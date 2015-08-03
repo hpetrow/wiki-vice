@@ -14,7 +14,7 @@ class WikiWrapper
 
   def get_json(title) 
     self.titles = "titles=#{title.gsub(" ", "%20")}"
-    url = "#{@callback}&#{@format}&#{@action}&#{@prop}&#{@rvlimit}&#{self.titles}"
+    url = "#{@callback}&#{@format}&#{@action}&#{@prop}&#{@rvlimit}&#{self.titles}&rvdiffto=prev"
     html = open(url)
     JSON.load(html)
   end
@@ -24,7 +24,12 @@ class WikiWrapper
     page_id = json["query"]["pages"].keys.first
     query = json["query"]["pages"][page_id]
     page = Page.new(title: query["title"])
-    page.save
+    
+  end
+
+  def add_revisions_to_page(revisions)
+
+
   end
 
 end
