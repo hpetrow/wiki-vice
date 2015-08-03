@@ -24,11 +24,20 @@ class WikiWrapper
     page_id = json["query"]["pages"].keys.first
     query = json["query"]["pages"][page_id]
     page = Page.new(title: query["title"])
-    
+    revisions = query["revisions"]
+    add_revisions_to_page(page, revisions)
   end
 
-  def add_revisions_to_page(revisions)
-
+  def add_revisions_to_page(page, revisions)
+    revisions.each do |r|
+      author = Author.new(name: r['user']).save
+      timestamp = r['timestamp']
+      comment = r['comment']
+      content = r['diff']['*']
+      revision = Revision.new(timestamp: timestamp, comment: comment, content: content)
+      revision.save
+      page.revisions << revision
+    end
 
   end
 
