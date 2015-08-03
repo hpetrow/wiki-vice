@@ -12,11 +12,19 @@ class WikiWrapper
     @prop = "prop=revisions"
   end
 
-  def get_page(title) 
+  def get_json(title) 
     self.titles = "titles=#{title.gsub(" ", "%20")}"
     url = "#{@callback}&#{@format}&#{@action}&#{@prop}&#{@rvlimit}&#{self.titles}"
     html = open(url)
-    json = JSON.load(html)
-    
+    JSON.load(html)
   end
+
+  def get_page(title)
+    json = get_json(title)
+    page_id = json["query"]["pages"].keys.first
+    query = json["query"]["pages"][page_id]
+    page = Page.new(title: query["title"])
+    page.save
+  end
+
 end
