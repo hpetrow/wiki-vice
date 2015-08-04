@@ -1,7 +1,7 @@
 class CreateRevisions < ActiveRecord::Migration
   def change
     create_table :revisions do |t|
-      t.datetime :time
+      t.string :time
       t.text :content
       t.integer :lines
       t.integer :page_id

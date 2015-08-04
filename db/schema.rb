@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20150804140408) do
   end
 
   create_table "revisions", force: :cascade do |t|
-    t.datetime "time"
+    t.string   "time"
     t.text     "content"
     t.integer  "lines"
     t.integer  "page_id"
