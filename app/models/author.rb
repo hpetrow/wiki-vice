@@ -7,6 +7,6 @@ class Author < ActiveRecord::Base
     # and the amount of contributions he has made to that page
     w = WikiWrapper.new
     contributions = w.get_user_contributions(self)
-    binding.pry
+    self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
   end
 end

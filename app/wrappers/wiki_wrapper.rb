@@ -79,9 +79,11 @@ class WikiWrapper
       revision = Revision.find_or_create_by(revid: revid)
       revision.page = page
       revision.author = author
+      revision.size = size
+      revision.size_diff = size_diff
       revision.save
     end
-    
+
   end
 
 end
