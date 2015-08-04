@@ -47,15 +47,14 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      author = Author.new(name: r['user'])
-      author.save
+      author = Author.find_or_create_by(name: r['user'])
       timestamp = r['timestamp']
       revid = r['revid']
       comment = r['comment']
       content = r['diff']['*'] || 'notcached'
       revision = Revision.new(time: timestamp, content: content, revid: revid, author_id: author.id)
-      revision.save
       page.revisions << revision
+      revision.save
     end
 
   end
