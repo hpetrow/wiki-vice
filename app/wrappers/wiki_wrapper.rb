@@ -59,4 +59,8 @@ class WikiWrapper
 
   end
 
+  def get_user_contributions
+    
+  end
+
 end
