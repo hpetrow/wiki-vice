@@ -3,20 +3,10 @@ class Page < ActiveRecord::Base
   has_many :authors, :through => :revisions
 
   def top_five_authors
-<<<<<<< HEAD
-    self.authors.group(:name).order('count_id desc').count('id').max_by(5){|id, num| num}
-=======
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
     results.collect do |r|
       {author: Author.find_by(name: r[0]), count: r[1]}
     end
->>>>>>> master
   end
-
-  def find_author_by_name(author_name)
-    self.authors.find_by(name: author_name)
-  end
-
-
   
 end

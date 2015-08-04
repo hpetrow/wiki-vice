@@ -6,8 +6,8 @@ class PagesController < ApplicationController
     redirect_to page_path(@page)
   end
 
-
   def show
     @page = Page.find(params[:id])
+    @top_five_authors = @page.top_five_authors
   end
 end
