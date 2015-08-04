@@ -9,5 +9,6 @@ class PagesController < ApplicationController
   def show
     @page = Page.find(params[:id])
     @top_five_authors = @page.top_five_authors
+    @revisions = @page.revisions
   end
 end
