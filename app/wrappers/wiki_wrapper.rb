@@ -59,8 +59,22 @@ class WikiWrapper
 
   end
 
-  def get_user_contributions
-    
+  def get_user_contributions(username)
+    list = "list=usercontribs"
+    ucuser = "ucuser=#{username}"
+    uclimit = "uclimit=500"
+    ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
+    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop].join("&")
+    html = open(url)
+    json = JSON.load(html)
+    usercontribs = json["query"]["usercontribs"]
+
+    usercontribs.each do |data|
+      page = Page.find_or_create_by(title: data["title"])
+      revid = data["revid"]
+      timestamp = data["timestamp"]
+      comment = data["comment"]
+    end
   end
 
 end
