@@ -1,4 +1,4 @@
-class PageController < ApplicationController
+class PagesController < ApplicationController
 
   def show
     @page = Page.find(params[:id])
