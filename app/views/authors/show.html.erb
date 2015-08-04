@@ -1,0 +1,6 @@
+<h1><%= @author.name %></h1>
+<ul>
+  <% @author.revisions.each do |revision| %>
+    <li><%= revision.revid %></li>
+  <% end %>
+</ul>

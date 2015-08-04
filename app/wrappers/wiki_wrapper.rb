@@ -40,7 +40,7 @@ class WikiWrapper
       page = Page.new(title: query["title"])
       revisions = query["revisions"]
       add_revisions_to_page(page, revisions)
-      page.save
+      page
     end
     page
   end
@@ -54,6 +54,34 @@ class WikiWrapper
       content = r['diff']['*'] || 'notcached'
       revision = Revision.new(time: timestamp, content: content, revid: revid, author_id: author.id)
       page.revisions << revision
+      revision.save
+    end
+
+  end
+
+  def get_user_contributions(author)
+    list = "list=usercontribs"
+    ucuser = "ucuser=#{author.name}"
+    uclimit = "uclimit=500"
+    ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
+    ucnamespace = "ucnamespace=0"
+    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
+    html = open(url)
+    json = JSON.load(html)
+    usercontribs = json["query"]["usercontribs"]
+
+    usercontribs.each do |data|
+      page = Page.find_or_create_by(title: data["title"])
+      revid = data["revid"]
+      timestamp = data["timestamp"]
+      comment = data["comment"]
+      size = data["size"]
+      size_diff = data["sizediff"]
+      revision = Revision.find_or_create_by(revid: revid)
+      revision.page = page
+      revision.author = author
+      revision.size = size
+      revision.size_diff = size_diff
       revision.save
     end
 
