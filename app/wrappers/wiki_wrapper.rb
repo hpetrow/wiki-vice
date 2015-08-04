@@ -32,7 +32,6 @@ class WikiWrapper
     revisions = query["revisions"]
     add_revisions_to_page(page, revisions)
 
-    binding.pry
     1.times do |i|
       json = get_json(title, {rvcontinue: rvcontinue})
       rvcontinue = json["continue"]["rvcontinue"]
@@ -41,7 +40,9 @@ class WikiWrapper
       page = Page.new(title: query["title"])
       revisions = query["revisions"]
       add_revisions_to_page(page, revisions)
+      page.save
     end
+    page
   end
 
   def add_revisions_to_page(page, revisions)
