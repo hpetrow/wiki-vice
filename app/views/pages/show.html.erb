@@ -1,0 +1,9 @@
+
+<h1><%= @page.title %></h1>
+<h3>Top 5 Page Contributors</h3>
+<ul>
+<% @page.top_five_authors.each do |author| %>
+  <% @a = @page.find_author_by_name(author.first) %>
+  <li> <%= link_to "#{@a.name}", author_path(@a.id) %>, Number of Edits: <%= author.second %>  </li>
+  <% end %>
+</ul>
