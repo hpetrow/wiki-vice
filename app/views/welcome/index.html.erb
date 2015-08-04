@@ -1,5 +1,5 @@
 <h1>Welcome to Wikipedia Vice!</h1>
-<%= form_tag(new_page_path, method: "post", class: "form col-md-6") do %>
+<%= form_tag("/pages", method: "post", class: "form col-md-6") do %>
 <div class="form-group">
   <%= label_tag(:query, "Search For:") %>
   <%= text_field_tag(:query, "", class: "form-control") %>  
