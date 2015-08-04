@@ -1,6 +1,7 @@
 class WikiWrapper 
   require 'json'
   require 'open-uri'
+  
 
   attr_accessor :callback, :format, :action, :prop, :rvlimit, :titles
 
@@ -31,7 +32,8 @@ class WikiWrapper
     revisions = query["revisions"]
     add_revisions_to_page(page, revisions)
 
-    9.times do |i|
+    binding.pry
+    1.times do |i|
       json = get_json(title, {rvcontinue: rvcontinue})
       rvcontinue = json["continue"]["rvcontinue"]
       page_id = json["query"]["pages"].keys.first
@@ -46,6 +48,7 @@ class WikiWrapper
     revisions.each do |r|
       author = Author.new(name: r['user']).save
       timestamp = r['timestamp']
+      revid = r['revid']
       comment = r['comment']
       content = r['diff']['*']
       revision = Revision.new(time: timestamp, content: content)
