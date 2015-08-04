@@ -8,11 +8,5 @@ class Page < ActiveRecord::Base
       {author: Author.find_by(name: r[0]), count: r[1]}
     end
   end
-
-  def find_author_by_name(author_name)
-    self.authors.find_by(name: author_name)
-  end
-
-
   
 end
