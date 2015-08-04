@@ -64,7 +64,8 @@ class WikiWrapper
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
-    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop].join("&")
+    ucnamespace = "ucnamespace=0"
+    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
     html = open(url)
     json = JSON.load(html)
     usercontribs = json["query"]["usercontribs"]
