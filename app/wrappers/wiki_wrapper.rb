@@ -40,7 +40,7 @@ class WikiWrapper
       page = Page.new(title: query["title"])
       revisions = query["revisions"]
       add_revisions_to_page(page, revisions)
-      page.save
+      page
     end
     page
   end
@@ -59,9 +59,9 @@ class WikiWrapper
 
   end
 
-  def get_user_contributions(username)
+  def get_user_contributions(author)
     list = "list=usercontribs"
-    ucuser = "ucuser=#{username}"
+    ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop].join("&")
@@ -74,7 +74,14 @@ class WikiWrapper
       revid = data["revid"]
       timestamp = data["timestamp"]
       comment = data["comment"]
+      size = data["size"]
+      size_diff = data["sizediff"]
+      revision = Revision.find_or_create_by(revid: revid)
+      revision.page = page
+      revision.author = author
+      revision.save
     end
+    
   end
 
 end
