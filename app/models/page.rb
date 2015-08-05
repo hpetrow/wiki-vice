@@ -39,7 +39,6 @@ class Page < ActiveRecord::Base
   end
 
   def group_by_location
-    #results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
-    self.anonymous_author_location.group(:country_code)
+    self.anonymous_author_location.group_by(&:country_code)
   end
 end
