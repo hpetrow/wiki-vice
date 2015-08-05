@@ -15,3 +15,6 @@
 //= require bootstrap
 //= require Chart
 //= require wiki_chart.js
+//= require vector_map.js
+//= require jquery-jvectormap-2.0.2.min.js
+//= require jquery-jvectormap-world-mill-en.js
