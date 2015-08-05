@@ -8,5 +8,14 @@ class Page < ActiveRecord::Base
       {author: Author.find_by(name: r[0]), count: r[1]}
     end
   end
+
+  def get_anonymous_authors
+    ip = self.authors.select do |author|
+      if author.name.match(/^[0-9 | .]\S*/)
+        author
+      else
+      end
+    end
+  end
   
 end
