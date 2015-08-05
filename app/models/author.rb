@@ -10,6 +10,8 @@ class Author < ActiveRecord::Base
     self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
   end
 
-  
+  def most_recent_revision
+    binding.pry
+  end
 
 end
