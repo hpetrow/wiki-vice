@@ -22,5 +22,12 @@ class Page < ActiveRecord::Base
   def get_number_of_anonymous_authors
     self.get_anonymous_authors.count
   end
+
+  def revisions_by_date
+    self.revisions.order("DATE(timestamp)").group("DATE(timestamp)").size
+  end
   
+  def avg_per_day
+    revisions_by_date.size / revisions.size
+  end
 end
