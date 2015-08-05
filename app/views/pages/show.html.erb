@@ -8,6 +8,7 @@
   <% end %>
 
   <h4>Latest Revision:</h4>
-  <p>Made on: <%= Date.parse(@revisions.first.time) %></p>
+  <% date = Date.parse(@revisions.first.time) %>
+  <p>Made on: <%= date.to_formatted_s(:long_ordinal) %></p>
   <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
 </ul>
