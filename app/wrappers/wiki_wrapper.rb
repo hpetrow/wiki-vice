@@ -72,16 +72,13 @@ class WikiWrapper
 
     usercontribs.each do |data|
       page = Page.find_or_create_by(title: data["title"])
-      revid = data["revid"]
-      timestamp = data["timestamp"]
-      comment = data["comment"]
-      size = data["size"]
-      size_diff = data["sizediff"]
-      revision = Revision.find_or_create_by(revid: revid)
+      revision = Revision.find_or_create_by(revid: data["revid"])
+      revision.time = data["timestamp"]
+      revision.comment = data["comment"]
+      revision.size = data["size"]
+      revision.size_diff = data["sizediff"]
       revision.page = page
       revision.author = author
-      revision.size = size
-      revision.size_diff = size_diff
       revision.save
     end
 
