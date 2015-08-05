@@ -7,7 +7,11 @@ class WikiWrapper
   def get_page(title)
     url = build_page_revisions_url(title)
     json = JSON.load(open(url))
-    rvcontinue = json["continue"]["rvcontinue"] || false
+    if json["continue"].nil?
+      rvcontinue = false
+    else
+      rvcontinue = json["continue"]["rvcontinue"]
+    end
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
     page = Page.new(title: page_data["title"])
@@ -38,7 +42,8 @@ class WikiWrapper
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff]
+    redirects = "redirects"
+    url = [CALLBACK, prop, rvlimit, titles, rvdiff, redirects]
     if options.empty?
       url.join("&")
     else
@@ -72,9 +77,8 @@ class WikiWrapper
   def add_categories_to_page(page, categories)
     categories.each do |c|
       category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.new(name: category_name)
-      category.save
-      page.categories << category if page.categories.none?{|c| c.name == category.name}
+      category = Category.create(name: category_name)
+      page.categories << category
     end
   end
 
