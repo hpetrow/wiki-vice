@@ -9,13 +9,18 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def get_date
+    DateTime.parse(self.revisions.first.time).to_formatted_s(:long_ordinal)
+  end
+
   def get_anonymous_authors
     ip = self.authors.select do |author|
-      if author.name.match(/^[0-9 | .]\S*/)
-        author
-      else
-      end
+      author.name.match(/^[0-9 | .]\S*/) ? author : nil
     end
+  end
+
+  def get_number_of_anonymous_authors
+    self.get_anonymous_authors.count
   end
   
 end
