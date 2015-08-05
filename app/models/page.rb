@@ -26,8 +26,8 @@ class Page < ActiveRecord::Base
   def revisions_by_date
     self.revisions.order("DATE(timestamp)").group("DATE(timestamp)").size
   end
-  
-  def avg_revisions_per_day
-    revisions_by_date.size.to_f / revisions.size
+
+  def avg_per_day
+    revisions_by_date.size / revisions.size
   end
 end
