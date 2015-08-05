@@ -75,7 +75,7 @@ class WikiWrapper
       if Revision.find_by(revid: data["revid"])
         revision = Revision.find_by(revid: data["revid"])
       else
-        Revision.new(
+        revision = Revision.create(
           time: data["timestamp"],
           timestamp: data["timestamp"],
           size: data["size"],
