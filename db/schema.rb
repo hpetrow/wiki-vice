@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150805194032) do
+ActiveRecord::Schema.define(version: 20150805225547) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150805194032) do
     t.integer  "size_diff"
     t.datetime "timestamp"
     t.string   "comment"
+    t.boolean  "vandalism"
   end
 
 end

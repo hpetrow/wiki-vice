@@ -65,4 +65,7 @@ class Page < ActiveRecord::Base
     self.authors.uniq
   end
 
+  def most_recent_vandalism
+    self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1)
+  end
 end

@@ -65,7 +65,8 @@ class WikiWrapper
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
     redirects = "redirects"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff, redirects]
+    rvprop = "rvprop=tags"
+    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, redirects]
     if options.empty?
       url.join("&")
     else
@@ -87,8 +88,10 @@ class WikiWrapper
         timestamp: r['timestamp'], 
         content: content,
         revid: r['revid'], 
-        comment: r['comment']
-        )
+        comment: r['comment'],
+        vandalism: vandalism?(r['tags'])
+      )
+
       author = Author.find_or_create_by(name: r['user'])
       revision.author = author
       revision.page = page
@@ -101,6 +104,29 @@ class WikiWrapper
       category_name = /^Category:(.+)/.match(c['title'])[1]
       category = Category.create(name: category_name)
       page.categories << category
+    end
+  end
+
+  def get_user_contributions(author)
+    url = user_contribs_url(author)
+    json = JSON.load(open(url))
+
+    usercontribs = json["query"]["usercontribs"]
+    usercontribs.each do |data|
+      page = Page.find_or_create_by(title: data["title"])
+      if Revision.find_by(revid: data["revid"])
+        revision = Revision.find_by(revid: data["revid"])
+      else
+        revision = Revision.create(
+          time: data["timestamp"],
+          timestamp: data["timestamp"],
+          size: data["size"],
+          size_diff: data["sizediff"]
+          )
+      end
+      revision.page = page
+      revision.author = author
+      revision.save
     end
   end
 
@@ -125,4 +151,7 @@ class WikiWrapper
     page
   end
 
+  def vandalism?(tags)
+    tags.include?("possible libel or vandalism")
+  end
 end
