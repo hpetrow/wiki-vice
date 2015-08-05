@@ -1,6 +1,5 @@
 $(function(){
 
-
 	var data = [
     {
         value: gon.data[0][1],
