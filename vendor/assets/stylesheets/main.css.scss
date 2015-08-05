@@ -758,7 +758,8 @@ label.valid {
   min-height: 80px;
   padding: 0 0 0 10px;
   position: relative;
-  background: #1abc9c url('../img/logo.png') no-repeat 25px 26px;
+  background-image: image-url("logo.png");
+  background: #1abc9c no-repeat 25px 26px;
 }
 #header .logo {
   color: #fff;
