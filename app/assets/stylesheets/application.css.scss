@@ -10,27 +10,15 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree ../../../vendor/assets/stylesheets/.
- *= require_tree .
+ *= require bootstrap.min
+ *= require font-awesome.min
+ *= require simple-line-icons
+ *= require animate
+ *= require main
+ 
  *= require_self
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.eot"
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.woff"
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.ttf"
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.svg"
  */
-@import "bootstrap";
-/* Some Style from the Bootstrap Default Theme */
-body {
-  padding-top: 70px;
-  padding-bottom: 30px;
-}
-
-.theme-dropdown .dropdown-menu {
-  position: static;
-  display: block;
-  margin-bottom: 20px;
-}
-
-.theme-showcase > p > .btn {
-  margin: 5px 0;
-}
