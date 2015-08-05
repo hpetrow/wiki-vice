@@ -7,6 +7,12 @@
     </li>
   <% end %>
 
-  <h4>Latest Revision:</h4>
-  <p><%= @revisions.first.content %></p>
+  <h2>Latest Revision:</h2>
+  <% %>
+  <p>Made on: <%= @page.get_date %></p>
+  <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
 </ul>
+
+<h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
+<h2>Number of anonymous authors: <%= @page.get_number_of_anonymous_authors %></h2>
+
