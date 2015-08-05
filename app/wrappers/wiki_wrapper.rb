@@ -70,8 +70,7 @@ class WikiWrapper
 
   def get_user_contributions(author)
     url = build_user_contribs_url
-    html = open(url)
-    json = JSON.load(html)
+    json = JSON.load(open(url))
     usercontribs = json["query"]["usercontribs"]
 
     usercontribs.each do |data|
