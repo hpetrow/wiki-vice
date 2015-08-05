@@ -7,7 +7,6 @@ class WikiWrapper
   def get_page(title)
     url = build_page_revisions_url(title)
     json = JSON.load(open(url))
-
     rvcontinue = json["continue"]["rvcontinue"]
     clcontinue = json["continue"]["clcontinue"] 
     page_id = json["query"]["pages"].keys.first
@@ -18,6 +17,9 @@ class WikiWrapper
     i = 1
     loop do 
       url = build_page_revisions_url(title, {rvcontinue: rvcontinue, clcontinue: clcontinue})
+      json = JSON.load(open(url))
+      rvcontinue = json["continue"]["rvcontinue"]
+      clcontinue = json["continue"]["clcontinue"]       
       page_id = json["query"]["pages"].keys.first
       page_data = json["query"]["pages"][page_id]
       add_categories_to_page(page, page_data["categories"])
