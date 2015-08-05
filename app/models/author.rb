@@ -11,7 +11,7 @@ class Author < ActiveRecord::Base
   end
 
   def most_recent_revision
-    binding.pry
+    self.revisions.order("timestamp desc").limit(1).first
   end
 
 end
