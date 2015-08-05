@@ -56,8 +56,9 @@ class WikiWrapper
         revid: r['revid'], 
         comment: r['comment']
         )
-      revision.author = Author.find_or_create_by(name: r['user'])
-      revision.page = page
+      author = Author.find_or_create_by(name: r['user'])
+      revision.author = author
+      page.authors << author
     end
   end
 
