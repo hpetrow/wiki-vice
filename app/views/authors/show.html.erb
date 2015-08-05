@@ -1,6 +1,7 @@
-<h1><%= @author.name %></h1>
-<ul>
-  <% @author.revisions.each do |revision| %>
-    <li><%= revision.revid %></li>
-  <% end %>
-</ul>
+<h1>Author Username: <%= @author.name %></h1>
+
+<ol>
+	<% @top_contributions.each do |contribution| %>
+		<li><h3><small>Page:</small> <%= contribution[0] %> <small>Number:</small> <%= contribution[1] %></h3></li>
+	<%end %>
+</ol>

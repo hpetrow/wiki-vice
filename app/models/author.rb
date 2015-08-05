@@ -9,4 +9,7 @@ class Author < ActiveRecord::Base
     contributions = w.get_user_contributions(self)
     self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
   end
+
+  
+
 end
