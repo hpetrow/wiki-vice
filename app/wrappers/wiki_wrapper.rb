@@ -9,11 +9,11 @@ class WikiWrapper
     @callback = "https://en.wikipedia.org/w/api.php?"
     @format = "format=json"
     @action = "action=query"
-    @rvlimit = "rvlimit=500"
+    @rvlimit = "rvlimit=50"
     @prop = "prop=revisions"
   end
 
-  def get_json(title, options={}) 
+  def get_json_for_title(title, options={}) 
     self.titles = "titles=#{title.gsub(" ", "%20")}"
     url = "#{@callback}&#{@format}&#{@action}&#{@prop}&#{@rvlimit}&#{self.titles}&rvdiffto=prev"
     if options[:rvcontinue] 
@@ -27,13 +27,12 @@ class WikiWrapper
     page = Page.new
     2.times do |i|
       if i == 1
-        json = get_json(title)
+        json = get_json_for_title(title)
         rvcontinue = json["continue"]["rvcontinue"]
       else
-        json = get_json(title, {rvcontinue: rvcontinue})
+        json = get_json_for_title(title, {rvcontinue: rvcontinue})
         rvcontinue = json["continue"]["rvcontinue"]
       end
-      
       page_id = json["query"]["pages"].keys.first
       page_data = json["query"]["pages"][page_id]
       page = Page.find_or_create_by(title: page_data["title"])
