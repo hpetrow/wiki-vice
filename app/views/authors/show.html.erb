@@ -1,11 +1,19 @@
-<h1><small>Author Username:</small> <%= @author.name %></h1>
+<h1><small>Author: </small> <%= @author.name %></h1><br>
 
-<ol>
-	<% @top_contributions.each do |contribution| %>
-		<li><h3><small>Page:</small> <%= contribution[0] %> <small>Number:</small> <%= contribution[1] %></h3></li>
-	<%end %>
-</ol>
-<canvas id="authorContributionsChart" width="400" height="400"></canvas>
+
+<div class="row">
+	<div class="col-md-7">
+		<ol>
+			<% @top_contributions.each do |contribution| %>
+				<li><h3><%= contribution[0] %><br> <small> # of contributions: <%= contribution[1] %></h3></li></small>
+			<%end %>
+		</ol>
+	</div>
+
+	<div class="col-md-5">
+		<canvas id="authorContributionsChart" width="300" height="300"></canvas>
+	</div>
+</div>
 
 <h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
 <p><%= @author.most_recent_revision.content %> </p>
