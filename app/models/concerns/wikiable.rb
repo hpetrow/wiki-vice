@@ -5,6 +5,9 @@ module Wikiable
   
   module InstanceMethods
     
+    def parse_title
+      
+    end
   end
   
 end
