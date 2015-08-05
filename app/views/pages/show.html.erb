@@ -11,6 +11,8 @@
   <% %>
   <p>Made on: <%= @page.get_date %></p>
   <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
+
+  <p>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></p>
 </ul>
 
 <h2>Number of anonymous authors: <%= @page.get_number_of_anonymous_authors %></h2>
