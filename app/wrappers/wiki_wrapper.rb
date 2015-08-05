@@ -24,21 +24,20 @@ class WikiWrapper
   end
 
   def get_page(title)
-    json = get_json(title)
-    rvcontinue = json["continue"]["rvcontinue"]
-    page_id = json["query"]["pages"].keys.first
-    query = json["query"]["pages"][page_id]
-    page = Page.new(title: query["title"])
-    revisions = query["revisions"]
-    add_revisions_to_page(page, revisions)
-
-    1.times do |i|
-      json = get_json(title, {rvcontinue: rvcontinue})
-      rvcontinue = json["continue"]["rvcontinue"]
+    page = Page.new
+    2.times do |i|
+      if i == 1
+        json = get_json(title)
+        rvcontinue = json["continue"]["rvcontinue"]
+      else
+        json = get_json(title, {rvcontinue: rvcontinue})
+        rvcontinue = json["continue"]["rvcontinue"]
+      end
+      
       page_id = json["query"]["pages"].keys.first
-      query = json["query"]["pages"][page_id]
-      page = Page.new(title: query["title"])
-      revisions = query["revisions"]
+      page_data = json["query"]["pages"][page_id]
+      page = Page.find_or_create_by(title: page_data["title"])
+      revisions = page_data["revisions"]
       add_revisions_to_page(page, revisions)
       page
     end
