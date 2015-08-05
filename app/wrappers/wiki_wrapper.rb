@@ -11,7 +11,7 @@ class WikiWrapper
     clcontinue = json["continue"]["clcontinue"] 
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    page = Page.create(title: page_data["title"])
+    page = Page.new(title: page_data["title"])
     add_categories_to_page(page, page_data["categories"])
     add_revisions_to_page(page, page_data["revisions"])    
     i = 1
@@ -25,8 +25,9 @@ class WikiWrapper
       add_categories_to_page(page, page_data["categories"])
       add_revisions_to_page(page, page_data["revisions"])  
       i += 1
-      break if i == 2
+      break if i == 5
     end
+    page.save
     page
   end
 
@@ -46,10 +47,16 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      revision = Revision.create(
+      puts r['revid']
+      if r['diff'].nil?
+        content = 'notcached'
+      else
+        content = r['diff']['*']
+      end
+      revision = Revision.new(
         time: r['timestamp'], 
         timestamp: r['timestamp'], 
-        content: r['diff']['*'] || 'notcached', 
+        content: content,
         revid: r['revid'], 
         comment: r['comment']
         )
@@ -62,9 +69,10 @@ class WikiWrapper
 
   def add_categories_to_page(page, categories)
     categories.each do |c|
-      category = /^Category:(.+)/.match(c['title'])[1]
-      page.categories << Category.find_or_create_by(name: category) if page.categories.none?{|c| c.name == category}
-      page.save
+      category_name = /^Category:(.+)/.match(c['title'])[1]
+      category = Category.new(name: category_name)
+      category.save
+      page.categories << category if page.categories.none?{|c| c.name == category.name}
     end
   end
 
