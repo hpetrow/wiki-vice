@@ -7,30 +7,27 @@ class WikiWrapper
   def get_page(title)
     url = build_page_revisions_url(title)
     json = JSON.load(open(url))
-
     rvcontinue = json["continue"]["rvcontinue"]
     clcontinue = json["continue"]["clcontinue"] 
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-
-    if Page.find_by(title: page_data["title"])
-      page = Page.find_by(title: page_data["title"])
-    else 
-      page = Page.new(title: page_data["title"])
+    page = Page.create(title: page_data["title"])
+    add_categories_to_page(page, page_data["categories"])
+    add_revisions_to_page(page, page_data["revisions"])    
+    i = 1
+    loop do 
+      url = build_page_revisions_url(title, {rvcontinue: rvcontinue, clcontinue: clcontinue})
+      json = JSON.load(open(url))
+      rvcontinue = json["continue"]["rvcontinue"]
+      clcontinue = json["continue"]["clcontinue"]       
+      page_id = json["query"]["pages"].keys.first
+      page_data = json["query"]["pages"][page_id]
       add_categories_to_page(page, page_data["categories"])
-      add_revisions_to_page(page, page_data["revisions"])    
-      i = 1
-      loop do 
-        url = build_page_revisions_url(title, {rvcontinue: rvcontinue, clcontinue: clcontinue})
-        page_id = json["query"]["pages"].keys.first
-        page_data = json["query"]["pages"][page_id]
-        add_categories_to_page(page, page_data["categories"])
-        add_revisions_to_page(page, page_data["revisions"])  
-        i += 1
-        break if i == 2
-      end
-      page
+      add_revisions_to_page(page, page_data["revisions"])  
+      i += 1
+      break if i == 2
     end
+    page
   end
 
   def build_page_revisions_url(title, options = {})
@@ -49,7 +46,7 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      revision = Revision.new(
+      revision = Revision.create(
         time: r['timestamp'], 
         timestamp: r['timestamp'], 
         content: r['diff']['*'] || 'notcached', 
@@ -58,7 +55,8 @@ class WikiWrapper
         )
       author = Author.find_or_create_by(name: r['user'])
       revision.author = author
-      page.authors << author
+      revision.page = page
+      revision.save
     end
   end
 
@@ -79,7 +77,7 @@ class WikiWrapper
       if Revision.find_by(revid: data["revid"])
         revision = Revision.find_by(revid: data["revid"])
       else
-        Revision.new(
+        revision = Revision.create(
           time: data["timestamp"],
           timestamp: data["timestamp"],
           size: data["size"],
@@ -98,7 +96,7 @@ class WikiWrapper
     uclimit = "uclimit=500"
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     ucnamespace = "ucnamespace=0"
-    [CALLBACK, FORMAT, ACTION, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
+    [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
   end  
 
 
