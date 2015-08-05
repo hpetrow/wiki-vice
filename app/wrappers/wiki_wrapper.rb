@@ -57,13 +57,17 @@ class WikiWrapper
 
   end
 
-  def get_user_contributions(author)
+  def build_user_contribs_url
     list = "list=usercontribs"
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     ucnamespace = "ucnamespace=0"
-    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
+    url = [self.callback, self.action, self.format, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
+  end
+
+  def get_user_contributions(author)
+    url = build_user_contribs_url
     html = open(url)
     json = JSON.load(html)
     usercontribs = json["query"]["usercontribs"]
