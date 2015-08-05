@@ -9,5 +9,5 @@
 
   <h4>Latest Revision:</h4>
   <p>Made on: <%= Date.parse(@revisions.first.time) %></p>
-  <p><%= @revisions.first.content %></p>
+  <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
 </ul>
