@@ -38,7 +38,14 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def group_by_location
-    self.anonymous_author_location.group_by(&:country_code)
+  def group_anonymous_users_by_location
+    locations = self.anonymous_author_location.group_by(&:country_code)
+    location_key = {}
+    locations.each do |country_code, location|
+      location_key[country_code] = location.count
+    end
+    location_key.sort_by{|code, location_count| location_count}.reverse.to_h
   end
+
+
 end
