@@ -14,6 +14,6 @@ class Author < ActiveRecord::Base
     self.revisions.order("timestamp desc").limit(1).first
   end
 
-  
+
 
 end
