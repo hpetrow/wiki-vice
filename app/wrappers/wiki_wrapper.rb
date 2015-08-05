@@ -7,27 +7,29 @@ class WikiWrapper
   def get_page(title)
     url = build_page_revisions_url(title)
     json = JSON.load(open(url))
-    rvcontinue = json["continue"]["rvcontinue"]
-    clcontinue = json["continue"]["clcontinue"] 
+    rvcontinue = json["continue"]["rvcontinue"] || false
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    page = Page.create(title: page_data["title"])
+    page = Page.new(title: page_data["title"])
     add_categories_to_page(page, page_data["categories"])
-    add_revisions_to_page(page, page_data["revisions"])    
+    add_revisions_to_page(page, page_data["revisions"])
+    params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
+    get_more_revisions(params)
+    page.save
+    page
+  end
+
+  def get_more_revisions(params)
     i = 1
     loop do 
-      url = build_page_revisions_url(title, {rvcontinue: rvcontinue, clcontinue: clcontinue})
+      url = build_page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
       json = JSON.load(open(url))
+      break if i == params[:continue] || json["continue"].nil?
       rvcontinue = json["continue"]["rvcontinue"]
-      clcontinue = json["continue"]["clcontinue"]       
       page_id = json["query"]["pages"].keys.first
-      page_data = json["query"]["pages"][page_id]
-      add_categories_to_page(page, page_data["categories"])
-      add_revisions_to_page(page, page_data["revisions"])  
+      add_revisions_to_page(params[:page], params[:revisions])  
       i += 1
-      break if i == 2
-    end
-    page
+    end    
   end
 
   def build_page_revisions_url(title, options = {})
@@ -35,6 +37,7 @@ class WikiWrapper
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
+    rclimit = "rclimit=10"
     url = [CALLBACK, prop, rvlimit, titles, rvdiff]
     if options.empty?
       url.join("&")
@@ -46,10 +49,16 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      revision = Revision.create(
+      puts r['revid']
+      if r['diff'].nil?
+        content = 'notcached'
+      else
+        content = r['diff']['*']
+      end
+      revision = Revision.new(
         time: r['timestamp'], 
         timestamp: r['timestamp'], 
-        content: r['diff']['*'] || 'notcached', 
+        content: content,
         revid: r['revid'], 
         comment: r['comment']
         )
@@ -62,9 +71,10 @@ class WikiWrapper
 
   def add_categories_to_page(page, categories)
     categories.each do |c|
-      category = /^Category:(.+)/.match(c['title'])[1]
-      page.categories << Category.find_or_create_by(name: category) if page.categories.none?{|c| c.name == category}
-      page.save
+      category_name = /^Category:(.+)/.match(c['title'])[1]
+      category = Category.new(name: category_name)
+      category.save
+      page.categories << category if page.categories.none?{|c| c.name == category.name}
     end
   end
 
