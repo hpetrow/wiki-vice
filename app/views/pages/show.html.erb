@@ -15,8 +15,9 @@
 
 <h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
 <h2>Number of anonymous authors: <%= @page.get_number_of_anonymous_authors %></h2>
+
 <h2>Locations of anonymous authors:
   <% @page.find_country_name.each do |name|%>
-      <%= name %>, 
+      <%= name %>
     <% end %>
 </h2>

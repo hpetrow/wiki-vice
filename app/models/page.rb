@@ -49,13 +49,6 @@ class Page < ActiveRecord::Base
   end
 
   def find_country_name
-    # locations = self.anonymous_author_location.group_by(&:country_code)
-    # locations
-    # self.group_anonymous_users_by_location.collect do |location|
-    #   self.anonymous_author_location.country_name
-    #     location.name 
-    # end
-
     locations = self.anonymous_author_location.collect do |location|
       location.country_name
     end.uniq
