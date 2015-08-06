@@ -126,6 +126,7 @@ class WikiWrapper
           revision.author = Author.find_or_create_by(name: author_name)
           revision.page = page
           revision.save
+          page.save
         }
       end
     end
@@ -157,17 +158,6 @@ class WikiWrapper
     revids = "revids=#{revision.revid}"
     rvdiffto = "rvdiffto=prev"
     [CALLBACK, prop, revids, rvdiffto].join("&")
-  end
-
-  def find_page(title, options={})
-    page = Page.find_by(title: title)
-    if page.nil?
-      page = Page.new(title: title) 
-      page.pageid = options[:pageid]
-    end
-    page.url = page_url(title)
-    page.save
-    page
   end
 
   def vandalism?(tags)
