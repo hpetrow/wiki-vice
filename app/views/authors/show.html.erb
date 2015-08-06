@@ -7,6 +7,7 @@
 			<% @top_contributions.each do |contribution| %>
 				<li>
 					<h3><%= contribution[0].title %><br> <small> # of contributions: <%= contribution[1] %></small></h3>
+					<%= link_to("Wiki", contribution[0].url) %>
 				</li>
 			<%end %>
 		</ol>
