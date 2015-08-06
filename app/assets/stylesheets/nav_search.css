@@ -1,0 +1,19 @@
+.navsearchbar {
+  border-style: none none solid none;
+  border-bottom-width: 3px;
+  border-bottom-color:  rgba(65,187,153,1.00);
+  background-color:#fff;
+  padding-top: 35px;
+  height:65px;
+  font-size: 25px;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+
+}
+
+.navsearch{
+    height:80px;
+}
+
+.navbutton{
+    margin-top: 20px;
+  }

@@ -10,5 +10,7 @@ class PagesController < ApplicationController
     @page = Page.find(params[:id])
     @top_five_authors = @page.top_five_authors
     @revisions = @page.revisions
+    gon.anonData = @page.group_anonymous_users_by_location
+    gon.anonCountryName = @page.find_country_name
   end
 end
