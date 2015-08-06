@@ -12,7 +12,7 @@
   <h2>Latest Revision:</h2>
   <% %>
   <p>Made on: <%= @page.get_date %></p>
-  <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
+  <p><%=  render partial: 'page_revision', locals: {revisions: @page} %></p>
 </ul>
 
 <h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>

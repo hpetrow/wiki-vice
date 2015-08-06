@@ -60,8 +60,9 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_revision
-    if self.first.content.nil?
-      self.first.content = WIKI.revision_content(revision)
+    first_revision = self.revisions.first
+    if first_revision.content.nil?
+      first_revision.content = WIKI.get_revision_content(first_revision)
     end
   end
 

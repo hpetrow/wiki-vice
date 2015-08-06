@@ -45,6 +45,14 @@ class WikiWrapper
     end
   end  
 
+  def get_revision_content(revision)
+    url = revision_content_url(revision)
+    json = JSON.load(open(url))
+    binding.pry
+    revisions = json["query"]["pages"][revision.page.id]["revisions"]
+
+  end
+
   private
   def get_more_revisions(params)
     i = 1
@@ -117,6 +125,13 @@ class WikiWrapper
     "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
   end
 
+  def revision_content_url(revision)
+    prop = "prop=revisions"
+    revids = "revids=#{revision.revid}"
+    rvprop = "rvprop=content"
+    [CALLBACK, prop, revids, rvprop].join("&")
+  end
+
   def find_page(title)
     page = Page.find_by(title: title)
     page = Page.new(title: title) if page.nil?
@@ -124,5 +139,7 @@ class WikiWrapper
     page.save
     page
   end
+
+
 
 end
