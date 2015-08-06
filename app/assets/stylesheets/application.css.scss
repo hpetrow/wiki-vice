@@ -11,11 +11,12 @@
  * file per style scope.
  *
  *= require bootstrap.min
- *= require font-awesome.min
+ *= require font-awesome
  *= require simple-line-icons
  *= require animate
  *= require main
  *= require app
+ *= require nav_search
  *= require jquery-jvectormap-2.0.2
  
  *= require_self
@@ -23,4 +24,6 @@
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.woff"
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.ttf"
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.svg"
+
+
  */
