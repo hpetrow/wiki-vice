@@ -15,7 +15,7 @@ class Page < ActiveRecord::Base
   end
 
   def get_anonymous_authors
-    ip = self.authors.select do |author|
+    self.authors.select do |author|
       author.name.match(/^[0-9 | .]\S*/) ? author : nil
     end
   end
@@ -32,10 +32,11 @@ class Page < ActiveRecord::Base
     revisions_by_date.size / revisions.size.to_f
   end
 
+
   def anonymous_author_location
-    self.get_anonymous_authors.collect do |aa|
-      GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-    end
+      self.get_anonymous_authors.collect do |aa| 
+        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+      end
   end
 
   def group_anonymous_users_by_location
@@ -47,5 +48,17 @@ class Page < ActiveRecord::Base
     location_key.sort_by{|code, location_count| location_count}.reverse.to_h
   end
 
+  def find_country_name
+    # locations = self.anonymous_author_location.group_by(&:country_code)
+    # locations
+    # self.group_anonymous_users_by_location.collect do |location|
+    #   self.anonymous_author_location.country_name
+    #     location.name 
+    # end
+
+    locations = self.anonymous_author_location.collect do |location|
+      location.country_name
+    end.uniq
+  end
 
 end
