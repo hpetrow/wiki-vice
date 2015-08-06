@@ -26,7 +26,11 @@
   <div class="col-md-6">
     <h3> This page's top author also contributes to: </h3>
     <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
+<<<<<<< HEAD
     <p><%= contribution[0]%></p>
+=======
+    <p><%= contribution[0] %></p>
+>>>>>>> 38dc37805a75e458b842c3ad8f5a9c9d86835352
     <% end %>
   </div>
 
