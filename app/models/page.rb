@@ -2,6 +2,7 @@ class Page < ActiveRecord::Base
   has_many :revisions
   has_many :authors, :through => :revisions
   has_many :categories
+  WIKI = WikiWrapper.new
 
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
@@ -61,6 +62,14 @@ class Page < ActiveRecord::Base
     self.authors.uniq
   end
 
+  def latest_revision
+    self.revisions.first
+  end
+
+  def self.wiki_link(title)
+    url = "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  end
+
   def most_recent_vandalism
     self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1).first
   end
@@ -69,4 +78,5 @@ class Page < ActiveRecord::Base
     vandalism = self.most_recent_vandalism
     vandalism ? vandalism.content.html_safe : ''
   end
+
 end

@@ -6,10 +6,10 @@
 		<ol>
 			<% @top_contributions.each do |contribution| %>
 				<li>
-					<h3><%= contribution[0].title %><br> <small> # of contributions: <%= contribution[1] %></small></h3>
-					<%= link_to("Wikipedia", contribution[0].url, target: "_blank") %>
+					<h3><%= link_to(contribution[0], pages_path(query: contribution[0]), method: :post) %><br> <small> # of contributions: <%= contribution[1] %></small></h3>
+					<%= link_to("Wikipedia", Page.wiki_link(contribution[0]), target: "_blank") %>
 				</li>
-			<%end %>
+			<% end %>
 		</ol>
 	</div>
 
