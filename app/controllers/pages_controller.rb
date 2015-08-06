@@ -2,7 +2,8 @@ class PagesController < ApplicationController
 
   def create
     wiki_wrapper = WikiWrapper.new
-    @page = wiki_wrapper.get_page(params[:query])
+    title = wiki_wrapper.get_page(params[:query])
+    @page = Page.find_or_create_by(title: title)
     redirect_to page_path(@page)
   end
 

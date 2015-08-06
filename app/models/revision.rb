@@ -5,6 +5,6 @@ class Revision < ActiveRecord::Base
 
   def get_date
     formatted_date = '%m-%d-%Y %H:%M:%S %Z'
-    DateTime.parse(self.time,formatted_date).to_formatted_s(:long)
+    DateTime.parse(self.timestamp.to_s, formatted_date).to_formatted_s(:long_ordinal)
   end
 end

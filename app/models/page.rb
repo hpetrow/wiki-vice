@@ -11,7 +11,7 @@ class Page < ActiveRecord::Base
   end
 
   def get_date
-    !!self.revisions.first.time ? DateTime.parse(self.revisions.first.time).to_formatted_s(:long_ordinal) : 'not available'
+    !!self.revisions.first.timestamp ? self.revisions.first.timestamp.to_formatted_s(:long_ordinal) : 'not available'
   end
 
   def get_anonymous_authors

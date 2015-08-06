@@ -32,8 +32,12 @@
 
 </div>
 
-  <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
+
+    <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
 </ul>
+  <h2>Most Recent Vandalism</h2>
+  <p><%= @page.most_recent_vandalism_content %></p>
+
 
 <h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
 <% if @page.get_number_of_anonymous_authors > 1 %>
@@ -45,14 +49,9 @@
 <div class="col-md-6">
     <canvas id="anonCountriesChart" width="400" height="400">
     </canvas>
-
-
 </div>
 <h2 class="col-md-4 col-md-offset-3">
   <% @page.find_country_name.each do |name|%>
     <%= name %>
   <% end %>
 </h2>
-
-<h2>Most Recent Vandalism</h2>
-<p><%= @page.most_recent_vandalism_content %></p>
