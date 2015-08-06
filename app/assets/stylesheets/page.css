@@ -1,4 +1,8 @@
 .tab_scroll {
-  height:400px;
+  height:389px;
   overflow:scroll;
 }
+
+ .tab_box {
+    overflow: scroll; height: 389px;
+  }
