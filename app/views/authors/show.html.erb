@@ -5,7 +5,9 @@
 	<div class="col-md-7">
 		<ol>
 			<% @top_contributions.each do |contribution| %>
-				<li><h3><%= contribution[0] %><br> <small> # of contributions: <%= contribution[1] %></h3></li></small>
+				<li>
+					<h3><%= contribution[0].title %><br> <small> # of contributions: <%= contribution[1] %></small></h3>
+				</li>
 			<%end %>
 		</ol>
 	</div>

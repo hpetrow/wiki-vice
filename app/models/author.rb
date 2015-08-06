@@ -7,7 +7,12 @@ class Author < ActiveRecord::Base
     # Returns the pages that the author has contributed to the most
     # and the amount of contributions he has made to that page
     WIKI.get_user_contributions(self) if self.unique_pages.size == 1
-    self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
+    contribs = self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
+    contribs.collect do |contrib|
+      page = Page.find_by(title: contrib[0])
+      num = contrib[1]
+      [page, num]
+    end
   end
 
   def most_recent_revision
