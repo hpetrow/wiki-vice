@@ -1,13 +1,12 @@
 class Author < ActiveRecord::Base
   has_many :revisions
   has_many :pages, :through => :revisions
+  WIKI = WikiWrapper.new
 
   def top_contributions
     # Returns the pages that the author has contributed to the most
     # and the amount of contributions he has made to that page
-    w = WikiWrapper.new
-    
-    w.get_user_contributions(self) if self.pages == 1
+    WIKI.get_user_contributions(self) if self.pages == 1
     self.pages.group(:title).order('count_id desc').count('id').max_by(5){|name, num| num}
   end
 
