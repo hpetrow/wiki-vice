@@ -1,5 +1,30 @@
-
-<%= @revisions.first.content.gsub("}}", "").html_safe %>
-
-
-
+<div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Latest Revision, from User</h3>
+                                <div class="actions pull-right">
+                                    <i class="fa fa-chevron-down"></i>
+                                    <i class="fa fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-wrapper tab-left ">
+                                    <% @last_ten_revisions = @revisions.limit(10) %>
+                                            <% @last_ten_revisions.each do |revision| %>
+                                        <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#<%=revision.id%>" data-toggle="tab"><%= revision.id %></a>
+                                        </li>
+                                      </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active tab_scroll" id="home3">
+                                            <p>
+                                            <%= revision.content.gsub("}}", "").html_safe %>
+                                            </p>
+                                        </div>
+                                      </div>
+                                      <% end %>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
