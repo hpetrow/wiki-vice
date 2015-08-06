@@ -32,10 +32,13 @@ class Page < ActiveRecord::Base
     revisions_by_date.size / revisions.size.to_f
   end
 
+  def days_between_revisions
+    (1 / (revisions_by_date.size / revisions.size.to_f)).round(0)
+  end
+
   def friendlier_revisions_per_day
     self.avg_revisions_per_day
   end
-
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
