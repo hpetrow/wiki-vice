@@ -1,26 +1,45 @@
-<h1><%= @page.title %></h1>
-<%= link_to("Wikipedia", @page.url, target: "_blank") %>
-<h3>Top 5 Page Contributors</h3>
 
-<ul>
+<div class="row">
+  <div class="col-md-6">
+    <h1><%= @page.title %></h1>
+    <%= link_to("Wikipedia", @page.url, target: "_blank") %>
+    <h3>Top 5 Page Contributors</h3>
+  </div>
+  
+  <div class="dashboard-tile detail tile-red col-md-6">
+      <div class="content">
+        <h4>This page changes every <b><%=@page.days_between_revisions%></b> days</h4>
+      </div>
+      <div class="icon"><i id="icon" class="fa fa-bar-chart-o"></i>
+    </div>
+  </div>
+</div>
+<ol>
+
   <% @top_five_authors.each do |top_five_author| %>
-    <li> <%= link_to "#{top_five_author[:author].name}",  
-        author_path(top_five_author[:author].id) %>, Number of Edits: <%= top_five_author[:count] %>  
+    <li><h3> <%= link_to "#{top_five_author[:author].name}",  
+        author_path(top_five_author[:author].id) %><br> 
+        <small># of contributions: <%= top_five_author[:count] %></small></h3>  
     </li>
   <% end %>
-</ul>
+
+</ol>
+
+  <h3>Top Author contributions</h3>
+  
+  <%= @top_five_authors.first[:author].top_contributions %>
+    
   <h2>Latest Revision:</h2>
   <p>Made on: <%= @page.get_date %></p>
   <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
 
-
-<h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
 <h2><%= @page.get_number_of_anonymous_authors %> anonymous authors from <%= @page.find_country_name.count %> countries:</h2>
 
 <div class="col-md-6">
     <canvas id="anonCountriesChart" width="400" height="400">
     </canvas>
 </div>
+
 
 <h2 class="col-md-4 col-md-offset-3">
   <% @page.find_country_name.each do |name|%>
