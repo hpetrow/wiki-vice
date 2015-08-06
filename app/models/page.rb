@@ -60,11 +60,7 @@ class Page < ActiveRecord::Base
   end
 
   def latest_revision
-    first_revision = self.revisions.first
-    if first_revision.content.nil?
-      WIKI.set_revision_content(first_revision)
-    end
-    first_revision
+    self.revisions.first
   end
 
 end

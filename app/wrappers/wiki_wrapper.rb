@@ -16,6 +16,7 @@ class WikiWrapper
     page_data = json["query"]["pages"][page_id]
     page = Page.new(title: page_data["title"], pageid: page_id)
     page.url = page_url(page_data["title"])
+    page.save
     add_categories_to_page(page, page_data["categories"])
     add_revisions_to_page(page, page_data["revisions"])
     params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
@@ -37,21 +38,13 @@ class WikiWrapper
           timestamp: data["timestamp"], 
           size: data["size"],
           size_diff: data["sizediff"]
-          }
+        }
       )
       revision.page = page
       revision.author = author
       revision.save
     end
   end  
-
-  def set_revision_content(revision)
-    url = revision_content_url(revision)
-    json = JSON.load(open(url))
-    revisions = json["query"]["pages"][revision.page.pageid.to_s]["revisions"]
-    revision.content = revisions.first["diff"]["*"]
-    revision.save
-  end
 
   private
   def get_more_revisions(params)
