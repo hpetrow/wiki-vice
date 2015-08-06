@@ -26,11 +26,7 @@
   <div class="col-md-6">
     <h3> This page's top author also contributes to: </h3>
     <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
-<<<<<<< HEAD
     <p><%= contribution[0]%></p>
-=======
-    <p><%= contribution[0] %></p>
->>>>>>> 38dc37805a75e458b842c3ad8f5a9c9d86835352
     <% end %>
   </div>
 
@@ -54,8 +50,3 @@
     <canvas id="anonCountriesChart" width="400" height="400">
     </canvas>
 </div>
-<h2 class="col-md-4 col-md-offset-3">
-  <% @page.find_country_name.each do |name|%>
-    <%= name %>
-  <% end %>
-</h2>
