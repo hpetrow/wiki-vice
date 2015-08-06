@@ -12,12 +12,12 @@ class Page < ActiveRecord::Base
   end
 
   def get_date
-    DateTime.parse(self.revisions.first.time).to_formatted_s(:long_ordinal)
+    !!self.revisions.first.timestamp ? self.revisions.first.timestamp.to_formatted_s(:long_ordinal) : 'not available'
   end
 
   def get_anonymous_authors
     self.authors.select do |author|
-      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/) ? author : nil
+      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/)
     end
   end
 
@@ -33,6 +33,13 @@ class Page < ActiveRecord::Base
     revisions_by_date.size / revisions.size.to_f
   end
 
+  def days_between_revisions
+    (1 / (revisions_by_date.size / revisions.size.to_f)).round(0)
+  end
+
+  def friendlier_revisions_per_day
+    self.avg_revisions_per_day
+  end
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
@@ -65,6 +72,15 @@ class Page < ActiveRecord::Base
 
   def self.wiki_link(title)
     url = "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  end
+
+  def most_recent_vandalism
+    self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1).first
+  end
+
+  def most_recent_vandalism_content
+    vandalism = self.most_recent_vandalism
+    vandalism ? vandalism.content.html_safe : ''
   end
 
 end
