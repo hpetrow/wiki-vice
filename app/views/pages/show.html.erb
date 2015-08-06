@@ -17,6 +17,8 @@
 <h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
 <% if @page.get_number_of_anonymous_authors > 1 %>
     <h2><%= @page.get_number_of_anonymous_authors %> anonymous authors from <%= @page.find_country_name.count %> countries:</h2>
+  <% else %>
+    <h2>This page has 0 edits from anonymous authors.</h2>
 <% end %>
 
 <div class="col-md-6">
