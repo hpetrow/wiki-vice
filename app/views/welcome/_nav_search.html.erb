@@ -1,0 +1,12 @@
+<div class="col-md-8 navsearch">
+  <%= form_tag("/pages", method: "post", class: "form") do %>
+        <div class="form-group col-md-10">
+            <%= text_field_tag(:query, "", class: "form-control navsearchbar", placeholder: "Search Wikipedia...") %>  
+        </div>
+        <div class="form-group col-md-2 navbutton">
+        <%= submit_tag("Search", class: "btn btn-primary") do%>
+              <i class="fa fa-search"></i>
+            <% end %>
+        </div>     
+  <% end %>
+</div>
