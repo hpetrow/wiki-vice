@@ -43,8 +43,7 @@
 
   <h2>Latest Revision:</h2>
   <p>Made on: <%= @page.get_date %></p>
-  <p><%=  render partial: 'page_revision', locals: {revisions: @revisions} %></p>
-
+  <p><%=  render partial: 'page_revision', locals: {revisions: @page} %></p>
   <h2>Most Recent Vandalism</h2>
   <p><%= @page.most_recent_vandalism_content %></p>
 </ul>

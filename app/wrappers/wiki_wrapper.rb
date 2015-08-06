@@ -15,8 +15,9 @@ class WikiWrapper
     end
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    page = Page.new(title: page_data["title"])
+    page = Page.new(title: page_data["title"], pageid: page_id)
     page.url = page_url(page_data["title"])
+    page.save
     add_categories_to_page(page, page_data["categories"])
     add_revisions_to_page(page, page_data["revisions"])
     params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
@@ -32,14 +33,14 @@ class WikiWrapper
 
     usercontribs = json["query"]["usercontribs"]
     usercontribs.each do |data|
-      page = find_page(data['title'])
+      page = find_page(data['title'], {pageid: data["pageid"]})
       revision = Revision.new(
         {
           revid: data["revid"],
           timestamp: data["timestamp"],
           size: data["size"],
           size_diff: data["sizediff"]
-          }
+        }
       )
       revision.page = page
       revision.author = author
@@ -133,7 +134,7 @@ class WikiWrapper
   def add_categories_to_page(page, categories)
     categories.each do |c|
       category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.create(name: category_name)
+      category = Category.find_or_create_by(name: category_name)
       page.categories << category
     end
   end
@@ -151,9 +152,19 @@ class WikiWrapper
     "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
   end
 
-  def find_page(title)
+  def revision_content_url(revision)
+    prop = "prop=revisions"
+    revids = "revids=#{revision.revid}"
+    rvdiffto = "rvdiffto=prev"
+    [CALLBACK, prop, revids, rvdiffto].join("&")
+  end
+
+  def find_page(title, options={})
     page = Page.find_by(title: title)
-    page = Page.new(title: title) if page.nil?
+    if page.nil?
+      page = Page.new(title: title) 
+      page.pageid = options[:pageid]
+    end
     page.url = page_url(title)
     page.save
     page
@@ -166,4 +177,5 @@ class WikiWrapper
   def load_json(url)
     json = JSON.load(open(url))
   end
+
 end
