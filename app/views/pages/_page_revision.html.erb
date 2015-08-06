@@ -11,13 +11,16 @@
       <div class="panel-body">
         <div class="tab-wrapper tab-left ">
           <ul class="nav nav-tabs">
-          <!-- This sets up the first active left tab -->
-            <li class="active"><a href="#<%=@first_revision.id%>" data-toggle="tab"><%=@first_revision.id%></a>
+          <!-- This sets up the first active left tab button -->
+            <li class="active"><a href="#<%=@first_revision.id%>" data-toggle="tab">1</a>
              </li>
-             <!-- This iterates through the rest of the revs to make tabs -->
+             <!-- This iterates through the rest of the revs to make tab buttons-->
+             <% @counter = 2 %>
               <% @last_ten_revisions.each do |revision| %>
-                <li><a href="#<%=revision.id%>" data-toggle="tab"><%= revision.id %></a>
+                
+                <li><a href="#<%=revision.id%>" data-toggle="tab"><%= @counter %></a>
                 </li>
+                <% @counter += 1 %>
               <% end %>
           </ul>
           <div class="tab-content">
