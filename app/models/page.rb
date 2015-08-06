@@ -16,7 +16,7 @@ class Page < ActiveRecord::Base
 
   def get_anonymous_authors
     self.authors.select do |author|
-      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2}\.\d{3}\.\d{3}\.\d{3}/) ? author : nil
+      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/) ? author : nil
     end
   end
 
