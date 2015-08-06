@@ -15,6 +15,7 @@ class WikiWrapper
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
     page = Page.new(title: page_data["title"])
+    page.url = page_url(page_data["title"])
     add_categories_to_page(page, page_data["categories"])
     add_revisions_to_page(page, page_data["revisions"])
     params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
@@ -113,5 +114,8 @@ class WikiWrapper
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
   end  
 
+  def page_url(title)
+    "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  end
 
 end

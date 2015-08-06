@@ -18,6 +18,4 @@ class Author < ActiveRecord::Base
     self.pages.uniq
   end
 
-
-
 end
