@@ -1,12 +1,12 @@
-class WikiWrapper 
+class WikiWrapper
   require 'json'
   require 'open-uri'
-  
+
   CALLBACK = "https://en.wikipedia.org/w/api.php?format=json&action=query"
 
   def get_page(title)
     url = page_revisions_url(title)
-    json = JSON.load(open(url))
+    json = load_json(url)
 
     if json["continue"].nil?
       rvcontinue = false
@@ -28,16 +28,15 @@ class WikiWrapper
 
   def get_user_contributions(author)
     url = user_contribs_url(author)
-    json = JSON.load(open(url))
+    json = load_json(url)
 
     usercontribs = json["query"]["usercontribs"]
     usercontribs.each do |data|
       page = find_page(data['title'])
       revision = Revision.new(
         {
-          revid: data["revid"], 
-          time: data["timestamp"], 
-          timestamp: data["timestamp"], 
+          revid: data["revid"],
+          timestamp: data["timestamp"],
           size: data["size"],
           size_diff: data["sizediff"]
           }
@@ -46,27 +45,49 @@ class WikiWrapper
       revision.author = author
       revision.save
     end
-  end  
+  end
+
+  def get_user_contributions(author)
+    url = user_contribs_url(author)
+    json = load_json(url)
+
+    usercontribs = json["query"]["usercontribs"]
+    usercontribs.each do |data|
+      page = Page.find_or_create_by(title: data["title"])
+      if Revision.find_by(revid: data["revid"])
+        revision = Revision.find_by(revid: data["revid"])
+      else
+        revision = Revision.create(
+          timestamp: data["timestamp"],
+          size: data["size"],
+          size_diff: data["sizediff"]
+          )
+      end
+      revision.page = page
+      revision.author = author
+      revision.save
+    end
+  end
 
   private
   def get_more_revisions(params)
     i = 1
     loop do
       url = page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
-      json = JSON.load(open(url))
+      json = load_json(url)
 
       break if i == params[:continue] || json["continue"].nil?
       page_id = json["query"]["pages"].keys.first
       revisions = json["query"]["pages"][page_id]["revisions"]
       add_revisions_to_page(params[:page], revisions)
       i += 1
-    end    
+    end
   end
 
   def get_vandalism_revisions(params)
     base_url = page_revisions_url(params[:title])
     url = "#{base_url}&rvtag=possible%20libel%20or%20vandalism"
-    json = JSON.load(open(url))
+    json = load_json(url)
 
     page_id = json["query"]["pages"].keys.first
     revisions = json["query"]["pages"][page_id]["revisions"]
@@ -94,15 +115,14 @@ class WikiWrapper
     revisions.each do |r|
       if (!Revision.find_by(timestamp: r['timestamp']))
         Revision.new.tap { |revision|
-          revision.time = r['timestamp']
           revision.timestamp = r['timestamp']
           revision.content = r['diff'].nil? ? 'notcached' : r['diff']['*']
           revision.revid = r['revid']
           revision.comment = r['comment']
           revision.vandalism = vandalism?(r['tags'])
 
-          author = Author.find_or_create_by(name: r['user'])
-          revision.author = author
+          author_name = !!r['user'] ? r['user'] : 'anonymous'
+          revision.author = Author.find_or_create_by(name: author_name)
           revision.page = page
           revision.save
         }
@@ -118,37 +138,14 @@ class WikiWrapper
     end
   end
 
-  def get_user_contributions(author)
-    url = user_contribs_url(author)
-    json = JSON.load(open(url))
-
-    usercontribs = json["query"]["usercontribs"]
-    usercontribs.each do |data|
-      page = Page.find_or_create_by(title: data["title"])
-      if Revision.find_by(revid: data["revid"])
-        revision = Revision.find_by(revid: data["revid"])
-      else
-        revision = Revision.create(
-          time: data["timestamp"],
-          timestamp: data["timestamp"],
-          size: data["size"],
-          size_diff: data["sizediff"]
-          )
-      end
-      revision.page = page
-      revision.author = author
-      revision.save
-    end
-  end
-
   def user_contribs_url(author)
     list = "list=usercontribs"
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     ucnamespace = "ucnamespace=0"
-    [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
-  end  
+    [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
+  end
 
   def page_url(title)
     "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
@@ -164,5 +161,9 @@ class WikiWrapper
 
   def vandalism?(tags)
     tags.include?("possible libel or vandalism")
+  end
+
+  def load_json(url)
+    json = JSON.load(open(url))
   end
 end
