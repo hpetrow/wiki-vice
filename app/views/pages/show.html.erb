@@ -35,7 +35,6 @@
 
     
 <h2>Latest Revision:</h2>
-<p>Made on: <%= @page.get_date %></p>
 <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
 
 <h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
