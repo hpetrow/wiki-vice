@@ -2,7 +2,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Latest Revision, from User</h3>
+        <h3 class="panel-title">Latest Revisions</h3>
           <div class="actions pull-right">
             <!-- <i class="fa fa-chevron-down"></i>
             <i class="fa fa-times"></i> -->
@@ -11,19 +11,27 @@
       <div class="panel-body">
         <div class="tab-wrapper tab-left ">
           <ul class="nav nav-tabs">
+          <!-- This sets up the first active left tab -->
             <li class="active"><a href="#<%=@first_revision.id%>" data-toggle="tab"><%=@first_revision.id%></a>
              </li>
+             <!-- This iterates through the rest of the revs to make tabs -->
               <% @last_ten_revisions.each do |revision| %>
                 <li><a href="#<%=revision.id%>" data-toggle="tab"><%= revision.id %></a>
                 </li>
               <% end %>
           </ul>
           <div class="tab-content">
+          <!-- This sets up the first active content tab. -->
           <div class="tab-pane active tab_box" id="<%= @first_revision.id %>">
+          <h3>From user <strong><%=@first_revision.author.name %></strong>:</h3>
+          <p>Made on: <%= @first_revision.page.get_date %></p>
             <%= @first_revision.content.gsub("}}", "").html_safe %>
           </div>
+          <!-- This iterates through the rest of the rev content for tabs. -->
             <% @last_ten_revisions.each do |revision| %>
               <div class="tab-pane tab_scroll" id="<%=revision.id%>">
+                <h3>From user <strong><%=revision.author.name %></strong>:</h3>
+                <p>Made on: <%= revision.page.get_date %></p>
                 <p>
                   <%= revision.content.gsub("}}", "").html_safe %>
                 </p>
