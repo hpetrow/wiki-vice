@@ -15,6 +15,7 @@ class WikiWrapper
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
     page = Page.new(title: page_data["title"])
+    page.url = page_url(page_data["title"])
     add_categories_to_page(page, page_data["categories"])
     add_revisions_to_page(page, page_data["revisions"])
     params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
@@ -24,21 +25,20 @@ class WikiWrapper
   end
 
   def get_user_contributions(author)
-    url = build_user_contribs_url(author)
+    url = user_contribs_url(author)
     json = JSON.load(open(url))
     usercontribs = json["query"]["usercontribs"]
     usercontribs.each do |data|
-      page = Page.find_or_create_by(title: data["title"])
-      if Revision.find_by(revid: data["revid"])
-        revision = Revision.find_by(revid: data["revid"])
-      else
-        revision = Revision.create(
-          time: data["timestamp"],
-          timestamp: data["timestamp"],
+      page = find_page(data['title'])
+      revision = Revision.new(
+        {
+          revid: data["revid"], 
+          time: data["timestamp"], 
+          timestamp: data["timestamp"], 
           size: data["size"],
           size_diff: data["sizediff"]
-          )
-      end
+          }
+      )
       revision.page = page
       revision.author = author
       revision.save
@@ -104,7 +104,7 @@ class WikiWrapper
     end
   end
 
-  def build_user_contribs_url(author)
+  def user_contribs_url(author)
     list = "list=usercontribs"
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
@@ -113,5 +113,16 @@ class WikiWrapper
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")    
   end  
 
+  def page_url(title)
+    "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  end
+
+  def find_page(title)
+    page = Page.find_by(title: title)
+    page = Page.new(title: title) if page.nil?
+    page.url = page_url(title)
+    page.save
+    page
+  end
 
 end
