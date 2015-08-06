@@ -23,15 +23,16 @@
           <div class="tab-content">
           <!-- This sets up the first active content tab. -->
           <div class="tab-pane active tab_box" id="<%= @first_revision.id %>">
-          <h3>From user <strong><%=@first_revision.author.name %></strong>:</h3>
-          <p>Made on: <%= @first_revision.get_date %></p>
+          <h3><strong><%=@first_revision.author.name %></strong> <br><small>on <%= @first_revision.get_date %></small></h3><hr>
+            <p>
             <%= @first_revision.content.gsub("}}", "").html_safe %>
+            </p>
           </div>
           <!-- This iterates through the rest of the rev content for tabs. -->
             <% @last_ten_revisions.each do |revision| %>
               <div class="tab-pane tab_scroll" id="<%=revision.id%>">
-                <h3>From user <strong><%=revision.author.name %></strong>:</h3>
-                <p>Made on: <%= revision.get_date %></p>
+                <h3><strong><%=revision.author.name %></strong><br><small>on <%= revision.get_date %></small></h3><hr>
+                
                 <p>
                   <%= revision.content.gsub("}}", "").html_safe %>
                 </p>
