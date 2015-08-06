@@ -30,4 +30,7 @@ var options = {
 	
 	var myChart = new Chart(document.getElementById("authorContributionsChart").getContext("2d")).Pie(data, options);
 
+
+    
+
 })
