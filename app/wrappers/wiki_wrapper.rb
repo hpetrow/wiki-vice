@@ -29,6 +29,7 @@ class WikiWrapper
   def get_user_contributions(author)
     url = user_contribs_url(author)
     json = JSON.load(open(url))
+
     usercontribs = json["query"]["usercontribs"]
     usercontribs.each do |data|
       page = find_page(data['title'])
@@ -53,21 +54,23 @@ class WikiWrapper
     loop do
       url = page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
       json = JSON.load(open(url))
+
       break if i == params[:continue] || json["continue"].nil?
       page_id = json["query"]["pages"].keys.first
-      add_revisions_to_page(params[:page], params[:revisions])  
+      revisions = json["query"]["pages"][page_id]["revisions"]
+      add_revisions_to_page(params[:page], revisions)
       i += 1
     end    
   end
 
   def get_vandalism_revisions(params)
-    base_url = build_page_revisions_url(params[:title])
+    base_url = page_revisions_url(params[:title])
     url = "#{base_url}&rvtag=possible%20libel%20or%20vandalism"
     json = JSON.load(open(url))
 
     page_id = json["query"]["pages"].keys.first
     revisions = json["query"]["pages"][page_id]["revisions"]
-    add_revisions_to_page(params[:page], revisions)
+    add_revisions_to_page(params[:page], revisions) if !!revisions
   end
 
   def page_revisions_url(title, options = {})
@@ -77,7 +80,7 @@ class WikiWrapper
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
     redirects = "redirects"
-    rvprop = "rvprop=tags"
+    rvprop = "rvprop=ids|user|timestamp|comment|tags"
     url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, redirects]
     if options.empty?
       url.join("&")
@@ -89,24 +92,21 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      if r['diff'].nil?
-        content = 'notcached'
-      else
-        content = r['diff']['*']
-      end
-      revision = Revision.new(
-        time: r['timestamp'], 
-        timestamp: r['timestamp'], 
-        content: content,
-        revid: r['revid'], 
-        comment: r['comment'],
-        vandalism: vandalism?(r['tags'])
-      )
+      if (!Revision.find_by(timestamp: r['timestamp']))
+        Revision.new.tap { |revision|
+          revision.time = r['timestamp']
+          revision.timestamp = r['timestamp']
+          revision.content = r['diff'].nil? ? 'notcached' : r['diff']['*']
+          revision.revid = r['revid']
+          revision.comment = r['comment']
+          revision.vandalism = vandalism?(r['tags'])
 
-      author = Author.find_or_create_by(name: r['user'])
-      revision.author = author
-      revision.page = page
-      revision.save
+          author = Author.find_or_create_by(name: r['user'])
+          revision.author = author
+          revision.page = page
+          revision.save
+        }
+      end
     end
   end
 

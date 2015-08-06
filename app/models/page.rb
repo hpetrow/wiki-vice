@@ -11,12 +11,12 @@ class Page < ActiveRecord::Base
   end
 
   def get_date
-    DateTime.parse(self.revisions.first.time).to_formatted_s(:long_ordinal)
+    !!self.revisions.first.time ? DateTime.parse(self.revisions.first.time).to_formatted_s(:long_ordinal) : 'not available'
   end
 
   def get_anonymous_authors
     self.authors.select do |author|
-      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/) ? author : nil
+      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/)
     end
   end
 
@@ -66,6 +66,11 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1)
+    self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1).first
+  end
+
+  def most_recent_vandalism_content
+    vandalism = self.most_recent_vandalism
+    vandalism ? vandalism.content.html_safe : ''
   end
 end
