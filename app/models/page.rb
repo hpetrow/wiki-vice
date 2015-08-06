@@ -1,6 +1,6 @@
 class Page < ActiveRecord::Base
   has_many :revisions
-  has_many :authors, :through => :revisions
+  has_many :authors, -> { uniq }, :through => :revisions
   has_many :categories
 
   def top_five_authors

@@ -5,7 +5,7 @@ class WikiWrapper
   CALLBACK = "https://en.wikipedia.org/w/api.php?format=json&action=query"
 
   def get_page(title)
-    url = build_page_revisions_url(title)
+    url = page_revisions_url(title)
     json = JSON.load(open(url))
     if json["continue"].nil?
       rvcontinue = false
@@ -23,20 +23,42 @@ class WikiWrapper
     page
   end
 
+  def get_user_contributions(author)
+    url = build_user_contribs_url(author)
+    json = JSON.load(open(url))
+    usercontribs = json["query"]["usercontribs"]
+    usercontribs.each do |data|
+      page = Page.find_or_create_by(title: data["title"])
+      if Revision.find_by(revid: data["revid"])
+        revision = Revision.find_by(revid: data["revid"])
+      else
+        revision = Revision.create(
+          time: data["timestamp"],
+          timestamp: data["timestamp"],
+          size: data["size"],
+          size_diff: data["sizediff"]
+          )
+      end
+      revision.page = page
+      revision.author = author
+      revision.save
+    end
+  end  
+
+  private
   def get_more_revisions(params)
     i = 1
-    loop do 
-      url = build_page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
+    loop do
+      url = page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
       json = JSON.load(open(url))
       break if i == params[:continue] || json["continue"].nil?
-      rvcontinue = json["continue"]["rvcontinue"]
       page_id = json["query"]["pages"].keys.first
       add_revisions_to_page(params[:page], params[:revisions])  
       i += 1
     end    
   end
 
-  def build_page_revisions_url(title, options = {})
+  def page_revisions_url(title, options = {})
     prop = "prop=revisions|categories"
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
@@ -79,28 +101,6 @@ class WikiWrapper
       category_name = /^Category:(.+)/.match(c['title'])[1]
       category = Category.create(name: category_name)
       page.categories << category
-    end
-  end
-
-  def get_user_contributions(author)
-    url = build_user_contribs_url(author)
-    json = JSON.load(open(url))
-    usercontribs = json["query"]["usercontribs"]
-    usercontribs.each do |data|
-      page = Page.find_or_create_by(title: data["title"])
-      if Revision.find_by(revid: data["revid"])
-        revision = Revision.find_by(revid: data["revid"])
-      else
-        revision = Revision.create(
-          time: data["timestamp"],
-          timestamp: data["timestamp"],
-          size: data["size"],
-          size_diff: data["sizediff"]
-          )
-      end
-      revision.page = page
-      revision.author = author
-      revision.save
     end
   end
 
