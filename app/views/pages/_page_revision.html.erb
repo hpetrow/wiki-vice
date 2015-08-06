@@ -11,11 +11,8 @@
       <div class="panel-body">
         <div class="tab-wrapper tab-left ">
           <ul class="nav nav-tabs">
-          <% @first_revision = @revisions.first %>
             <li class="active"><a href="#<%=@first_revision.id%>" data-toggle="tab"><%=@first_revision.id%></a>
              </li>
-            <% @last_ten_revisions = @revisions.slice(1,9) %>
-
               <% @last_ten_revisions.each do |revision| %>
                 <li><a href="#<%=revision.id%>" data-toggle="tab"><%= revision.id %></a>
                 </li>
