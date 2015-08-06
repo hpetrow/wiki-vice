@@ -2,6 +2,7 @@ class Page < ActiveRecord::Base
   has_many :revisions
   has_many :authors, :through => :revisions
   has_many :categories
+  WIKI = WikiWrapper.new
 
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
@@ -56,6 +57,12 @@ class Page < ActiveRecord::Base
 
   def unique_authors
     self.authors.uniq
+  end
+
+  def most_recent_revision
+    if self.first.content.nil?
+      self.first.content = WIKI.revision_content(revision)
+    end
   end
 
 end
