@@ -59,11 +59,12 @@ class Page < ActiveRecord::Base
     self.authors.uniq
   end
 
-  def most_recent_revision
+  def latest_revision
     first_revision = self.revisions.first
     if first_revision.content.nil?
-      first_revision.content = WIKI.get_revision_content(first_revision)
+      WIKI.set_revision_content(first_revision)
     end
+    first_revision
   end
 
 end

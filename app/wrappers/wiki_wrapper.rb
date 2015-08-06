@@ -29,7 +29,7 @@ class WikiWrapper
     json = JSON.load(open(url))
     usercontribs = json["query"]["usercontribs"]
     usercontribs.each do |data|
-      page = find_page(data['title'])
+      page = find_page(data['title'], {pageid: data["pageid"]})
       revision = Revision.new(
         {
           revid: data["revid"], 
@@ -45,12 +45,12 @@ class WikiWrapper
     end
   end  
 
-  def get_revision_content(revision)
+  def set_revision_content(revision)
     url = revision_content_url(revision)
     json = JSON.load(open(url))
-    binding.pry
-    revisions = json["query"]["pages"][revision.page.id]["revisions"]
-
+    revisions = json["query"]["pages"][revision.page.pageid.to_s]["revisions"]
+    revision.content = revisions.first["diff"]["*"]
+    revision.save
   end
 
   private
@@ -107,7 +107,7 @@ class WikiWrapper
   def add_categories_to_page(page, categories)
     categories.each do |c|
       category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.create(name: category_name)
+      category = Category.find_or_create_by(name: category_name)
       page.categories << category
     end
   end
@@ -128,13 +128,16 @@ class WikiWrapper
   def revision_content_url(revision)
     prop = "prop=revisions"
     revids = "revids=#{revision.revid}"
-    rvprop = "rvprop=content"
-    [CALLBACK, prop, revids, rvprop].join("&")
+    rvdiffto = "rvdiffto=prev"
+    [CALLBACK, prop, revids, rvdiffto].join("&")
   end
 
-  def find_page(title)
+  def find_page(title, options={})
     page = Page.find_by(title: title)
-    page = Page.new(title: title) if page.nil?
+    if page.nil?
+      page = Page.new(title: title) 
+      page.pageid = options[:pageid]
+    end
     page.url = page_url(title)
     page.save
     page
