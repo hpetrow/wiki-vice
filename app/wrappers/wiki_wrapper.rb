@@ -7,6 +7,7 @@ class WikiWrapper
   def get_page(title)
     url = page_revisions_url(title)
     json = JSON.load(open(url))
+
     if json["continue"].nil?
       rvcontinue = false
     else
@@ -20,6 +21,7 @@ class WikiWrapper
     add_revisions_to_page(page, page_data["revisions"])
     params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
     get_more_revisions(params)
+    get_vandalism_revisions(params)
     page.save
     page
   end
@@ -58,6 +60,16 @@ class WikiWrapper
     end    
   end
 
+  def get_vandalism_revisions(params)
+    base_url = build_page_revisions_url(params[:title])
+    url = "#{base_url}&rvtag=possible%20libel%20or%20vandalism"
+    json = JSON.load(open(url))
+
+    page_id = json["query"]["pages"].keys.first
+    revisions = json["query"]["pages"][page_id]["revisions"]
+    add_revisions_to_page(params[:page], revisions)
+  end
+
   def page_revisions_url(title, options = {})
     prop = "prop=revisions|categories"
     rvlimit = "rvlimit=50"
@@ -77,7 +89,6 @@ class WikiWrapper
 
   def add_revisions_to_page(page, revisions)
     revisions.each do |r|
-      puts r['revid']
       if r['diff'].nil?
         content = 'notcached'
       else
