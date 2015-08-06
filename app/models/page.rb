@@ -37,10 +37,6 @@ class Page < ActiveRecord::Base
     (1 / (revisions_by_date.size / revisions.size.to_f)).round(0)
   end
 
-  def friendlier_revisions_per_day
-    self.avg_revisions_per_day
-  end
-
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
         GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
