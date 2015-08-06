@@ -54,4 +54,8 @@ class Page < ActiveRecord::Base
     end.uniq
   end
 
+  def unique_authors
+    self.authors.uniq
+  end
+
 end
