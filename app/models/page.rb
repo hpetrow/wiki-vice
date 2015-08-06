@@ -63,4 +63,8 @@ class Page < ActiveRecord::Base
     self.revisions.first
   end
 
+  def self.wiki_link(title)
+    url = "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  end
+
 end
