@@ -24,6 +24,8 @@ gem "font-awesome-rails"
 gem 'gon'
 # Adds functionality to search for location based on IP address.
 gem 'geoip'
+# Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.
+gem 'whenever', :require => false
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
