@@ -10,10 +10,6 @@ class WikiWrapper
 
     persistor = JsonPersistor.new(json)
     page = persistor.persist_page
-    persistor.persist_revisions(page)
-    # get_vandalism_revisions(params)
-    # page.save
-    # page
     page
   end
 
@@ -21,43 +17,24 @@ class WikiWrapper
     url = user_contribs_url(author)
     json = load_json(url)
 
-    usercontribs = json["query"]["usercontribs"]
-    usercontribs.each do |data|
-      page = find_page(data['title'], {pageid: data["pageid"]})
-      revision = Revision.new(
-        {
-          revid: data["revid"],
-          timestamp: data["timestamp"],
-          size: data["size"],
-          size_diff: data["sizediff"]
-        }
-      )
-      revision.page = page
-      revision.author = author
-      revision.save
-    end
-  end
+    persistor = JsonPersistor.new(json)
+    persist_author_revisions(author)
 
-  def get_user_contributions(author)
-    url = user_contribs_url(author)
-    json = load_json(url)
-
-    usercontribs = json["query"]["usercontribs"]
-    usercontribs.each do |data|
-      page = Page.find_or_create_by(title: data["title"])
-      if Revision.find_by(revid: data["revid"])
-        revision = Revision.find_by(revid: data["revid"])
-      else
-        revision = Revision.create(
-          timestamp: data["timestamp"],
-          size: data["size"],
-          size_diff: data["sizediff"]
-          )
-      end
-      revision.page = page
-      revision.author = author
-      revision.save
-    end
+    # usercontribs = json["query"]["usercontribs"]
+    # usercontribs.each do |data|
+    #   page = find_page(data['title'], {pageid: data["pageid"]})
+    #   revision = Revision.new(
+    #     {
+    #       revid: data["revid"],
+    #       timestamp: data["timestamp"],
+    #       size: data["size"],
+    #       size_diff: data["sizediff"]
+    #     }
+    #   )
+    #   revision.page = page
+    #   revision.author = author
+    #   revision.save
+    # end
   end
 
   private
