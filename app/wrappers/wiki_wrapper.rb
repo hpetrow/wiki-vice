@@ -15,7 +15,7 @@ class WikiWrapper
     end
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    page = Page.new(title: page_data["title"], pageid: page_id)
+    page = Page.new(title: page_data["title"], page_id: page_id)
     page.url = page_url(page_data["title"])
     page.save
     add_categories_to_page(page, page_data["categories"])
@@ -134,8 +134,8 @@ class WikiWrapper
 
   def add_categories_to_page(page, categories)
     categories.each do |c|
-      category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.find_or_create_by(name: category_name)
+      category_title = /^Category:(.+)/.match(c['title'])[1]
+      category = Category.find_or_create_by(title: category_title)
       page.categories << category
     end
   end
