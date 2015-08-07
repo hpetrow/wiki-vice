@@ -8,25 +8,12 @@ class WikiWrapper
     url = page_revisions_url(title)
     json = load_json(url)
     persistor = JsonPersistor.new(json)
-    page = persistor.persist_page_revisions
-
-    # if json["continue"].nil?
-    #   rvcontinue = false
-    # else
-    #   rvcontinue = json["continue"]["rvcontinue"]
-    # end
-    # page_id = json["query"]["pages"].keys.first
-    # page_data = json["query"]["pages"][page_id]
-    # page = Page.new(title: page_data["title"], pageid: page_id)
-    # page.url = page_url(page_data["title"])
-    # page.save
-    # add_categories_to_page(page, page_data["categories"])
-    # add_revisions_to_page(page, page_data["revisions"])
-    # params = {continue: 10, title: title, revisions: page_data["revisions"], page: page, rvcontinue: rvcontinue}
-    # get_more_revisions(params)
+    page = persistor.persist_page
+    persistor.persist_revisions(page)
     # get_vandalism_revisions(params)
     # page.save
     # page
+    page
   end
 
   def get_user_contributions(author)
@@ -103,6 +90,7 @@ class WikiWrapper
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
+    rvtag = "&rvtag=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
