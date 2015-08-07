@@ -16,7 +16,7 @@ class JsonPersistor
   end
 
   def persist_page_revisions(page)
-    revisions = json["query"]["pages"][page.page_id.to_s]["revisions"]
+    revisions = json["query"]["pages"][page.page_id.to_s]["revisions"] || []
     revisions.each do |r|
 
       if r["diff"]

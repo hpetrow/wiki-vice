@@ -10,7 +10,7 @@ class WikiWrapper
     persistor = JsonPersistor.new(json) 
     if persistor.page_exists?
       page = persistor.persist_page
-    # if page is new, get vandalism
+      get_vandalism_revisions(page)
       page
     else
       "can't find page"
@@ -31,13 +31,9 @@ class WikiWrapper
   end  
 
   def get_vandalism_revisions(page)
-    base_url = page_revisions_url(page.title)
-    url = "#{base_url}&rvtag=possible%20libel%20or%20vandalism"
-    json = load_json(url)
-
-    page_id = json["query"]["pages"].keys.first
-    revisions = json["query"]["pages"][page_id]["revisions"]
-    add_revisions_to_page(params[:page], revisions) if !!revisions
+    json = load_json(vandalism_revisions_url(page))
+    persistor = JsonPersistor.new(json)
+    persistor.persist_page_revisions(page)
   end  
 
   private
@@ -81,6 +77,11 @@ class WikiWrapper
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     ucnamespace = "ucnamespace=0"
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
+  end
+
+  def vandalism_revisions_url(page)
+    revisions_url = page_revisions_url(page.title)
+    url = "#{revisions_url}&rvtag=possible%20libel%20or%20vandalism"
   end
 
   def page_url(title)
