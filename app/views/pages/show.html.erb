@@ -40,8 +40,8 @@
     <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
 </ul>
 
-  <h2>Most Recent Vandalism</h2>
-  <p><%= @page.most_recent_vandalism_content %></p>
+  <h2>Most Recent Vandalism:</h2>
+  <h3><%= @page.most_recent_vandalism_regex %></h3>
 
 
 <script type="text/javascript">
