@@ -13,7 +13,7 @@ class WikiWrapper
     # if page is new, get vandalism
       page
     else
-      "can't find page"
+      false
     end
   end
 
