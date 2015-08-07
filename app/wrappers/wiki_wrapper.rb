@@ -10,6 +10,7 @@ class WikiWrapper
     persistor = JsonPersistor.new(json) 
     if persistor.page_exists?
       page = persistor.persist_page
+      get_more_revisions(page, json)
       get_vandalism_revisions(page)
       page
     else
@@ -28,27 +29,25 @@ class WikiWrapper
     json = load_json(revision_content_url(revision))
     persistor = JsonPersistor.new(json)
     persistor.persist_revision_content(revision)
-  end  
-
-  def get_vandalism_revisions(page)
-    json = load_json(vandalism_revisions_url(page))
-    persistor = JsonPersistor.new(json)
-    persistor.persist_page_revisions(page)
-  end  
+  end
 
   private
-  def get_more_revisions(params)
-    i = 1
-    loop do
-      url = page_revisions_url(params[:title], {rvcontinue: params[:rvcontinue]})
-      json = load_json(url)
 
-      break if i == params[:continue] || json["continue"].nil?
-      page_id = json["query"]["pages"].keys.first
-      revisions = json["query"]["pages"][page_id]["revisions"]
-      add_revisions_to_page(params[:page], revisions)
+  def get_more_revisions(page, json)
+    continue = 10
+    i = 1
+    while (!!json["continue"] && i < continue)
+      json = load_json(page_revisions_url(page.title, {rvcontinue: json["continue"]["rvcontinue"]}))
+      persistor = JsonPersistor.new(json)
+      persistor.persist_page_revisions(page)
       i += 1
     end
+  end
+
+  def get_vandalism_revisions(page)
+    json = load_json(page_revisions_url(page.title, {rvtag: "possible%20libel%20or%20vandalism"}))
+    persistor = JsonPersistor.new(json)
+    persistor.persist_page_revisions(page)
   end
 
   def page_revisions_url(title, options = {})
@@ -77,11 +76,6 @@ class WikiWrapper
     ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
     ucnamespace = "ucnamespace=0"
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
-  end
-
-  def vandalism_revisions_url(page)
-    revisions_url = page_revisions_url(page.title)
-    url = "#{revisions_url}&rvtag=possible%20libel%20or%20vandalism"
   end
 
   def page_url(title)
