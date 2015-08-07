@@ -79,4 +79,9 @@ class Page < ActiveRecord::Base
     vandalism ? vandalism.content.html_safe : ''
   end
 
+  def most_recent_vandalism_regex
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  end
+
 end
