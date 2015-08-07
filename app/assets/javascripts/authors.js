@@ -1,5 +1,4 @@
 $(function(){
-console.log(gon.data);
   var data = [
     {
         value: gon.data[0][1],

@@ -13,12 +13,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require Chart
-//= require wiki_chart.js
-//= require anonymous_by_country.js
-//= require vector_map.js
 //= require jquery-jvectormap-2.0.2.min.js
 //= require jquery-jvectormap-world-mill-en.js
+//= require Chart
+//= require page.js
+//= require authors.js
+
+
 
 
 
