@@ -14,5 +14,6 @@ class PagesController < ApplicationController
     gon.anonCountryName = @page.find_country_name
     @first_revision = @revisions.first 
     @last_ten_revisions = @revisions.slice(1,9) 
+    gon.params = params
   end
 end
