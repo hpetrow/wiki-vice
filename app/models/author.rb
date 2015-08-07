@@ -1,7 +1,6 @@
 class Author < ActiveRecord::Base
   has_many :revisions
   has_many :pages, :through => :revisions
-  validates :name, uniqueness: true
   WIKI = WikiWrapper.new
 
   def top_contributions
