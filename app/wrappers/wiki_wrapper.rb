@@ -7,6 +7,7 @@ class WikiWrapper
   def get_page(title)
     url = page_revisions_url(title)
     json = load_json(url)
+
     persistor = JsonPersistor.new(json)
     page = persistor.persist_page
     persistor.persist_revisions(page)
@@ -125,8 +126,8 @@ class WikiWrapper
 
   def add_categories_to_page(page, categories)
     categories.each do |c|
-      category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.find_or_create_by(name: category_name)
+      category_title = /^Category:(.+)/.match(c['title'])[1]
+      category = Category.find_or_create_by(title: category_title)
       page.categories << category
     end
   end
