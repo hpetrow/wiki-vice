@@ -8,13 +8,10 @@ class JsonPersistor
   def persist_page
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
+    Page.where(page_id: page_id).destroy_all
     page = Page.new(title: page_data["title"], page_id: page_id)
-    if page.valid?
-      persist_page_categories(page)
-      persist_page_revisions(page)
-    else
-      page = Page.find_by(page_id: page_id)
-    end
+    persist_page_categories(page)
+    persist_page_revisions(page)
     page
   end
 
@@ -29,9 +26,8 @@ class JsonPersistor
       end
 
       author_name = !!r["user"] ? r["user"] : "anonymous"
-      author = Author.new(name: r["user"])
-      author.save      
-
+      author = Author.find_or_create_by(name: r["user"])
+       
       revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], comment: r["comment"], vandalism: vandalism?(r["tags"]), content: content)
       if revision.valid?
         revision.page = page
@@ -41,12 +37,9 @@ class JsonPersistor
     end
   end
 
-  def persist_author_revisions(author)
-    usercontribs = json["query"]["usercontribs"]
+  def page_exists?
     binding.pry
-    # usercontribs.each do |uc|
-
-    # end
+    json["query"]["pages"]["-1"].nil?
   end
 
   private

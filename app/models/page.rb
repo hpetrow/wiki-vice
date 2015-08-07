@@ -1,5 +1,5 @@
 class Page < ActiveRecord::Base
-  has_many :revisions
+  has_many :revisions, :dependent => :destroy
   has_many :authors, :through => :revisions
   has_many :categories
   validates :title, uniqueness: true
