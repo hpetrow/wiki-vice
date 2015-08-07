@@ -38,8 +38,24 @@ class JsonPersistor
   end
 
   def page_exists?
-    binding.pry
     json["query"]["pages"]["-1"].nil?
+  end
+
+  def persist_author_revisions(author)
+    usercontribs = json["query"]["usercontribs"]
+    binding.pry
+    usercontribs.each do |uc|
+      page = Page.new(page_id: uc["pageid"], title: uc["title"])
+      page.save
+      revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"], comment: uc["comment"])
+      revision.page = page
+      revision.author = author
+      revision.save      
+    end
+  end
+
+  def persist_revision_content
+    binding.pry
   end
 
   private

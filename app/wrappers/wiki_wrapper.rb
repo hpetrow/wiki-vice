@@ -22,7 +22,7 @@ class WikiWrapper
     json = load_json(url)
 
     persistor = JsonPersistor.new(json)
-    persist_author_revisions(author)
+    persistor.persist_author_revisions(author)
 
     # usercontribs = json["query"]["usercontribs"]
     # usercontribs.each do |data|
@@ -51,6 +51,11 @@ class WikiWrapper
     add_revisions_to_page(params[:page], revisions) if !!revisions
   end  
 
+  def get_content_for_revision(revision)
+    json = load_json(revision_content_url(revision))
+    persistor = Persistor.new
+    persistor.persist_revision_content(json)
+  end
 
   private
   def get_more_revisions(params)
@@ -66,8 +71,6 @@ class WikiWrapper
       i += 1
     end
   end
-
-
 
   def page_revisions_url(title, options = {})
     prop = "prop=revisions|categories"
@@ -85,34 +88,6 @@ class WikiWrapper
     else
       options.each {|key, value| url << "#{key}=#{value}"}
       url.join("&")
-    end
-  end
-
-  def add_revisions_to_page(page, revisions)
-    revisions.each do |r|
-      if (!Revision.find_by(timestamp: r['timestamp']))
-        Revision.new.tap { |revision|
-          revision.timestamp = r['timestamp']
-          revision.content = r['diff'].nil? ? 'notcached' : r['diff']['*']
-          revision.revid = r['revid']
-          revision.comment = r['comment']
-          revision.vandalism = vandalism?(r['tags'])
-
-          author_name = !!r['user'] ? r['user'] : 'anonymous'
-          revision.author = Author.find_or_create_by(name: author_name)
-          revision.page = page
-          revision.save
-          page.save
-        }
-      end
-    end
-  end
-
-  def add_categories_to_page(page, categories)
-    categories.each do |c|
-      category_title = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.find_or_create_by(title: category_title)
-      page.categories << category
     end
   end
 
