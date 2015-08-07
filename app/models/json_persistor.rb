@@ -29,11 +29,11 @@ class JsonPersistor
       author = Author.find_or_create_by(name: r["user"])
        
       revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], comment: r["comment"], vandalism: vandalism?(r["tags"]), content: content)
-      # if revision.valid?
+      if revision.valid?
         revision.page = page
         revision.author = author
         revision.save
-      # end
+      end
     end
   end
 
@@ -43,9 +43,13 @@ class JsonPersistor
 
   def persist_author_revisions(author)
     usercontribs = json["query"]["usercontribs"]
+
     usercontribs.each do |uc|
       page = Page.new(page_id: uc["pageid"], title: uc["title"])
-      page.save
+      if !(page.valid?)
+        binding.pry
+        page = Page.find(page_id: uc["pageid"])
+      end  
       revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"], comment: uc["comment"])
       revision.page = page
       revision.author = author
