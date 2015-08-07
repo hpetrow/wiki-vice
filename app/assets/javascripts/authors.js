@@ -17,6 +17,18 @@ $(function(){
         color: "#FDB45C",
         highlight: "#FFC870",
         label: gon.data[2][0]
+    },
+    {
+        value: gon.data[3][1],
+        color: "#3598DB",
+        highlight: "#5DADE2",
+        label: gon.data[3][0]
+    },
+    {
+        value: gon.data[4][1],
+        color: "#293949",
+        highlight: "#3E4D5B",
+        label: gon.data[4][0]
     }
 ];
 
@@ -51,8 +63,4 @@ $('#world-map').vectorMap({map: 'world_mill_en',
             "stroke-width": 3
           }
         }});
-
-
-
-
 });

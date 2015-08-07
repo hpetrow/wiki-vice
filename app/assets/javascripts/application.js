@@ -16,8 +16,9 @@
 //= require jquery-jvectormap-2.0.2.min.js
 //= require jquery-jvectormap-world-mill-en.js
 //= require Chart
-//= require page.js
 //= require authors.js
+//= require page.js
+
 
 
 
