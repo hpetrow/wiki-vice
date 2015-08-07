@@ -18,9 +18,19 @@ class JsonPersistor
 
   def persist_categories(page)
     categories = json["query"]["pages"][page.page_id.to_s]["categories"]
-    all_categories = Category.pluck(:name)
+    all_categories = Category.pluck(:title)
+    binding.pry
     categories.each do |category|
-
+      category_title = /^Category:(.+)/.match(category['title'])[1]
+      category = Category.new(title: category_title)
+      if category.valid?
+        category.page = page
+        category.save
+      else
+        category = Category.find_by(title: category_title)
+        category.page = page
+        category.save
+      end
     end
   end
 end

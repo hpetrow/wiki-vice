@@ -103,9 +103,10 @@ class WikiWrapper
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
-    redirects = "redirects"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, redirects]
+    clprop = "clprop=sortkey|hidden"
+    redirects = "redirects"
+    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, clprop,redirects]
     if options.empty?
       url.join("&")
     else
