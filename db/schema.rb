@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150806234644) do
+ActiveRecord::Schema.define(version: 20150807035104) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20150806234644) do
     t.text     "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "pageid"
+    t.integer  "page_id"
   end
 
   create_table "revisions", force: :cascade do |t|
