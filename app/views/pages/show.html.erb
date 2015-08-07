@@ -24,7 +24,7 @@
   </div>
 
   <div class="col-md-6">
-    <h3> This page's top author also contributes to: </h3>
+    <h3><%= link_to "#{@top_five_authors.first[:author].name}",author_path(@top_five_authors.first[:author].id) %> also contributes to: </h3>
     <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
     <p><%= contribution[0]%></p>
     <% end %>
