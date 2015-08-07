@@ -56,7 +56,7 @@ class WikiWrapper
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
-    rvtag = "&rvtag=possible%20libel%20or%20vandalism"
+    rvtag = "&rvtags=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
