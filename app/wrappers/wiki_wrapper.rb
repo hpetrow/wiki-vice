@@ -134,8 +134,8 @@ class WikiWrapper
 
   def add_categories_to_page(page, categories)
     categories.each do |c|
-      category_name = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.find_or_create_by(name: category_name)
+      category_title = /^Category:(.+)/.match(c['title'])[1]
+      category = Category.find_or_create_by(title: category_title)
       page.categories << category
     end
   end
