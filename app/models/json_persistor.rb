@@ -47,18 +47,20 @@ class JsonPersistor
     usercontribs.each do |uc|
       page = Page.new(page_id: uc["pageid"], title: uc["title"])
       if !(page.valid?)
-        binding.pry
-        page = Page.find(page_id: uc["pageid"])
+        page = Page.find_by(page_id: uc["pageid"])
       end  
       revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"], comment: uc["comment"])
-      revision.page = page
-      revision.author = author
-      revision.save      
+      if revision.valid?
+        revision.page = page
+        revision.author = author
+        revision.save      
+      else
+        revision
+      end
     end
   end
 
   def persist_revision_content(revision)
-    binding.pry
     revisions = json["query"]["pages"][revision.page.page_id.to_s]["revisions"]
     revisions.each do |r|
       if r["diff"]
