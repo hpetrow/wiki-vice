@@ -6,7 +6,12 @@
   </div>
   
   <div class="col-md-6">
-    <h4>This page changes every <b><%=@page.days_between_revisions%></b> days</h4>
+    <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+  <% if @page.get_number_of_anonymous_authors > 1 %>
+    <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
+  <% else %>
+    <h3>This page has 0 edits from anonymous authors.</h3>
+<% end %>
   </div>
 </div>
 
@@ -38,13 +43,6 @@
   <h2>Most Recent Vandalism</h2>
   <p><%= @page.most_recent_vandalism_content %></p>
 
-
-<h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
-<% if @page.get_number_of_anonymous_authors > 1 %>
-    <h2><%= @page.get_number_of_anonymous_authors %> anonymous authors from <%= @page.find_country_name.count %> countries:</h2>
-  <% else %>
-    <h2>This page has 0 edits from anonymous authors.</h2>
-<% end %>
 
 <script type="text/javascript">
 $(function(){
