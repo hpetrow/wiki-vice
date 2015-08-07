@@ -18,5 +18,4 @@ $('#world-map').vectorMap({map: 'world_mill_en',
             "stroke-width": 3
           }
       }
-
 });
