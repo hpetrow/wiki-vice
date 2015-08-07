@@ -20,26 +20,15 @@ class WikiWrapper
   def get_user_contributions(author)
     url = user_contribs_url(author)
     json = load_json(url)
-
     persistor = JsonPersistor.new(json)
     persistor.persist_author_revisions(author)
-
-    # usercontribs = json["query"]["usercontribs"]
-    # usercontribs.each do |data|
-    #   page = find_page(data['title'], {pageid: data["pageid"]})
-    #   revision = Revision.new(
-    #     {
-    #       revid: data["revid"],
-    #       timestamp: data["timestamp"],
-    #       size: data["size"],
-    #       size_diff: data["sizediff"]
-    #     }
-    #   )
-    #   revision.page = page
-    #   revision.author = author
-    #   revision.save
-    # end
   end
+
+  def get_content_for_revision(revision)
+    json = load_json(revision_content_url(revision))
+    persistor = JsonPersistor.new(json)
+    persistor.persist_revision_content(revision)
+  end  
 
   def get_vandalism_revisions(page)
     base_url = page_revisions_url(page.title)
@@ -50,12 +39,6 @@ class WikiWrapper
     revisions = json["query"]["pages"][page_id]["revisions"]
     add_revisions_to_page(params[:page], revisions) if !!revisions
   end  
-
-  def get_content_for_revision(revision)
-    json = load_json(revision_content_url(revision))
-    persistor = Persistor.new
-    persistor.persist_revision_content(json)
-  end
 
   private
   def get_more_revisions(params)
@@ -109,10 +92,6 @@ class WikiWrapper
     revids = "revids=#{revision.revid}"
     rvdiffto = "rvdiffto=prev"
     [CALLBACK, prop, revids, rvdiffto].join("&")
-  end
-
-  def vandalism?(tags)
-    tags.include?("possible libel or vandalism")
   end
 
   def load_json(url)
