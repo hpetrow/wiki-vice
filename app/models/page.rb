@@ -27,16 +27,11 @@ class Page < ActiveRecord::Base
     self.get_anonymous_authors.count
   end
 
-  def revisions_by_date
-    self.revisions.order("DATE(timestamp)").group("DATE(timestamp)").size
-  end
-
-  def avg_revisions_per_day
-    revisions_by_date.size / revisions.size.to_f
-  end
-
   def days_between_revisions
-    (1 / (revisions_by_date.size / revisions.size.to_f)).round(0)
+    revisions_ordered = self.revisions.order("DATE(timestamp)")
+    first_date = revisions_ordered.first.timestamp.to_date
+    last_date = revisions_ordered.last.timestamp.to_date
+    (last_date - first_date).to_f / revisions.size
   end
 
   def anonymous_author_location
