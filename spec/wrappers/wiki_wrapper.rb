@@ -19,15 +19,9 @@ RSpec.describe WikiWrapper, "#get_page" do
     it "page has a page_id" do 
       expect(page.page_id).to_not eq nil
     end    
-  end
 
-  context "page revisions" do 
     it "page has many revisions" do 
       expect(page.revisions.size).not_to eq 0
-    end
-
-    it "revisions have nil content" do 
-      expect(page.revisions.first.content).to eq nil
     end
 
     it "page does not have duplicate revisions" do 
@@ -36,36 +30,79 @@ RSpec.describe WikiWrapper, "#get_page" do
       expect(revisions_count).to eq unique_revisions_count
     end    
 
-    context "page categories" do 
-      it "has many categories" do 
-        expect(page.revisions.size).to_not eq 0
-      end
-    end
-
-  end
-
-  context "page authors" do 
     it "page has many authors" do 
       expect(page.authors.size).not_to eq 0
-    end
-
-    it "page has no authors with nil name" do 
-      has_nil_names = page.authors.any?{|a| a.name.nil? }
-      expect(has_nil_names).to eq false
-    end
-
-
-    it "page's authors have one unique page" do
-      expect(page.authors.first.pages.uniq.size).to eq 1
-    end
+    end    
 
     it "page has duplicate authors" do 
       authors_count = page.authors.size
       unique_authors_count = page.authors.uniq.size
       expect(authors_count).to_not eq unique_authors_count
+    end    
+
+  end
+
+  let(:revisions) {
+    wiki = WikiWrapper.new
+    page = wiki.get_page("The Matrix")    
+    page.revisions
+  }
+
+  context "page revisions" do 
+
+    it "revisions have revid" do 
+      expect(revisions.all?{|r| r.revid}).to eq true
+    end
+
+    it "revisions have a timestamp" do 
+      expect(revisions.all?{|r| r.timestamp}).to eq true
+    end
+
+    it "revisions have nil content" do 
+      expect(revisions.all?{|r| r.content}).to eq false
+    end
+
+    it "revisions have a page" do 
+      expect(revisions.all?{|r| r.page}).to eq true
     end
 
   end
+
+  let(:authors) {
+    wiki = WikiWrapper.new
+    page = wiki.get_page("Kanye West")
+    page.authors
+  }
+
+  context "page authors" do 
+
+
+    it "authors have a name" do 
+      expect(authors.all?{|a| a.name}).to eq true
+    end
+
+    it "author has pages" do 
+      expect(authors.all?{|a| a.pages}).to eq true
+    end    
+
+    it "page's authors have one unique page" do
+      expect(authors.all?{|a| a.pages.uniq.size == 1}).to eq true
+    end
+
+  end
+
+  context "page categories" do 
+    it "has many categories" do 
+      expect(page.revisions.size).to_not eq 0
+    end
+
+    it "does not have duplicate categories" do 
+      categories = page.categories
+      unique_categories = page.categories.uniq
+      expect(categories.size).to eq unique_categories.size
+    end
+  end
+
 end
 
 RSpec.describe WikiWrapper, "#get_user_contributions" do 
