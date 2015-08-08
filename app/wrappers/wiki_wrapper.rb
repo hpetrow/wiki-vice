@@ -59,13 +59,11 @@ class WikiWrapper
     prop = "prop=revisions|categories"
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
-    rvdiff = "rvdiffto=prev"
-    rclimit = "rclimit=10"
     rvtag = "&rvtag=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, clprop,redirects]
+    url = [CALLBACK, prop, rvlimit, titles, rvprop, clprop,redirects]
     if options.empty?
       url.join("&")
     else
