@@ -36,6 +36,12 @@ RSpec.describe WikiWrapper, "#get_page" do
       expect(revisions_count).to eq unique_revisions_count
     end    
 
+    context "page categories" do 
+      it "has many categories" do 
+        expect(page.revisions.size).to_not eq 0
+      end
+    end
+
   end
 
   context "page authors" do 
