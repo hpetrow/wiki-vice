@@ -56,11 +56,10 @@ class WikiWrapper
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvdiff = "rvdiffto=prev"
     rclimit = "rclimit=10"
-    rvtag = "&rvtags=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, clprop,redirects]
+    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, clprop, redirects]
     if options.empty?
       url.join("&")
     else
@@ -90,7 +89,10 @@ class WikiWrapper
   end
 
   def load_json(url)
-    json = JSON.load(open(url))
+    #json = JSON.load(open(url))
+    uri = URI.parse(url)
+          system "curl '#{uri}' > wiki_response"
+    json = JSON.load(File.read("wiki_response"))
   end
 
 end
