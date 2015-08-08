@@ -89,10 +89,7 @@ class WikiWrapper
   end
 
   def load_json(url)
-    #json = JSON.load(open(url))
-    uri = URI.parse(url)
-          system "curl '#{uri}' > wiki_response"
-    json = JSON.load(File.read("wiki_response"))
+    json = JSON.load(open(url))
   end
 
 end
