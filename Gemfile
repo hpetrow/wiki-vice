@@ -32,6 +32,8 @@ gem 'whenever', :require => false
 gem 'diffy', '~> 3.0.7'
 # Wikitext is a fast wikitext-to-HTML translator written in C.
 gem 'wikitext', '~> 4.1.2'
+
+gem "typhoeus"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -66,7 +68,6 @@ group :test, :development do
   gem 'pry-rails'
   gem 'guard-rspec', require: false
   gem 'thin'
-  gem 'vcr'
 end
 
 group :production do
