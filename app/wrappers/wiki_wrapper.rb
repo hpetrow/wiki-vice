@@ -25,7 +25,7 @@ class WikiWrapper
     persistor.persist_author_revisions(author)
   end
 
-  def get_content_for_revision(revision)
+  def get_revision_content(revision)
     json = load_json(revision_content_url(revision))
     persistor = JsonPersistor.new(json)
     persistor.persist_revision_content(revision)
