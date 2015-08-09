@@ -125,5 +125,11 @@ RSpec.describe Page, type: :model do
       expect(page.most_recent_vandalism_content).to_not eq nil
     end
   end
+
+  context "#wiki_link" do 
+    it "returns a wikipedia link" do 
+      expect(page.wiki_link.include?("https://en.wikipedia.org/wiki/")).to eq true
+    end
+  end
   
 end

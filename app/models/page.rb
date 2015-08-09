@@ -72,8 +72,8 @@ class Page < ActiveRecord::Base
     first_revision
   end
 
-  def self.wiki_link(title)
-    url = "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  def wiki_link
+    url = "https://en.wikipedia.org/wiki/" + self.title.gsub(" ", "_")
   end
 
   def most_recent_vandalism
@@ -83,7 +83,7 @@ class Page < ActiveRecord::Base
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
     if vandalism 
-      vandalism.content = WIKI.get_revision_content(first_revision)
+      vandalism.content = WIKI.get_revision_content(vandalism)
       vandalism.content.html_safe
     else
       ""
