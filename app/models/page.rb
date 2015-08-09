@@ -37,8 +37,12 @@ class Page < ActiveRecord::Base
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
-        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-      end
+        begin
+          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+        rescue Exception => e
+          puts e
+        end
+      end.compact
   end
 
   def group_anonymous_users_by_location
@@ -78,10 +82,12 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
-    if vandalism.content.nil?
-      WIKI.get_revision_content(vandalism)
+    if vandalism 
+      vandalism.content = WIKI.get_revision_content(first_revision)
+      vandalism.content.html_safe
+    else
+      ""
     end
-    vandalism ? vandalism.content.html_safe : ''
   end
 
   def most_recent_vandalism_regex
