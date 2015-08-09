@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe WikiWrapper, "#get_page" do 
+RSpec.describe WikiWrapper, "#get_page" do   
 
   let(:page) { 
     wiki = WikiWrapper.new
@@ -42,51 +42,38 @@ RSpec.describe WikiWrapper, "#get_page" do
 
   end
 
-  let(:revisions) {
-    wiki = WikiWrapper.new
-    page = wiki.get_page("The Matrix")    
-    page.revisions
-  }
-
   context "page revisions" do 
 
     it "revisions have revid" do 
-      expect(revisions.all?{|r| r.revid}).to eq true
+      expect(page.revisions.all?{|r| r.revid}).to eq true
     end
 
     it "revisions have a timestamp" do 
-      expect(revisions.all?{|r| r.timestamp}).to eq true
+      expect(page.revisions.all?{|r| r.timestamp}).to eq true
     end
 
     it "revisions have nil content" do 
-      expect(revisions.all?{|r| r.content}).to eq false
+      expect(page.revisions.all?{|r| r.content}).to eq false
     end
 
     it "revisions have a page" do 
-      expect(revisions.all?{|r| r.page}).to eq true
+      expect(page.revisions.all?{|r| r.page}).to eq true
     end
 
   end
 
-  let(:authors) {
-    wiki = WikiWrapper.new
-    page = wiki.get_page("Kanye West")
-    page.authors
-  }
-
   context "page authors" do 
 
-
     it "authors have a name" do 
-      expect(authors.all?{|a| a.name}).to eq true
+      expect(page.authors.all?{|a| a.name}).to eq true
     end
 
     it "author has pages" do 
-      expect(authors.all?{|a| a.pages}).to eq true
+      expect(page.authors.all?{|a| a.pages}).to eq true
     end    
 
     it "page's authors have one unique page" do
-      expect(authors.all?{|a| a.pages.uniq.size == 1}).to eq true
+      expect(page.authors.all?{|a| a.pages.uniq.size == 1}).to eq true
     end
 
   end
@@ -117,5 +104,19 @@ RSpec.describe WikiWrapper, "#get_user_contributions" do
 
   it "increases unique pages of author" do 
     expect(author.pages.uniq.size).to_not eq 1
+  end
+end
+
+RSpec.describe WikiWrapper, "#get_revision_content" do 
+  let(:page) {
+    wiki = WikiWrapper.new
+    page = wiki.get_page("San Pellegrino")
+  }
+
+  it "fills a revision with content" do 
+    wiki = WikiWrapper.new
+    wiki.get_revision_content(page.revisions.first)
+
+    expect(page.revisions.first.content).to_not eq nil
   end
 end

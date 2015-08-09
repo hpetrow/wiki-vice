@@ -58,7 +58,7 @@ class WikiWrapper
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
-    url = [CALLBACK, prop, rvlimit, titles, rvprop, clprop, redirects, rvtag]
+    url = [CALLBACK, prop, rvlimit, titles, rvprop, clprop, redirects]
     if options.empty?
       url.join("&")
     else
