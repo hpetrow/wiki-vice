@@ -60,7 +60,7 @@ class Page < ActiveRecord::Base
   end
 
   def latest_revision
-    self.revisions.first
+    WIKI.get_revision_content(self.revisions.first)
   end
 
   def self.wiki_link(title)
