@@ -5,6 +5,7 @@ class Page < ActiveRecord::Base
   validates :title, uniqueness: true
   validates :page_id, uniqueness: true
   WIKI = WikiWrapper.new
+  BAD_IPS = ["223.176.156.214"]
 
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
@@ -36,6 +37,7 @@ class Page < ActiveRecord::Base
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
+        puts aa.name
         GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
       end
   end
@@ -62,7 +64,7 @@ class Page < ActiveRecord::Base
   def latest_revision
     first_revision = self.revisions.first
     if first_revision.content.nil?
-      WIKI.get_revision_content(revision)
+      WIKI.get_revision_content(first_revision)
     end
     first_revision
   end
@@ -77,6 +79,9 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
+    if vandalism.content.nil?
+      WIKI.get_revision_content(vandalism)
+    end
     vandalism ? vandalism.content.html_safe : ''
   end
 
