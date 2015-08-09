@@ -6,7 +6,12 @@
   </div>
   
   <div class="col-md-6">
-    <h4>This page changes every <b><%=@page.days_between_revisions%></b> days</h4>
+    <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+  <% if @page.get_number_of_anonymous_authors > 1 %>
+    <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
+  <% else %>
+    <h3>This page has 0 edits from anonymous authors.</h3>
+<% end %>
   </div>
 </div>
 
@@ -24,7 +29,7 @@
   </div>
 
   <div class="col-md-6">
-    <h3> This page's top author also contributes to: </h3>
+    <h3><%= link_to "#{@top_five_authors.first[:author].name}",author_path(@top_five_authors.first[:author].id) %> also contributes to: </h3>
     <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
     <p><%= contribution[0]%></p>
     <% end %>
@@ -35,16 +40,57 @@
     <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
 </ul>
 
-  <h2>Most Recent Vandalism</h2>
-  <p><%= @page.most_recent_vandalism_content %></p>
+  <h2>Most Recent Vandalism:</h2>
+  <h3><%= @page.most_recent_vandalism_regex %></h3>
 
 
-<h2>Average Revision Frequency Per Day: <%= @page.avg_revisions_per_day %></h2>
-<% if @page.get_number_of_anonymous_authors > 1 %>
-    <h2><%= @page.get_number_of_anonymous_authors %> anonymous authors from <%= @page.find_country_name.count %> countries:</h2>
-  <% else %>
-    <h2>This page has 0 edits from anonymous authors.</h2>
-<% end %>
+<script type="text/javascript">
+$(function(){
+ var anonData = [
+        {
+            value: gon.anonData[225],
+            color:"#F7464A",
+            highlight: "#FF5A5E",
+            label: gon.anonCountryName[0]
+        },
+        {
+            value: gon.anonData[0],
+            color: "#46BFBD",
+            highlight: "#5AD3D1",
+            label: gon.anonCountryName[1]
+        },
+        {
+            value: gon.anonData[38],
+            color: "#FDB45C",
+            highlight: "#FFC870",
+            label: gon.anonCountryName[2]
+        },
+        {
+            value: gon.anonData[233],
+            color: "#949FB1",
+            highlight: "#A8B3C5",
+            label: gon.anonCountryName[3]
+        },
+        {
+            value: gon.anonData[191],
+            color: "#4D5360",
+            highlight: "#616774",
+            label: gon.anonCountryName[4]
+        }
+    ];
+
+
+    var options = {
+      scaleShowLabelBackdrop: true,
+      scaleBackdropColor: "rgba(255,255,255,0.75)",
+      scaleBeginAtZero: true,
+      scaleShowLine: true,
+      animationSteps: 40
+    };
+    var ctx = document.getElementById("anonCountriesChart");
+    var anonChart = new Chart(ctx).PolarArea(anonData, options);
+    });
+</script>
 
 <div class="col-md-6">
     <canvas id="anonCountriesChart" width="400" height="400">

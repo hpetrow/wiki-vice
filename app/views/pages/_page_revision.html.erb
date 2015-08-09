@@ -28,16 +28,17 @@
           <div class="tab-pane active tab_box" id="<%= @first_revision.id %>">
           <h3><strong><%=@first_revision.author.name %></strong> <br><small>on <%= @first_revision.get_date %></small></h3><hr>
             <p>
-            <%= @first_revision.content.gsub("}}", "").html_safe %>
+            <%= @first_revision.content.gsub("}}", "").html_safe if !@first_revision.content.nil?  %>
             </p>
           </div>
           <!-- This iterates through the rest of the rev content for tabs. -->
             <% @last_ten_revisions.each do |revision| %>
+           
               <div class="tab-pane tab_scroll" id="<%=revision.id%>">
                 <h3><strong><%=revision.author.name %></strong><br><small>on <%= revision.get_date %></small></h3><hr>
                 
                 <p>
-                  <%= revision.content.gsub("}}", "").html_safe if !revision.content.nil?%>
+                  <%= revision.content.gsub("}}", "").html_safe if !revision.content.nil?  %>
                 </p>
               </div>
             <% end %> 
