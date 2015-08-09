@@ -66,6 +66,7 @@ group :test, :development do
   gem 'pry-rails'
   gem 'guard-rspec', require: false
   gem 'thin'
+  gem 'vcr'
 end
 
 group :production do
