@@ -13,7 +13,7 @@ class Author < ActiveRecord::Base
   def most_recent_revision
     revision = self.revisions.order("timestamp desc").limit(1).first
     if revision.content.nil?
-      WIKI.get_content_for_revision(revision)
+      WIKI.get_revision_content(revision)
     end
     revision
   end
