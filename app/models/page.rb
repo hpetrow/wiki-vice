@@ -37,7 +37,6 @@ class Page < ActiveRecord::Base
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
-        puts aa.name
         GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
       end
   end

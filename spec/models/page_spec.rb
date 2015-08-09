@@ -86,6 +86,22 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  context "#group_anonymous_users_by_location" do 
+    it "returns a hash" do 
+      expect(page.group_anonymous_users_by_location.class).to eq Hash
+    end
+
+    it "returns a hash with country code keys" do 
+      keys = page.group_anonymous_users_by_location.keys
+      expect(keys.all?{|k| k.class == Fixnum}).to eq true
+    end
+
+    it "returns a hash with count values" do 
+      values = page.group_anonymous_users_by_location.values
+      expect(values.all?{|v| v.class == Fixnum}).to eq true
+    end
+  end
+
   context "#days_between_revisions" do 
     it "returns the average days between revisions" do 
       expect(page.days_between_revisions.class).to eq Float
@@ -95,6 +111,18 @@ RSpec.describe Page, type: :model do
   context "#latest_revision" do 
     it "returns the latest revision" do
       expect(page.latest_revision.content).to_not eq nil
+    end
+  end
+
+  context "#most_recent_vandalism" do
+    it "returns a revision with vandalism" do 
+      expect(page.most_recent_vandalism.vandalism).to eq true
+    end
+  end
+
+  context "#most_recent_vandalism_content" do 
+    it "returns the content of the most recent vandalism" do 
+      expect(page.most_recent_vandalism_content).to_not eq nil
     end
   end
   
