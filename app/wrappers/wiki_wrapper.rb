@@ -36,8 +36,9 @@ class WikiWrapper
   def get_more_revisions(page, json)
     continue = 10
     i = 1
-    while (!!json["continue"] && i < continue)
+    while (!!json["continue"]["rvcontinue"] && i < continue)
       json = load_json(page_revisions_url(page.title, {rvcontinue: json["continue"]["rvcontinue"]}))
+      # binding.pry
       persistor = JsonPersistor.new(json)
       persistor.persist_page_revisions(page)
       i += 1
