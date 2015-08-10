@@ -1,7 +1,7 @@
 class RevisionParser
   attr_accessor :html_content
 
-  def parse_content(content)
+  def initialize(content)
     @html_content = Nokogiri::HTML(content)
   end
 
@@ -19,5 +19,9 @@ class RevisionParser
 
   def added_line
     html_content.css(".diff-addedline").text
+  end
+
+  def change
+    @html_content.css(".diffchange").text
   end
 end

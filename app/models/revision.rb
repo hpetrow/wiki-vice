@@ -8,4 +8,9 @@ class Revision < ActiveRecord::Base
     formatted_date = '%m-%d-%Y %H:%M:%S %Z'
     DateTime.parse(self.timestamp.to_s, formatted_date).to_formatted_s(:long_ordinal)
   end
+
+  def get_content
+    WikiWrapper.new.get_revision_content(self) if !self.content
+    self.content
+  end
 end

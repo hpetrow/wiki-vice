@@ -27,9 +27,9 @@
           <!-- This sets up the first active content tab. -->
           <div class="tab-pane active tab_box" id="<%= @first_revision.id %>">
           <h3><strong><%=@first_revision.author.name %></strong> <br><small>on <%= @first_revision.get_date %></small></h3><hr>
-            <p>
-              <%= @revision_parser.parse_content(@first_revision.content) %>
-            </p>
+
+            <%= render partial: 'revision_content', locals: {revision_parser: RevisionParser.new(@first_revision.content)} %>
+
           </div>
           <!-- This iterates through the rest of the rev content for tabs. -->
             <% @last_ten_revisions.each do |revision| %>
