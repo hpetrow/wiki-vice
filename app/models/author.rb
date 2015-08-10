@@ -18,16 +18,27 @@ class Author < ActiveRecord::Base
     user_contribs = []
     WIKI.get_user_contributions(self).take(50).each do |contribution|
       #user_contribs[:size_diff] = contribution["sizediff"]
-      user_contribs << contribution["comment"].gsub("/* ","").gsub("*/ ","")
+      user_contribs << contribution["comment"].gsub("/* ","").gsub("*/ ","").gsub("--", "")
     end
-    
-    split_words = user_contribs.collect  do |comment|
-      comment.split(" ")
-    end
-    split_words.compact
+    user_contribs.collect{|comment| comment.split(" ") }.flatten.sort
+  end
+
+  def count_comment_words
+    counted_words = {}
+    self.get_user_comments.reduce(counted_words) { |h, v| 
+      h.store(v, h[v] + 1); h }
+      .sort_by{|k,v| v }.reverse.to_h
+  end
+
+  def ignore_dumb_comment_words
+    Regexp.new('to' 'and' 'the' 'on' 'in' 'of', true)
+    self.count_comment_words
+  end
     #look through all words in comments
     #look for matching words
     #count how many times repeat terms occur
+    #.sort
+    #Ignore dumb words like to/and/the/in/on/of/--/
     #Return a list of most used terms with how many times they occur
 
 
