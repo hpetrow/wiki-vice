@@ -7,7 +7,7 @@ $(function(){
 	    series: {
 	      regions: [{
 	        values: anonLocationData,
-	        scale: ['#44C6AD', '#e84c3d'],
+	        scale: ['#eda3a3', '#e84c3d'],
 	        normalizeFunction: 'polynomial'
 	      }]
 	    },
