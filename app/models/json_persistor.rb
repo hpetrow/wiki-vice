@@ -20,7 +20,7 @@ class JsonPersistor
       author_name = !!r["user"] ? r["user"] : "anonymous"
       author = Author.find_or_create_by(name: author_name) 
       if !(r["minor"]) && !(r["bot"])
-        revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]))
+        revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]), size: r["size"])
         if revision.valid?
           revision.page = page
           revision.author = author
