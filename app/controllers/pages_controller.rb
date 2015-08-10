@@ -22,5 +22,6 @@ class PagesController < ApplicationController
     gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
     
+    @revision_parser = RevisionParser.new
   end
 end
