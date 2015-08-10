@@ -40,13 +40,13 @@ class JsonPersistor
       if !(page.valid?)
         page = Page.find_by(page_id: uc["pageid"])
       end  
-      revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"], comment: uc["comment"])
+      revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"])
       if revision.valid?
         revision.page = page
         revision.author = author
         revision.save      
       else
-        revision
+        revision.find_by(revid: uc["revid"])
       end
     end
   end
