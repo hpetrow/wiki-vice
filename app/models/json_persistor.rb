@@ -10,7 +10,6 @@ class JsonPersistor
     page_data = json["query"]["pages"][page_id]
     Page.where(page_id: page_id).destroy_all
     page = Page.new(title: page_data["title"], page_id: page_id)
-    persist_page_categories(page)
     persist_page_revisions(page)
     page
   end
