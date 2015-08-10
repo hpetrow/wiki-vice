@@ -2,8 +2,13 @@ class PagesController < ApplicationController
 
   def create
     wiki_wrapper = WikiWrapper.new
-    @page = wiki_wrapper.get_page(params[:query])      
-    redirect_to page_path(@page)
+    @page = wiki_wrapper.get_page(params[:query])
+    if @page    
+      redirect_to page_path(@page)
+    else
+      flash[:notice] = "Can't find #{params[:query]}. Please try again."
+      redirect_to root_path
+    end
   end
 
   def show

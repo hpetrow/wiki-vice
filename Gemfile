@@ -28,7 +28,12 @@ gem 'geoip'
 gem 'turbolinks'
 # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.
 gem 'whenever', :require => false
+# It provides a convenient way to generate a diff from two strings or files. 
+gem 'diffy', '~> 3.0.7'
+# Wikitext is a fast wikitext-to-HTML translator written in C.
+gem 'wikitext', '~> 4.1.2'
 
+gem "typhoeus"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -14,7 +14,7 @@ class WikiWrapper
       get_vandalism_revisions(page)
       page
     else
-      "can't find page"
+      false
     end
   end
 
@@ -25,7 +25,7 @@ class WikiWrapper
     persistor.persist_author_revisions(author)
   end
 
-  def get_content_for_revision(revision)
+  def get_revision_content(revision)
     json = load_json(revision_content_url(revision))
     persistor = JsonPersistor.new(json)
     persistor.persist_revision_content(revision)
@@ -36,7 +36,7 @@ class WikiWrapper
   def get_more_revisions(page, json)
     continue = 10
     i = 1
-    while (!!json["continue"] && i < continue)
+    while (!!json["continue"]["rvcontinue"] && i < continue)
       json = load_json(page_revisions_url(page.title, {rvcontinue: json["continue"]["rvcontinue"]}))
       persistor = JsonPersistor.new(json)
       persistor.persist_page_revisions(page)
@@ -54,12 +54,11 @@ class WikiWrapper
     prop = "prop=revisions|categories"
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
-    rvdiff = "rvdiffto=prev"
-    rclimit = "rclimit=10"
+    rvtag = "&rvtag=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
-    url = [CALLBACK, prop, rvlimit, titles, rvdiff, rvprop, clprop, redirects]
+    url = [CALLBACK, prop, rvlimit, titles, rvprop, clprop, redirects]
     if options.empty?
       url.join("&")
     else
