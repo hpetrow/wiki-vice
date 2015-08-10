@@ -1,20 +1,57 @@
 <div class="row">
-  <div class="col-md-6">
     <h1><%= @page.title %></h1>
     <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
-    <h3>Top 5 Page Contributors</h3>
-  </div>
+</div>
   
-  <div class="col-md-6">
-    <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
-  <% if @page.get_number_of_anonymous_authors > 1 %>
-    <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
-  <% else %>
-    <h3>This page has 0 edits from anonymous authors.</h3>
-<% end %>
+<div class="row"> 
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-red">
+      <div class="content">
+        <h4>This page changes every <h1><%=@page.days_between_revisions%></h1>days</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-turquoise">
+      <div class="content">
+      <% if @page.get_number_of_anonymous_authors > 1 %>
+      <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
+      <% else %>
+      <h3>This page has 0 edits from anonymous authors.</h3>
+      <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-blue">
+      <div class="content">
+        <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-purple">
+      <div class="content">
+        <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-6">
+    <div id="map" style="width: 600px; height: 400px"></div>
+  </div>
+  <div class="col-md-6">
+    <canvas id="authorContributionsChart" width="300" height="300"></canvas>
+  </div>
+
+</div>
+
+    <h3>Top 5 Page Contributors</h3>
 
 <div class="row">
   <div class="col-md-6">
@@ -89,10 +126,48 @@ $(function(){
     };
     var ctx = document.getElementById("anonCountriesChart");
     var anonChart = new Chart(ctx).PolarArea(anonData, options);
-    });
-</script>
 
-<div class="col-md-6">
-    <canvas id="anonCountriesChart" width="400" height="400">
-    </canvas>
-</div>
+  var data = [
+    {
+        value: gon.data[0][1],
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: gon.data[0][0]
+    },
+    {
+        value: gon.data[1][1],
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: gon.data[1][0]
+    },
+    {
+        value: gon.data[2][1],
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: gon.data[2][0]
+    },
+    {
+        value: gon.data[3][1],
+        color: "#3598DB",
+        highlight: "#5DADE2",
+        label: gon.data[3][0]
+    },
+    {
+        value: gon.data[4][1],
+        color: "#293949",
+        highlight: "#3E4D5B",
+        label: gon.data[4][0]
+    }
+  ];
+
+  var options = {
+    scaleShowLabels : true,
+    animation: true,
+    animationEasing: "easeOutQuart",
+    animationSteps: 40,
+  };
+  
+  var myChart = new Chart(document.getElementById("authorContributionsChart").getContext("2d")).Pie(data, options);
+
+});
+</script>

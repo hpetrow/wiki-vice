@@ -32,7 +32,7 @@ class Page < ActiveRecord::Base
     revisions_ordered = self.revisions.order("DATE(timestamp)")
     first_date = revisions_ordered.first.timestamp.to_date
     last_date = revisions_ordered.last.timestamp.to_date
-    (last_date - first_date).to_f / revisions.size
+    ((last_date - first_date).to_f / revisions.size).round
   end
 
   def anonymous_author_location

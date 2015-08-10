@@ -18,6 +18,9 @@
 //= require Chart
 //= require authors.js
 //= require page.js
+//= require page_map.js
+//= require anonLocationData.js
+//= require countryCodes.js
 
 
 
