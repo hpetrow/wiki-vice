@@ -71,7 +71,7 @@ class WikiWrapper
     list = "list=usercontribs"
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
-    ucprop = "ucprop=ids|title|timestamp"
+    ucprop = "ucprop=ids|title|timestamp|flags"
     ucnamespace = "ucnamespace=0"
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
   end
