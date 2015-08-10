@@ -55,7 +55,7 @@ class WikiWrapper
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvtag = "&rvtag=possible%20libel%20or%20vandalism"
-    rvprop = "rvprop=ids|user|timestamp|comment|tags"
+    rvprop = "rvprop=ids|user|timestamp|comment|tags|flags"
     clprop = "clprop=sortkey|hidden"
     redirects = "redirects"
     url = [CALLBACK, prop, rvlimit, titles, rvprop, clprop, redirects]
@@ -71,7 +71,8 @@ class WikiWrapper
     list = "list=usercontribs"
     ucuser = "ucuser=#{author.name}"
     uclimit = "uclimit=500"
-    ucprop = "ucprop=ids|title|timestamp|comment|size|sizediff|flags|tags"
+    ucprop = "ucprop=ids|title|timestamp"
+    ucshow = "ucshow=!minor"
     ucnamespace = "ucnamespace=0"
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
   end

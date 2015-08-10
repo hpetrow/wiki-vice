@@ -10,7 +10,6 @@ class JsonPersistor
     page_data = json["query"]["pages"][page_id]
     Page.where(page_id: page_id).destroy_all
     page = Page.new(title: page_data["title"], page_id: page_id)
-    persist_page_categories(page)
     persist_page_revisions(page)
     page
   end
@@ -19,12 +18,14 @@ class JsonPersistor
     revisions = json["query"]["pages"][page.page_id.to_s]["revisions"] || []
     revisions.each do |r|
       author_name = !!r["user"] ? r["user"] : "anonymous"
-      author = Author.find_or_create_by(name: author_name)    
-      revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]))
-      if revision.valid?
-        revision.page = page
-        revision.author = author
-        revision.save
+      author = Author.find_or_create_by(name: author_name) 
+      if !(r["minor"]) && !(r["bot"])
+        revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]))
+        if revision.valid?
+          revision.page = page
+          revision.author = author
+          revision.save
+        end
       end
     end
   end
@@ -40,13 +41,13 @@ class JsonPersistor
       if !(page.valid?)
         page = Page.find_by(page_id: uc["pageid"])
       end  
-      revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"], comment: uc["comment"])
+      revision = Revision.new(revid: uc["revid"], timestamp: uc["timestamp"])
       if revision.valid?
         revision.page = page
         revision.author = author
         revision.save      
       else
-        revision
+        Revision.find_by(revid: uc["revid"])
       end
     end
   end
