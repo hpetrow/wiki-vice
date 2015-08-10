@@ -19,12 +19,14 @@ class JsonPersistor
     revisions = json["query"]["pages"][page.page_id.to_s]["revisions"] || []
     revisions.each do |r|
       author_name = !!r["user"] ? r["user"] : "anonymous"
-      author = Author.find_or_create_by(name: author_name)    
-      revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]))
-      if revision.valid?
-        revision.page = page
-        revision.author = author
-        revision.save
+      author = Author.find_or_create_by(name: author_name) 
+      if !(r["minor"])
+        revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]))
+        if revision.valid?
+          revision.page = page
+          revision.author = author
+          revision.save
+        end
       end
     end
   end
@@ -46,7 +48,7 @@ class JsonPersistor
         revision.author = author
         revision.save      
       else
-        revision.find_by(revid: uc["revid"])
+        Revision.find_by(revid: uc["revid"])
       end
     end
   end
