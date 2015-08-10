@@ -19,6 +19,7 @@ class PagesController < ApplicationController
     @last_ten_revisions = @revisions.slice(1,9) 
     gon.anonData = @page.group_anonymous_users_by_location
     gon.anonCountryName = @page.find_country_name
+    gon.anonLocationMap = @page.anonymous_location_for_map
     
   end
 end
