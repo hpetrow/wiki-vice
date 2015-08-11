@@ -1,6 +1,6 @@
 class JsonPersistor
   attr_accessor :json
-  
+
   def initialize(json)
     @json = json
   end
@@ -12,26 +12,38 @@ class JsonPersistor
   end
 
   def insert_authors
-    authors = []
+    values = []
     json.each do |r|
       if r["user"]
         author_name = r["user"]
         ip_address?(author_name) ? anonymous = true : anonymous = false
-        authors << Author.new(name: author_name, anonymous: anonymous)
+        values << [author_name, anonymous]
       end
     end
-    Author.import(authors)   
+    columns = [:name, :anonymous]
+    Author.import(columns, values)   
   end  
 
   def insert_revisions(page)
-    revisions = []
+    values = []
     json.each do |r|
       if !(r["minor"]) && !(r["bot"]) && r["user"]
         author = Author.find_by(name: r["user"]) || Author.create(name: "anonymous")
-        revisions << Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]), size: r["size"], page_id: page.id, author_id: author.id)
+        vandalism = vandalism?(r["tags"])
+        values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
       end
     end
-    Revision.import(revisions)
+    columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
+    Revision.import(columns, values)
+  end
+
+  def insert_pages
+    values = []
+    json.each do |uc|
+      values << [uc["pageid"], uc["title"]]
+    end
+    columns = [:pageid, :title]
+    Page.import(columns, values)
   end
 
   def insert_vandalism(page)

@@ -2,7 +2,7 @@ class Revision < ActiveRecord::Base
   belongs_to :page
   belongs_to :author
   delegate :categories, to: :page
-  # validates :revid, uniqueness: true
+  validates :revid, uniqueness: true
 
   def get_date
     formatted_date = '%m-%d-%Y %H:%M:%S %Z'
