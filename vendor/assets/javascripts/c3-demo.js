@@ -1,10 +1,27 @@
 $(function () {
+      var colors = ['#000'];
       var chart = c3.generate({
-         bindto: '#zoom',
+        bindto: '#zoom',
         data: {
+          x: 'x',
           columns: [
-            ['sample', 30, 200, 100, 400, 150, 250, 150, 200, 170, 240, 350, 150, 100, 400, 150, 250, 150, 200, 170, 240, 100, 150, 250, 150, 200, 170, 240, 30, 200, 100, 400, 150, 250, 150, 200, 170, 240, 350, 150, 100, 400, 350, 220, 250, 300, 270, 140, 150, 90, 150, 50, 120, 70, 40]
-          ]
+            gon.revDates,
+            gon.revCounts
+          ],
+          type: 'spline',
+          color: function(color) {
+            return colors[0];
+          }
+        },
+        axis : {
+          x : {
+            type: 'timeseries',
+            tick : {
+            rotate: -45,
+            multiline: false,
+            format: '%m/%d/%Y'
+           }     
+          }
         },
         zoom: {
           enabled: true

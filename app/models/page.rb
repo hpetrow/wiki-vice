@@ -7,6 +7,13 @@ class Page < ActiveRecord::Base
   WIKI = WikiWrapper.new
   BAD_IPS = ["223.176.156.214"]
 
+  def top_revisions
+    max = self.revisions.size >= 5 ? 5 : revisions.length
+    self.revisions.slice(0, max).each { |revision|
+      revision.get_content
+    }
+  end
+
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
     results.collect do |r|
@@ -114,4 +121,42 @@ class Page < ActiveRecord::Base
     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
+  def get_dates
+    self.revisions.pluck(:timestamp)
+  end
+
+  def group_timestamps_by_date
+    self.get_dates.group_by{|timestamp| timestamp.to_date }
+  end
+
+  def group_and_count_revs_per_day
+    counted_revisions = {}
+    self.group_timestamps_by_date.map {|timestamp, counter| 
+        counted_revisions[:date] = timestamp.strftime("%F"),
+        counted_revisions[:count] = counter.count
+      }.to_h
+  end
+
+  def format_rev_dates_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      date 
+    end.unshift('x')
+  end
+
+  def format_rev_counts_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      count
+    end.unshift('Revisions Per Day')
+  end
+
+  def edit_activity_amount
+    case self.days_between_revisions
+    when (0..5)
+      "highly active"
+    when (5..15)
+      "moderately active"
+    else 
+      "relatively stable"
+    end
+  end
 end
