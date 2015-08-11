@@ -114,4 +114,15 @@ class Page < ActiveRecord::Base
     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
+  def edit_activity_amount
+    case self.days_between_revisions
+    when (0..5)
+      "highly active"
+    when (5..15)
+      "moderately active"
+    else 
+      "relatively stable"
+    end
+  end
+
 end
