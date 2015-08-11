@@ -40,6 +40,7 @@ class WikiWrapper
     json = load_json(url)
     json = json["query"]["usercontribs"]
     persistor = JsonPersistor.new(json)
+    persistor.insert_pages
     persistor.insert_revisions_into_author(author.id)
   end
 

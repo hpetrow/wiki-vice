@@ -6,7 +6,7 @@ class Author < ActiveRecord::Base
   def top_contributions
     # Returns the pages that the author has contributed to the most
     # and the amount of contributions he has made to that page
-    WIKI.get_user_contributions(self) if self.unique_pages.size == 1
+    WIKI.get_user_contributions(self)
     Revision.includes(:author, :page).where(authors: {id: self.id}).group(:title).order("count_id DESC").count.take(5)
   end
 
