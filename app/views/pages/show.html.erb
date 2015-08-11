@@ -68,7 +68,7 @@
       <% @top_five_authors.each do |top_five_author| %>
         <li><h3> <%= link_to "#{top_five_author[:author].name}",  
             author_path(top_five_author[:author].id) %><br> 
-            <small># of contributions: <%= top_five_author[:count] %></small></h3>  
+            <small><strong><%= top_five_author[:count] %></strong> contributions</small></h3>  
         </li>
       <% end %>
     </ol>
