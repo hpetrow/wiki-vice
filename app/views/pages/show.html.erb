@@ -29,7 +29,7 @@
   <div class="col-md-3 col-sm-6">
     <div class="dashboard-tile detail tile-blue">
       <div class="content">
-        <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+        <h3><b><%=@page.authors.all.count%></b> authors have edited this page</h3>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@
   <div class="col-md-3 col-sm-6">
     <div class="dashboard-tile detail tile-purple">
       <div class="content">
-        <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+        <h3>This page is <b><%=@page.edit_activity_amount%></b> days</h3>
       </div>
     </div>
   </div>
