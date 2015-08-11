@@ -1,8 +1,11 @@
 class Page < ActiveRecord::Base
-  has_many :revisions
+  has_many :revisions, :dependent => :destroy
   has_many :authors, :through => :revisions
   has_many :categories
+  validates :title, uniqueness: true
+  validates :page_id, uniqueness: true
   WIKI = WikiWrapper.new
+  BAD_IPS = ["223.176.156.214"]
 
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
@@ -25,23 +28,41 @@ class Page < ActiveRecord::Base
     self.get_anonymous_authors.count
   end
 
-  def revisions_by_date
-    self.revisions.order("DATE(timestamp)").group("DATE(timestamp)").size
-  end
-
-  def avg_revisions_per_day
-    revisions_by_date.size / revisions.size.to_f
-  end
-
   def days_between_revisions
-    (1 / (revisions_by_date.size / revisions.size.to_f)).round(0)
+    revisions_ordered = self.revisions.order("DATE(timestamp)")
+    first_date = revisions_ordered.first.timestamp.to_date
+    last_date = revisions_ordered.last.timestamp.to_date
+    ((last_date - first_date).to_f / revisions.size).round
   end
 
   def anonymous_author_location
       self.get_anonymous_authors.collect do |aa| 
-        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-      end
+        begin
+          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+        rescue Exception => e
+          puts e
+        end
+      end.compact
   end
+
+  def anonymous_location_for_map
+    locations = self.anonymous_author_location.group_by(&:country_code2)
+    location_key = {}
+    locations.each do |country_code, location|
+      location_key[country_code] = location.count
+    end
+    location_key.sort_by{|code, location_count| location_count}.reverse.to_h
+  end
+
+    def anonymous_location_for_view
+    locations = self.anonymous_author_location.group_by(&:country_name)
+    location_key = {}
+    locations.each do |country_code, location|
+      location_key[country_code] = location.count
+    end
+    location_key.sort_by{|code, location_count| location_count}.reverse.to_h.first(5)
+  end
+
 
   def group_anonymous_users_by_location
     locations = self.anonymous_author_location.group_by(&:country_code)
@@ -63,11 +84,15 @@ class Page < ActiveRecord::Base
   end
 
   def latest_revision
-    self.revisions.first
+    first_revision = self.revisions.first
+    if first_revision.content.nil?
+      WIKI.get_revision_content(first_revision)
+    end
+    first_revision
   end
 
-  def self.wiki_link(title)
-    url = "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
+  def wiki_link
+    url = "https://en.wikipedia.org/wiki/" + self.title.gsub(" ", "_")
   end
 
   def most_recent_vandalism
@@ -76,7 +101,55 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
-    vandalism ? vandalism.content.html_safe : ''
+    if vandalism 
+      vandalism.content = WIKI.get_revision_content(vandalism)
+      vandalism.content.html_safe
+    else
+      ""
+    end
   end
 
+  def most_recent_vandalism_regex
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  end
+
+  def get_dates
+    self.revisions.pluck(:timestamp)
+  end
+
+  def group_timestamps_by_date
+    self.get_dates.group_by{|timestamp| timestamp.to_date }
+  end
+
+  def group_and_count_revs_per_day
+    counted_revisions = {}
+    self.group_timestamps_by_date.map {|timestamp, counter| 
+        counted_revisions[:date] = timestamp.strftime("%F"),
+        counted_revisions[:count] = counter.count
+      }.to_h
+  end
+
+  def format_rev_dates_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      date 
+    end.unshift('x')
+  end
+
+  def format_rev_counts_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      count
+    end.unshift('Revisions Per Day')
+  end
+
+  def edit_activity_amount
+    case self.days_between_revisions
+    when (0..5)
+      "highly active"
+    when (5..15)
+      "moderately active"
+    else 
+      "relatively stable"
+    end
+  end
 end

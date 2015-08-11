@@ -1,21 +1,67 @@
+<br>
 <div class="row">
-  <div class="col-md-6">
     <h1><%= @page.title %></h1>
-    <%= link_to("Wikipedia", @page.url, target: "_blank") %>
-    <h3>Top 5 Page Contributors</h3>
-  </div>
+    <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
+</div>
+<br><br><br>
   
-  <div class="col-md-6">
-    <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
-  <% if @page.get_number_of_anonymous_authors > 1 %>
-    <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
-  <% else %>
-    <h3>This page has 0 edits from anonymous authors.</h3>
-<% end %>
+<div class="row"> 
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-red">
+      <div class="content">
+        <h3>This page changes every <b><%=@page.days_between_revisions%></b> days</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-turquoise">
+      <div class="content">
+      <% if @page.get_number_of_anonymous_authors > 1 %>
+      <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
+      <% else %>
+      <h3>This page has no edits from anonymous authors.</h3>
+      <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-blue">
+      <div class="content">
+        <h3><b><%=@page.authors.all.count%></b> authors have edited this page</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="dashboard-tile detail tile-purple">
+      <div class="content">
+        <h3>Based on the rate of edits, this page is <b><%=@page.edit_activity_amount%></b></h3>
+      </div>
+    </div>
   </div>
 
 </div>
 
+<div class="row">
+  <div class="col-md-8">
+    <h2>Anonymous authors by location:</h2>
+    <div id="map" style="width: 600px; height: 400px"></div>
+  </div>
+  <div class="col-md-4">
+    <!-- <canvas id="authorContributionsChart" width="300" height="300"></canvas> -->
+    <h2>Count:</h2>
+    <br>
+    <% @anonymous_revisions_by_country.each do |revision| %>
+    <h3><%= revision[0] %> : <b><%= revision[1] %></b></h3>
+    <% end %>
+
+  </div>
+
+</div>
+
+    <h3>Top 5 Page Contributors</h3>
 
 <div class="row">
   <div class="col-md-6">
@@ -38,64 +84,22 @@
 
 </div>
 
-    <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
-</ul>
+  <br>
+  <% if @page.most_recent_vandalism_content != "" %>
+    <h2>Most Recent Vandalism:</h2>
+    <h3><%= @page.most_recent_vandalism_regex %></h3>
+  <% else %>
+  <%end %>
 
-<div id="world-map" style="width: 600px; height: 400px"></div>
-
-  <h2>Most Recent Vandalism</h2>
-  <p><%= @page.most_recent_vandalism_content %></p>
-
-
-<script type="text/javascript">
-$(function(){
- var anonData = [
-        {
-            value: gon.anonData[225],
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-            label: gon.anonCountryName[0]
-        },
-        {
-            value: gon.anonData[0],
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            label: gon.anonCountryName[1]
-        },
-        {
-            value: gon.anonData[38],
-            color: "#FDB45C",
-            highlight: "#FFC870",
-            label: gon.anonCountryName[2]
-        },
-        {
-            value: gon.anonData[233],
-            color: "#949FB1",
-            highlight: "#A8B3C5",
-            label: gon.anonCountryName[3]
-        },
-        {
-            value: gon.anonData[191],
-            color: "#4D5360",
-            highlight: "#616774",
-            label: gon.anonCountryName[4]
-        }
-    ];
+<h1><div class="text-center">Timeline of revisions</div></h1>
+<%= render partial: 'layouts/timeline', locals: {revisions: @revisions} %>
 
 
-    var options = {
-      scaleShowLabelBackdrop: true,
-      scaleBackdropColor: "rgba(255,255,255,0.75)",
-      scaleBeginAtZero: true,
-      scaleShowLine: true,
-      animationSteps: 40
-    };
-    var ctx = document.getElementById("anonCountriesChart");
-    var anonChart = new Chart(ctx).PolarArea(anonData, options);
-    });
-</script>
-
-<div class="col-md-6">
-    <canvas id="anonCountriesChart" width="400" height="400">
-    </canvas>
+<h1>Revisions per day</h1>
+<div class="row">
+ <div class="panel-body text-center">
+    <div class="chart">
+        <div id="zoom"></div>
+    </div>
+</div>
 </div>
