@@ -10,7 +10,8 @@ class Revision < ActiveRecord::Base
   end
 
   def get_content
-    WikiWrapper.new.get_revision_content(self) if !self.content
+    self.content = WikiWrapper.new.revision_content(self) if !self.content
+    self.save
     self.content
   end
 
