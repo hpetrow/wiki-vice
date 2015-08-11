@@ -17,9 +17,7 @@ class WikiWrapper
 
       page_id = json["query"]["pages"].keys.first.to_s
 
-      revisions = json["query"]["pages"][page_id]["revisions"]
-
-      revisions << more_revisions(title, json)
+      revisions = paged_revisions(title, json)
 
       persistor.json = revisions.flatten
 
@@ -58,7 +56,7 @@ class WikiWrapper
 
   private
 
-  def more_revisions(page_title, json)
+  def paged_revisions(page_title, json)
     continue = 10
     i = 1
     revisions = []

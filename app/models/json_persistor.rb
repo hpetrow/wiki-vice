@@ -123,34 +123,6 @@ class JsonPersistor
 
   private
 
-  def parse_author(data)
-
-  end
-
-  def parse_revision_content(data)
-    if data["diff"]
-      content = data["diff"]["*"]
-    else
-      content = "notcached"
-    end
-  end
-
-  def persist_page_categories(page)
-    categories = json["query"]["pages"][page.page_id.to_s]["categories"]
-    categories.each do |c|
-      category_title = /^Category:(.+)/.match(c['title'])[1]
-      category = Category.new(title: category_title)
-      if category.valid?
-        category.page = page
-        category.save
-      else
-        category = Category.find_by(title: category_title)
-        category.page = page
-        category.save
-      end
-    end
-  end
-
   def ip_address?(name)
     !!(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)) 
   end
