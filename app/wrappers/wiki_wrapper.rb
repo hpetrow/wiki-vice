@@ -23,23 +23,12 @@ class WikiWrapper
     end
   end
 
-  def vandalism(page)
+  def most_recent_vandalism(page)
     json = load_json(vandalism_url(page.title))
     json = json["query"]["pages"][page.page_id.to_s]["revisions"].first
     persistor = JsonPersistor.new(json)
     persistor.insert_vandalism(page)
   end  
-
-  def vandalism_url(title)
-    prop = "prop=revisions"
-    titles = "titles=#{title.gsub(" ", "%20")}"
-    rvlimit = "rvlimit=1"
-    rvtag = "rvtag=possible%20libel%20or%20vandalism"
-    rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size|content"
-    rvdiffto ="rvdiffto=prev"
-    redirects = "redirects"    
-    [CALLBACK, prop, titles, rvprop, rvlimit, rvtag, rvdiffto, redirects].join("&")
-  end
 
   def get_user_contributions(author)
     url = user_contribs_url(author)
@@ -48,13 +37,12 @@ class WikiWrapper
     persistor.persist_author_revisions(author)
   end
 
-  def get_revision_content(revision)
+  def revision_content(revision)
     json = load_json(revision_content_url(revision))
-    persistor = JsonPersistor.new(json)
-    persistor.persist_revision_content(revision)
+    page_id = Page.joins(:revisions).where(revisions: {revid: revision.revid}).take.page_id
+    revision = json["query"]["pages"][page_id.to_s]["revisions"].first
+    content = revision["diff"]["*"]
   end
-
-
 
   private
 
@@ -68,6 +56,17 @@ class WikiWrapper
       i += 1
     end
     revisions.flatten
+  end  
+
+  def vandalism_url(title)
+    prop = "prop=revisions"
+    titles = "titles=#{title.gsub(" ", "%20")}"
+    rvlimit = "rvlimit=1"
+    rvtag = "rvtag=possible%20libel%20or%20vandalism"
+    rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size"
+    rvdiffto ="rvdiffto=prev"
+    redirects = "redirects"    
+    [CALLBACK, prop, titles, rvprop, rvlimit, rvtag, rvdiffto, redirects].join("&")
   end
 
   def get_vandalism_revisions(page)

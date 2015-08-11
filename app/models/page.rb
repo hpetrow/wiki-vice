@@ -83,14 +83,13 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    revision = WIKI.vandalism(self)
+    Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).take
   end
 
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
     if vandalism 
-      vandalism.content = WIKI.get_revision_content(vandalism)
-      vandalism.content.html_safe
+      WIKI.revision_content(vandalism).html_safe
     else
       ""
     end
@@ -98,7 +97,7 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism_regex
     regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism.content).to_s.gsub("\"><div>","")
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
 end

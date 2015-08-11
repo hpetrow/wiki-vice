@@ -1,7 +1,6 @@
 class JsonPersistor
   attr_accessor :json
-  CONN = ActiveRecord::Base.connection
-
+  
   def initialize(json)
     @json = json
   end
@@ -37,7 +36,7 @@ class JsonPersistor
 
   def insert_vandalism(page)
     author = Author.find_or_create_by(name: json["user"])
-    Revision.create(revid: json["revid"], timestamp: json["timestamp"], content: json["diff"]["*"].html_safe, page_id: page.id)
+    Revision.create(revid: json["revid"], timestamp: json["timestamp"], page_id: page.id)
   end
 
   def persist_page
