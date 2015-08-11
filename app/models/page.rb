@@ -7,6 +7,13 @@ class Page < ActiveRecord::Base
   WIKI = WikiWrapper.new
   BAD_IPS = ["223.176.156.214"]
 
+  def top_revisions
+    max = self.revisions.size >= 5 ? 5 : revisions.length
+    self.revisions.slice(0, max).each { |revision|
+      revision.get_content
+    }
+  end
+
   def top_five_authors
     results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
     results.collect do |r|

@@ -46,3 +46,16 @@
 //     var anonChart = new Chart(ctx).PolarArea(anonData, options);
 // });
 
+$(function() {
+  $('ul.nav-tabs').on('click', 'li', function (e) {
+    window.activeTab = e.target;
+    var tabValue = parseInt(window.activeTab.text);
+
+    $.ajax({
+      url: '/revisions/' + tabValue,
+      data: {id: tabValue},
+      dataType: 'script'
+    });
+  });
+});
+

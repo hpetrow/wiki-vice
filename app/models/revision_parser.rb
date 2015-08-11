@@ -1,8 +1,8 @@
 class RevisionParser
   attr_accessor :html_content
 
-  def initialize(content)
-    @html_content = Nokogiri::HTML(content)
+  def initialize(revision)
+    @html_content = Nokogiri::HTML(revision.content)
   end
 
   def line_number

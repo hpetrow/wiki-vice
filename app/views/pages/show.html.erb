@@ -83,6 +83,7 @@
 
 </div>
 
+  <p><%=  render partial: 'page_revision', locals: { top_revisions: @top_revisions, revision_parser: @revision_parser} %></p>
 
   <br>
   <% if @page.most_recent_vandalism_content != "" %>

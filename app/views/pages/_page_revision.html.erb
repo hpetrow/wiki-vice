@@ -12,11 +12,11 @@
         <div class="tab-wrapper tab-left ">
           <ul class="nav nav-tabs">
           <!-- This sets up the first active left tab button -->
-            <li class="active"><a href="#<%=@first_revision.id%>" data-toggle="tab">1</a>
-             </li>
-             <!-- This iterates through the rest of the revs to make tab buttons-->
-             <% @counter = 2 %>
-              <% @last_ten_revisions.each do |revision| %>
+            <li class="active"><a href="#<%=@top_revisions.first.id%>" data-toggle="tab">1</a>
+            </li>
+            <!-- This iterates through the rest of the revs to make tab buttons-->
+              <% @counter = 2 %>
+              <% @top_revisions.slice(1, @top_revisions.size).each do |revision| %>
                 
                 <li><a href="#<%=revision.id%>" data-toggle="tab"><%= @counter %></a>
                 </li>
@@ -25,21 +25,12 @@
           </ul>
           <div class="tab-content">
           <!-- This sets up the first active content tab. -->
-          <div class="tab-pane active tab_box" id="<%= @first_revision.id %>">
-          <h3><strong><%=@first_revision.author.name %></strong> <br><small>on <%= @first_revision.get_date %></small></h3><hr>
-
-            <%= render partial: 'revision_content', locals: {revision_parser: RevisionParser.new(@first_revision.content)} %>
-
+          <div class="tab-pane active tab_box" id="<%= @top_revisions.first.id %>">
+            <%= render partial: 'revisions/revision', locals: { revision: @top_revisions.first, revision_parser: @revision_parser} %>
           </div>
           <!-- This iterates through the rest of the rev content for tabs. -->
-            <% @last_ten_revisions.each do |revision| %>
-           
+            <% @top_revisions.slice(1, @top_revisions.size).each do |revision| %>
               <div class="tab-pane tab_scroll" id="<%=revision.id%>">
-                <h3><strong><%=revision.author.name %></strong><br><small>on <%= revision.get_date %></small></h3><hr>
-                
-                <p>
-                  <%= revision.content.gsub("}}", "").html_safe if !revision.content.nil?  %>
-                </p>
               </div>
             <% end %> 
           </div> 
