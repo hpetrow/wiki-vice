@@ -1,4 +1,5 @@
 $(function () {
+      var colors = ['#000'];
       var chart = c3.generate({
         bindto: '#zoom',
         data: {
@@ -8,24 +9,20 @@ $(function () {
             gon.revCounts
           ],
           type: 'spline',
-          colors: {
-            x: '#000'
-          },
           color: function(color) {
-            return color;
+            return colors[0];
           }
         },
         axis : {
-            x : {
-               type : 'timeseries',
-               tick: {
-                rotate: -45,
-                multiline: false,
-                format: '%m/%d/%Y'
-           }
-               
-         }
-       },
+          x : {
+            type: 'timeseries',
+            tick : {
+            rotate: -45,
+            multiline: false,
+            format: '%m/%d/%Y'
+           }     
+          }
+        },
         zoom: {
           enabled: true
         }
