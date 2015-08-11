@@ -12,13 +12,13 @@
         <div class="tab-wrapper tab-left ">
           <ul class="nav nav-tabs">
           <!-- This sets up the first active left tab button -->
-            <li class="active"><a href="#<%=@top_revisions.first.id%>" data-toggle="tab">1</a>
+            <li data-id="<%=@top_revisions.first.id%>" class="active"><a href="#<%=@top_revisions.first.id%>" data-toggle="tab">1</a>
             </li>
             <!-- This iterates through the rest of the revs to make tab buttons-->
               <% @counter = 2 %>
               <% @top_revisions.slice(1, @top_revisions.size).each do |revision| %>
                 
-                <li><a href="#<%=revision.id%>" data-toggle="tab"><%= @counter %></a>
+                <li data-id="<%=revision.id%>"><a href="#<%=revision.id%>" data-toggle="tab"><%= @counter %></a>
                 </li>
                 <% @counter += 1 %>
               <% end %>

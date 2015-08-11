@@ -24,4 +24,19 @@ class RevisionParser
   def change
     @html_content.css(".diffchange").text
   end
+
+  def change_context
+    @html_content.css(".diffchange").first.parent
+  end
+
+  def change_type
+    binding.pry
+    self.change_context.parent.attr('class') == 'diff-deletedline' ? 'Deleted Line' : 'Added Line'
+  end
+
+  def parse_change
+    result = "#{self.change_context}".gsub("&lt;", "<").gsub("&gt", ">")
+    result = result.gsub(/({{)|(}})|(\[\[)|(]])/, " ")
+    result.gsub(/(<ref[^<]+<\/ref>;)/, "").html_safe
+  end
 end
