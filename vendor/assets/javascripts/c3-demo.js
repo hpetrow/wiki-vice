@@ -12,14 +12,14 @@ $(function () {
             x : {
                type : 'timeseries',
                tick: {
-               format: '%m/%d/%Y'
-             //format: '%Y' // format string is also available for timeseries data
+                rotate: -45,
+                format: '%m/%d/%Y'
            }
                
          }
-       }
-        // zoom: {
-        //   enabled: true
-        // }
+       },
+        zoom: {
+          enabled: true
+        }
       });
 });
