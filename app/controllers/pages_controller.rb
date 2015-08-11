@@ -20,6 +20,5 @@ class PagesController < ApplicationController
     gon.revDates = @page.format_rev_dates_for_c3
     gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
-    
   end
 end
