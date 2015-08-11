@@ -41,7 +41,11 @@ class WikiWrapper
     json = load_json(revision_content_url(revision))
     page_id = Page.joins(:revisions).where(revisions: {revid: revision.revid}).take.page_id
     revision = json["query"]["pages"][page_id.to_s]["revisions"].first
-    content = revision["diff"]["*"]
+    if revision["texthidden"] 
+      content = "text hidden" 
+    else
+      content = revision["diff"]["*"]
+    end
   end
 
   private
