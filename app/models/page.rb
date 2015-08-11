@@ -68,11 +68,11 @@ class Page < ActiveRecord::Base
   end
 
   def unique_authors
-    Page.includes(:authors).where(pages: {id: self.id}).distinct
+    Author.includes(:page).where(pages: {id: self.id}).distinct
   end
 
   def latest_revision
-    first_revision = Page.includes(:revisions).where(pages: {id: self.id}).take
+    first_revision = Revision.includes(:page).where(pages: {id: self.id}).take
     if first_revision.content.nil?
       WIKI.get_revision_content(first_revision)
     end
