@@ -16,7 +16,7 @@ class Author < ActiveRecord::Base
 
   def get_user_comments
     user_contribs = []
-    WIKI.get_user_contributions(self).take(50).each do |contribution|
+    self.get_user_contributions_wiki.take(50).each do |contribution|
       #user_contribs[:size_diff] = contribution["sizediff"]
       user_contribs << contribution["comment"].gsub("/* ","").gsub("*/ ","").gsub("--", "")
     end
@@ -40,9 +40,6 @@ class Author < ActiveRecord::Base
     #.sort
     #Ignore dumb words like to/and/the/in/on/of/--/
     #Return a list of most used terms with how many times they occur
-
-
-  end
 
 
   def most_recent_revision

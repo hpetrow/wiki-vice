@@ -144,9 +144,9 @@ class Page < ActiveRecord::Base
 
   def edit_activity_amount
     case self.days_between_revisions
-    when (0..5)
+    when (0...2)
       "highly active"
-    when (5..15)
+    when (2...15)
       "moderately active"
     else 
       "relatively stable"
