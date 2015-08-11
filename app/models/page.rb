@@ -8,9 +8,9 @@ class Page < ActiveRecord::Base
   BAD_IPS = ["223.176.156.214"]
 
   def top_five_authors
-    results = Page.includes(:authors).group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
+    results =  Revision.includes(:page, :author).where(pages: {id: self.id}).group(:name).order("count_id DESC").count.take(5)
     results.collect do |r|
-      {author: Author.find_by(name: r[0]), count: r[1]}
+      {author: Author.where(authors: {name: r[0]}).take, count: r[1]}
     end
   end
 
