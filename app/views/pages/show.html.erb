@@ -1,7 +1,9 @@
+<br>
 <div class="row">
     <h1><%= @page.title %></h1>
     <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
 </div>
+<br><br><br>
   
 <div class="row"> 
   <div class="col-md-3 col-sm-6">
@@ -75,10 +77,14 @@
 </div>
 
     <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
-</ul>
+  <br>
+  <% if @page.most_recent_vandalism_content != "" %>
+    <h2>Most Recent Vandalism:</h2>
+    <h3><%= @page.most_recent_vandalism_regex %></h3>
+  <%end %>
 
-  <h2>Most Recent Vandalism:</h2>
-  <h3><%= @page.most_recent_vandalism_regex %></h3>
+<h1><div class="text-center">Timeline of edits</div></h1>
+<%= render 'layouts/timeline' %>
 
 
 <script type="text/javascript">
@@ -171,3 +177,4 @@ $(function(){
 
 });
 </script>
+
