@@ -1,6 +1,7 @@
 $(function(){
 
-	var anonLocationData = gon.anonLocationMap
+	var anonLocationData = gon.anonLocationMap; 
+
 
 	$('#map').vectorMap({
 	    map: 'world_mill_en',

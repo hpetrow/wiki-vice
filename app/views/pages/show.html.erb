@@ -83,7 +83,7 @@
 
 </div>
 
-    <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
+
   <br>
   <% if @page.most_recent_vandalism_content != "" %>
     <h2>Most Recent Vandalism:</h2>
@@ -95,94 +95,9 @@
 <%= render partial: 'layouts/timeline', locals: {revisions: @revisions} %>
 
 
-<script type="text/javascript">
-$(function(){
- var anonData = [
-        {
-            value: gon.anonData[225],
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-            label: gon.anonCountryName[0]
-        },
-        {
-            value: gon.anonData[0],
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            label: gon.anonCountryName[1]
-        },
-        {
-            value: gon.anonData[38],
-            color: "#FDB45C",
-            highlight: "#FFC870",
-            label: gon.anonCountryName[2]
-        },
-        {
-            value: gon.anonData[233],
-            color: "#949FB1",
-            highlight: "#A8B3C5",
-            label: gon.anonCountryName[3]
-        },
-        {
-            value: gon.anonData[191],
-            color: "#4D5360",
-            highlight: "#616774",
-            label: gon.anonCountryName[4]
-        }
-    ];
 
-
-    var options = {
-      scaleShowLabelBackdrop: true,
-      scaleBackdropColor: "rgba(255,255,255,0.75)",
-      scaleBeginAtZero: true,
-      scaleShowLine: true,
-      animationSteps: 40
-    };
-    var ctx = document.getElementById("anonCountriesChart");
-    var anonChart = new Chart(ctx).PolarArea(anonData, options);
-
-  var data = [
-    {
-        value: gon.data[0][1],
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: gon.data[0][0]
-    },
-    {
-        value: gon.data[1][1],
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: gon.data[1][0]
-    },
-    {
-        value: gon.data[2][1],
-        color: "#FDB45C",
-        highlight: "#FFC870",
-        label: gon.data[2][0]
-    },
-    {
-        value: gon.data[3][1],
-        color: "#3598DB",
-        highlight: "#5DADE2",
-        label: gon.data[3][0]
-    },
-    {
-        value: gon.data[4][1],
-        color: "#293949",
-        highlight: "#3E4D5B",
-        label: gon.data[4][0]
-    }
-  ];
-
-  var options = {
-    scaleShowLabels : true,
-    animation: true,
-    animationEasing: "easeOutQuart",
-    animationSteps: 40,
-  };
-  
-  var myChart = new Chart(document.getElementById("authorContributionsChart").getContext("2d")).Pie(data, options);
-
-});
-</script>
-
+ <div class="panel-body text-center">
+    <div class="chart">
+        <div id="zoom"></div>
+    </div>
+</div>
