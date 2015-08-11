@@ -128,9 +128,21 @@ class Page < ActiveRecord::Base
   def count_revs_per_day
     counted_revs = {}
     self.get_dates.inject(Hash.new(0)) {|h,v|
-      date = v.strftime("%B %d, %Y");
+      date = v.strftime("%F");
       date = (h[date] += 1) ; h }.sort_by{|k,v| k
     }.reverse.to_h
+  end
+
+  def format_rev_dates_for_c3
+    self.count_revs_per_day.collect do |date, count|
+      date 
+    end.unshift('x')
+  end
+
+  def format_rev_counts_for_c3
+    self.count_revs_per_day.collect do |date, count|
+      count
+    end.unshift('Revisions Per Day')
   end
 
 end

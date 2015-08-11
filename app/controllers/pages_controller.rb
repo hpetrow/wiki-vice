@@ -18,8 +18,8 @@ class PagesController < ApplicationController
     @first_revision = @revisions.first 
     @last_ten_revisions = @revisions.slice(1,9)
     @anonymous_revisions_by_country = @page.anonymous_location_for_view
-    gon.anonData = @page.group_anonymous_users_by_location
-    gon.anonCountryName = @page.find_country_name
+    gon.revDates = @page.format_rev_dates_for_c3
+    gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
     
   end
