@@ -114,13 +114,6 @@ class Page < ActiveRecord::Base
     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
-  def get_unique_dates
-    all_dates = self.revisions.pluck(:timestamp)
-    all_dates.collect do |datetime|
-      datetime
-    end.uniq
-  end
-
   def get_dates
     self.revisions.pluck(:timestamp)
   end
@@ -128,16 +121,6 @@ class Page < ActiveRecord::Base
   def group_timestamps_by_date
     self.get_dates.group_by{|timestamp| timestamp.to_date }
   end
-
-#Old method. refactored to be kinda clearer below, but keeping because this one
-#works just for now.
-  # def count_revs_per_day
-  #   self.get_dates.inject(Hash.new(0)) {|h,v|
-       #if v > Date.today - 6.months
-  #       date = v.strftime("%F");
-  #       date = (h[date] += 1) ; h 
-  #     }.sort.reverse.to_h  
-  # end
 
   def group_and_count_revs_per_day
     counted_revisions = {}
@@ -157,6 +140,16 @@ class Page < ActiveRecord::Base
     self.group_and_count_revs_per_day.collect do |date, count|
       count
     end.unshift('Revisions Per Day')
+
+  def edit_activity_amount
+    case self.days_between_revisions
+    when (0..5)
+      "highly active"
+    when (5..15)
+      "moderately active"
+    else 
+      "relatively stable"
+    end
   end
 
 end
