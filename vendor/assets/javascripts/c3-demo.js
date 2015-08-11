@@ -8,7 +8,7 @@ $(function () {
             gon.revDates,
             gon.revCounts
           ],
-          type: 'spline',
+          type: 'line',
           color: function(color) {
             return colors[0];
           }
