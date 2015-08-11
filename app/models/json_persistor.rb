@@ -64,6 +64,7 @@ class JsonPersistor
     end
   end
 
+
   private
 
   def parse_author(data)
@@ -99,3 +100,4 @@ class JsonPersistor
     tags.include?("possible libel or vandalism")
   end
 end
+

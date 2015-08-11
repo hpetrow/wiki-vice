@@ -4,6 +4,7 @@
     <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
 </div>
 <br><br><br>
+<img src="<%= @photo_url %>" height="200">
   
 <div class="row"> 
   <div class="col-md-3 col-sm-6">
@@ -80,7 +81,6 @@
     <p><%= contribution[0]%></p>
     <% end %>
   </div>
-
 </div>
 
 
@@ -93,7 +93,6 @@
 
 <h1><div class="text-center">Timeline of revisions</div></h1>
 <%= render partial: 'layouts/timeline', locals: {revisions: @revisions} %>
-
 
 
  <div class="panel-body text-center">

@@ -21,6 +21,10 @@ class PagesController < ApplicationController
     gon.anonData = @page.group_anonymous_users_by_location
     gon.anonCountryName = @page.find_country_name
     gon.anonLocationMap = @page.anonymous_location_for_map
-    
+
+    wiki_wrapper = WikiWrapper.new
+    @photo_name = wiki_wrapper.get_page_photo(@page.title)
+    @photo_url = wiki_wrapper.get_full_res_photo_url(@photo_name)  
+
   end
 end
