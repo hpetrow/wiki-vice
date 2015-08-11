@@ -125,12 +125,22 @@ class Page < ActiveRecord::Base
     all_dates = self.revisions.pluck(:timestamp)
   end
 
-  def count_revs_per_day
-    counted_revs = {}
-    self.get_dates.inject(Hash.new(0)) {|h,v|
-      date = v.strftime("%F");
-      date = (h[date] += 1) ; h }.sort_by{|k,v| k
-    }.reverse.to_h
+#Old method. refactored to be kinda clearer below, but keeping because this one
+#works just for now.
+  # def count_revs_per_day
+  #   self.get_dates.inject(Hash.new(0)) {|h,v|
+       #if v > Date.today - 6.months
+  #       date = v.strftime("%F");
+  #       date = (h[date] += 1) ; h 
+  #     }.sort.reverse.to_h  
+  # end
+
+  def group_count_revs_per_day
+    counted_revisions = {}
+    self.get_dates.group_by{|timestamp| timestamp.to_date }.map {|timestamp, counter| 
+        counted_revisions[:date] = timestamp.strftime("%F"),
+        counted_revisions[:count] = counter.count
+      }.to_h
   end
 
   def format_rev_dates_for_c3

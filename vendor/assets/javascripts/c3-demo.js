@@ -1,12 +1,16 @@
 $(function () {
       var chart = c3.generate({
          bindto: '#zoom',
+
         data: {
           x: 'x',
           columns: [
             gon.revDates,
             gon.revCounts
-          ]
+          ],
+          colors: {
+            x: '#41BB99',
+          },
         },
         axis : {
             x : {
