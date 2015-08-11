@@ -21,8 +21,8 @@ class RevisionParser
     html_content.css(".diff-addedline").text
   end
 
-  def change
-    @html_content.css(".diffchange").text
+  def diff_change
+    @html_content.css(".diffchange")
   end
 
   def change_context
@@ -30,7 +30,6 @@ class RevisionParser
   end
 
   def change_type
-    binding.pry
     self.change_context.parent.attr('class') == 'diff-deletedline' ? 'Deleted Line' : 'Added Line'
   end
 
