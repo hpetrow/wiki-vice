@@ -16,7 +16,8 @@ class PagesController < ApplicationController
     @top_five_authors = @page.top_five_authors
     @revisions = @page.revisions
     @first_revision = @revisions.first 
-    @last_ten_revisions = @revisions.slice(1,9) 
+    @last_ten_revisions = @revisions.slice(1,9)
+    @anonymous_revisions_by_country = @page.anonymous_location_for_view
     gon.anonData = @page.group_anonymous_users_by_location
     gon.anonCountryName = @page.find_country_name
     gon.anonLocationMap = @page.anonymous_location_for_map
