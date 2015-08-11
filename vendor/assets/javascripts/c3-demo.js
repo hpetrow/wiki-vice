@@ -1,16 +1,19 @@
 $(function () {
       var chart = c3.generate({
-         bindto: '#zoom',
-
+        bindto: '#zoom',
         data: {
           x: 'x',
           columns: [
             gon.revDates,
             gon.revCounts
           ],
+          type: 'spline',
           colors: {
-            x: '#41BB99',
+            x: '#000'
           },
+          color: function(color) {
+            return color;
+          }
         },
         axis : {
             x : {
