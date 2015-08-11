@@ -114,4 +114,23 @@ class Page < ActiveRecord::Base
     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
+  def get_unique_dates
+    all_dates = self.revisions.pluck(:timestamp)
+    all_dates.collect do |datetime|
+      datetime
+    end.uniq
+  end
+
+  def get_dates
+    all_dates = self.revisions.pluck(:timestamp)
+  end
+
+  def count_revs_per_day
+    counted_revs = {}
+    self.get_dates.inject(Hash.new(0)) {|h,v|
+      date = v.strftime("%B %d, %Y");
+      date = (h[date] += 1) ; h }.sort_by{|k,v| k
+    }.reverse.to_h
+  end
+
 end
