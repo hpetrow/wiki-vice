@@ -1,8 +1,43 @@
 class JsonPersistor
   attr_accessor :json
+  CONN = ActiveRecord::Base.connection
 
   def initialize(json)
     @json = json
+  end
+
+  def insert_page
+    page_id = json["query"]["pages"].keys.first
+    page_data = json["query"]["pages"][page_id]
+    Page.create(title: page_data["title"], page_id: page_id)
+  end
+
+  def insert_authors
+    authors = []
+    json.each do |r|
+      if r["user"]
+        author_name = r["user"]
+        ip_address?(author_name) ? anonymous = true : anonymous = false
+        authors << Author.new(name: author_name, anonymous: anonymous)
+      end
+    end
+    Author.import(authors)   
+  end  
+
+  def insert_revisions(page)
+    revisions = []
+    json.each do |r|
+      if !(r["minor"]) && !(r["bot"]) && r["user"]
+        author = Author.find_by(name: r["user"]) || Author.create(name: "anonymous")
+        revisions << Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]), size: r["size"], page_id: page.id, author_id: author.id)
+      end
+    end
+    Revision.import(revisions)
+  end
+
+  def insert_vandalism(page)
+    author = Author.find_or_create_by(name: json["user"])
+    Revision.create(revid: json["revid"], timestamp: json["timestamp"], content: json["diff"]["*"].html_safe, page_id: page.id)
   end
 
   def persist_page

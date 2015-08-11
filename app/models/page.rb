@@ -2,10 +2,9 @@ class Page < ActiveRecord::Base
   has_many :revisions, :dependent => :destroy
   has_many :authors, :through => :revisions
   has_many :categories
-  validates :title, uniqueness: true
-  validates :page_id, uniqueness: true
+  # validates :title, uniqueness: true
+  # validates :page_id, uniqueness: true
   WIKI = WikiWrapper.new
-  BAD_IPS = ["223.176.156.214"]
 
   def top_five_authors
     results =  Revision.includes(:page, :author).where(pages: {id: self.id}).group(:name).order("count_id DESC").count.take(5)
@@ -27,9 +26,9 @@ class Page < ActiveRecord::Base
   end
 
   def days_between_revisions
-    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp.to_date
-    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp.to_date
-    ((last_date - first_date).to_f / revisions.size).round
+    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
+    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
+    ((last_date.to_date - first_date.to_date).to_f / revisions.size).round
   end
 
   def anonymous_author_location
@@ -84,7 +83,7 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).order("timestamp desc").take
+    revision = WIKI.vandalism(self)
   end
 
   def most_recent_vandalism_content
@@ -99,7 +98,7 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism_regex
     regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+    regex.match(most_recent_vandalism.content).to_s.gsub("\"><div>","")
   end
 
 end
