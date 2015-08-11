@@ -1,0 +1,16 @@
+<h3><strong><%= revision.author.name %></strong> <br>
+<small>on <%= revision.get_date %></small></h3><hr>
+
+<p>
+  <%= revision_parser.line_number %>
+</p>
+
+<% if revision.comment %>
+  <p>
+    Comment: <%= revision.comment %>
+  </p>
+<% end %>
+
+<p>
+  <%= revision_parser.change.html_safe %>
+</p>

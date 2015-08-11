@@ -1,6 +1,7 @@
 $(function(){
 
-	var anonLocationData = gon.anonLocationMap
+	var anonLocationData = gon.anonLocationMap; 
+
 
 	$('#map').vectorMap({
 	    map: 'world_mill_en',
@@ -14,7 +15,7 @@ $(function(){
 	    backgroundColor: 'transparent',
 	    regionStyle: {
 	        initial: {
-	            fill: '#1ABC9C',
+	            fill: '#C9C5C5',
 	        },
 	        hover: {
 	            "fill-opacity": 0.8

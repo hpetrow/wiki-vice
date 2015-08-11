@@ -14,12 +14,11 @@ class PagesController < ApplicationController
   def show
     @page = Page.find(params[:id])
     @top_five_authors = @page.top_five_authors
-    @revisions = @page.revisions
-    @first_revision = @revisions.first 
-    @last_ten_revisions = @revisions.slice(1,9) 
-    gon.anonData = @page.group_anonymous_users_by_location
-    gon.anonCountryName = @page.find_country_name
+    @top_revisions = @page.top_revisions
+    @revision_parser = RevisionParser.new(@top_revisions.first)
+    @anonymous_revisions_by_country = @page.anonymous_location_for_view
+    gon.revDates = @page.format_rev_dates_for_c3
+    gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
-    
   end
 end
