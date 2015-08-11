@@ -19,7 +19,7 @@ class Page < ActiveRecord::Base
   end
 
   def get_anonymous_authors
-    Page.includes(:authors).where(pages: {id: self.id}, authors: {anonymous: true})
+    Author.includes(:pages).where(pages: {id: self.id}, authors: {anonymous: true})
   end
 
   def get_number_of_anonymous_authors
