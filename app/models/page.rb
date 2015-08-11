@@ -140,6 +140,7 @@ class Page < ActiveRecord::Base
     self.group_and_count_revs_per_day.collect do |date, count|
       count
     end.unshift('Revisions Per Day')
+  end
 
   def edit_activity_amount
     case self.days_between_revisions
@@ -151,5 +152,4 @@ class Page < ActiveRecord::Base
       "relatively stable"
     end
   end
-
 end
