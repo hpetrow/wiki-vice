@@ -18,7 +18,8 @@ class JsonPersistor
     revisions = json["query"]["pages"][page.page_id.to_s]["revisions"] || []
     revisions.each do |r|
       author_name = !!r["user"] ? r["user"] : "anonymous"
-      author = Author.find_or_create_by(name: author_name) 
+      ip_address?(author_name) ? anonymous = true : anonymous = false
+      author = Author.find_or_create_by(name: author_name, anonymous: anonymous)
       if !(r["minor"]) && !(r["bot"])
         revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]), size: r["size"])
         if revision.valid?
@@ -94,6 +95,9 @@ class JsonPersistor
     end
   end
 
+  def ip_address?(name)
+    /\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)    
+  end
 
   def vandalism?(tags)
     tags.include?("possible libel or vandalism")

@@ -8,20 +8,18 @@ class Page < ActiveRecord::Base
   BAD_IPS = ["223.176.156.214"]
 
   def top_five_authors
-    results = self.authors.group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
+    results = Page.includes(:authors).group(:name).order('count_id desc').count('id').max_by(5){|name, num| num}
     results.collect do |r|
       {author: Author.find_by(name: r[0]), count: r[1]}
     end
   end
 
   def get_date
-    !!self.revisions.first.timestamp ? self.revisions.first.timestamp.to_formatted_s(:long_ordinal) : 'not available'
+    Page.includes(:revisions).where(pages: {id: p.id}).take.timestamp
   end
 
   def get_anonymous_authors
-    self.authors.select do |author|
-      author.name.match(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/)
-    end
+    Page.includes(:authors).where(pages: {id: self.id}, authors: {anonymous: true})
   end
 
   def get_number_of_anonymous_authors
@@ -29,9 +27,8 @@ class Page < ActiveRecord::Base
   end
 
   def days_between_revisions
-    revisions_ordered = self.revisions.order("DATE(timestamp)")
-    first_date = revisions_ordered.first.timestamp.to_date
-    last_date = revisions_ordered.last.timestamp.to_date
+    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp.to_date
+    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp.to_date
     (last_date - first_date).to_f / revisions.size
   end
 
@@ -61,11 +58,11 @@ class Page < ActiveRecord::Base
   end
 
   def unique_authors
-    self.authors.uniq
+    Page.includes(:authors).where(pages: {id: self.id}).distinct
   end
 
   def latest_revision
-    first_revision = self.revisions.first
+    first_revision = Page.includes(:revisions).where(pages: {id: self.id}).take
     if first_revision.content.nil?
       WIKI.get_revision_content(first_revision)
     end
@@ -77,7 +74,7 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    self.revisions.where("vandalism = ?", true).order("timestamp desc").limit(1).first
+    Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).order("timestamp desc").take
   end
 
   def most_recent_vandalism_content
