@@ -13,6 +13,7 @@ $(function () {
                type : 'timeseries',
                tick: {
                 rotate: -45,
+                multiline: false,
                 format: '%m/%d/%Y'
            }
                
