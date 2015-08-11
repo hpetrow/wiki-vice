@@ -12,9 +12,5 @@
 <% end %>
 
 <p>
-  <%= revision_parser.change_type %>
-</p>
-
-<p>
-  <%= revision_parser.parse_change %>
+  <%= revision_parser.change.html_safe %>
 </p>

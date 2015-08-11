@@ -10,32 +10,44 @@ class RevisionParser
   end
 
   def context
-    html_content.css(".diff-context").text
+    html_content.css(".diff-context")
   end
 
   def deleted_line
-    html_content.css(".diff-deletedline").text
+    html_content.css(".diff-deletedline")
   end
 
   def added_line
-    html_content.css(".diff-addedline").text
+    html_content.css(".diff-addedline")
   end
 
   def diff_change
     @html_content.css(".diffchange")
   end
 
-  def change_context
+  def diff_change_context
     @html_content.css(".diffchange").first.parent
   end
 
-  def change_type
-    self.change_context.parent.attr('class') == 'diff-deletedline' ? 'Deleted Line' : 'Added Line'
+  def diff_change_type
+    self.diff_change_context.parent.attr('class') == 'diff-deletedline' ? 'Deleted Line' : 'Added Line'
   end
 
-  def parse_change
-    result = "#{self.change_context}".gsub("&lt;", "<").gsub("&gt", ">")
+  def change
+    if !diff_change.empty?
+      "#{diff_change_type}: #{parse_change(diff_change_context)}"
+    elsif !added_line.empty?
+      line = "Added Line: #{parse_change(added_line)}"
+    elsif !deleted_line.empty?
+      "Deleted Line: #{parse_change(delete_line)}"
+    else
+      ""
+    end
+  end
+
+  def parse_change(change)
+    result = "#{change}".gsub("&lt;", "<").gsub("&gt", ">")
     result = result.gsub(/({{)|(}})|(\[\[)|(]])/, " ")
-    result.gsub(/(<ref[^<]+<\/ref>;)/, "").html_safe
+    result.gsub(/(<ref[^<]+<\/ref>;)/, "")
   end
 end
