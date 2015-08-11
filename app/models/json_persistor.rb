@@ -121,6 +121,7 @@ class JsonPersistor
     end
   end
 
+
   private
 
   def ip_address?(name)
@@ -131,3 +132,4 @@ class JsonPersistor
     tags.include?("possible libel or vandalism")
   end
 end
+

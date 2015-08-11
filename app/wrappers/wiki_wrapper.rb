@@ -55,6 +55,32 @@ class WikiWrapper
     end
   end
 
+  def get_page_photo(title)
+    url = page_photo_url(title)
+    json = load_json(url)
+    pageid = json["query"]["pages"].first[0]
+    image_name = json["query"]["pages"][pageid]["images"].second["title"]
+  end
+
+  def get_full_res_photo_url(name)
+    url = "https://en.wikipedia.org/w/api.php?action=query&titles=#{name}&prop=imageinfo&iiprop=timestamp|user|url&format=json"      
+    json = load_json(url)
+    photo_url = json["query"]["pages"].first[1]["imageinfo"][0]["url"]
+  end
+
+  def photo_thumb(full_res_photo_url)
+    photo_url_end = full_res_photo_url.gsub("https://upload.wikimedia.org/wikipedia/commons/","")
+    full_res_photo_url.gsub("commons/","commons/thumb/") + "/320px-" + photo_url_end
+  end
+
+  def page_photo_url(titles)
+    prop = "prop=images"
+    titles = "titles=#{titles.gsub(" ", "%20")}"
+    redirects = "redirects"
+    url = [CALLBACK, prop, titles, redirects]
+    url.join("&")
+  end
+
   private
 
   def paged_revisions(page_title, json)
