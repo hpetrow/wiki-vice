@@ -9,37 +9,40 @@ class WikiWrapper
     json = load_json(url)
     persistor = JsonPersistor.new(json) 
     if json["query"]["pages"]["-1"].nil?
+
       page = persistor.insert_page
+
       revisions = json["query"]["pages"][page.page_id.to_s]["revisions"]
-      revisions << get_more_revisions(page, json)
+
+      revisions << more_revisions(page.page_id, page.title, json)
+
       persistor.json = revisions.flatten
+
       persistor.insert_authors
+
       persistor.insert_revisions(page)
-      persistor.json = get_vandalism_revisions(page)
-      persistor.persist_page_revisions(page) if !(persistor.json.nil?)
+
+      persistor.json = vandalism_revisions(page.title)
+
+      persistor.insert_revisions(page) if !(persistor.json.nil?)
+
       page
     else
       false
     end
   end
 
-  def most_recent_vandalism(page)
-    json = load_json(vandalism_url(page.title))
-    json = json["query"]["pages"][page.page_id.to_s]["revisions"].first
-    persistor = JsonPersistor.new(json)
-    persistor.insert_vandalism(page)
-  end  
-
   def get_user_contributions(author)
     url = user_contribs_url(author)
     json = load_json(url)
+    json = json["query"]["usercontribs"]
     persistor = JsonPersistor.new(json)
-    persistor.persist_author_revisions(author)
+    persistor.insert_revisions(author)
   end
 
   def revision_content(revision)
     json = load_json(revision_content_url(revision))
-    page_id = Page.joins(:revisions).where(revisions: {revid: revision.revid}).take.page_id
+    page_id = json["query"]["pages"].keys.first
     revision = json["query"]["pages"][page_id.to_s]["revisions"].first
     if revision["texthidden"] 
       content = "text hidden" 
@@ -50,13 +53,13 @@ class WikiWrapper
 
   private
 
-  def get_more_revisions(page, json)
+  def more_revisions(page_id, page_title, json)
     continue = 10
     i = 1
     revisions = []
     while (!!json["continue"] && i < continue)
-      json = load_json(page_revisions_url(page.title, {rvcontinue: json["continue"]["rvcontinue"]}))
-      revisions << json["query"]["pages"][page.page_id.to_s]["revisions"]
+      json = load_json(page_revisions_url(page_title, {rvcontinue: json["continue"]["rvcontinue"]}))
+      revisions << json["query"]["pages"][page_id.to_s]["revisions"]
       i += 1
     end
     revisions.flatten
@@ -73,8 +76,10 @@ class WikiWrapper
     [CALLBACK, prop, titles, rvprop, rvlimit, rvtag, rvdiffto, redirects].join("&")
   end
 
-  def get_vandalism_revisions(page)
-    json = load_json(page_revisions_url(page.title, {rvtag: "possible%20libel%20or%20vandalism"}))
+  def vandalism_revisions(page_title)
+    json = load_json(vandalism_url(page_title))
+    page_id = json["query"]["pages"].keys.first
+    json["query"]["pages"][page_id.to_s]["revisions"]
   end
 
   def page_revisions_url(title, options = {})
@@ -82,7 +87,7 @@ class WikiWrapper
     rvlimit = "rvlimit=50"
     titles = "titles=#{title.gsub(" ", "%20")}"
     rvtag = "&rvtag=possible%20libel%20or%20vandalism"
-    rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size"
+    rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size|userid"
     redirects = "redirects"
     url = [CALLBACK, prop, rvlimit, titles, rvprop, redirects]
     if options.empty?
@@ -103,10 +108,6 @@ class WikiWrapper
     [CALLBACK, list, ucuser, uclimit, ucprop, ucnamespace].join("&")
   end
 
-  def page_url(title)
-    "https://en.wikipedia.org/wiki/" + title.gsub(" ", "_")
-  end
-
   def revision_content_url(revision)
     prop = "prop=revisions"
     revids = "revids=#{revision.revid}"
@@ -116,10 +117,6 @@ class WikiWrapper
 
   def load_json(url)
     json = JSON.load(open(url))
-  end
-
-  def ip_address?(name)
-    /\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)    
-  end  
+  end 
 
 end

@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   def create
     wiki = WikiWrapper.new
     @page = wiki.get_page(params[:query])
-    if @page    
+    if @page
       redirect_to page_path(@page)
     else
       flash[:notice] = "Can't find #{params[:query]}. Please try again."

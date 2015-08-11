@@ -8,11 +8,12 @@ class JsonPersistor
   def insert_page
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    Page.create(title: page_data["title"], page_id: page_id)
+    Page.create(page_id: page_id, title: page_data["title"])
   end
 
   def insert_authors
     values = []
+    author_ids = []
     json.each do |r|
       if r["user"]
         author_name = r["user"]
@@ -24,17 +25,12 @@ class JsonPersistor
     Author.import(columns, values)   
   end  
 
-  def insert_revisions(page)
-    values = []
-    json.each do |r|
-      if !(r["minor"]) && !(r["bot"]) && r["user"]
-        author = Author.find_by(name: r["user"]) || Author.create(name: "anonymous")
-        vandalism = vandalism?(r["tags"])
-        values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
-      end
+  def insert_revisions(model)
+    if model.class == Page
+      insert_revisions_into_page(model)
+    elsif model.class == Author
+      insert_revisions_into_author(model)
     end
-    columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
-    Revision.import(columns, values)
   end
 
   def insert_pages
@@ -42,13 +38,36 @@ class JsonPersistor
     json.each do |uc|
       values << [uc["pageid"], uc["title"]]
     end
-    columns = [:pageid, :title]
+    columns = [:page_id, :title]
     Page.import(columns, values)
   end
 
   def insert_vandalism(page)
     author = Author.find_or_create_by(name: json["user"])
     Revision.create(revid: json["revid"], timestamp: json["timestamp"], page_id: page.id)
+  end
+
+  def insert_revisions_into_page(page)
+    values = []
+    json.each do |r|
+      if !(r["minor"]) && !(r["bot"]) && r["user"]
+        vandalism = vandalism?(r["tags"])
+        author = Author.find_by(name: r["user"])
+        values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
+      end
+    end
+    columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
+    Revision.import(columns, values)    
+  end
+
+  def insert_revisions_into_author(author)
+    values = []
+    json.each do |uc|
+      page = Page.find_or_create_by(title: uc["title"])
+      values << [uc['revid'], uc["timestamp"], page.id, author.id]
+    end
+    columns = [:revid, :timestamp, :page_id, :author_id]
+    Revision.import(columns, values)        
   end
 
   def persist_page
