@@ -114,6 +114,33 @@ class Page < ActiveRecord::Base
     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
+  def get_dates
+    self.revisions.pluck(:timestamp)
+  end
+
+  def group_timestamps_by_date
+    self.get_dates.group_by{|timestamp| timestamp.to_date }
+  end
+
+  def group_and_count_revs_per_day
+    counted_revisions = {}
+    self.group_timestamps_by_date.map {|timestamp, counter| 
+        counted_revisions[:date] = timestamp.strftime("%F"),
+        counted_revisions[:count] = counter.count
+      }.to_h
+  end
+
+  def format_rev_dates_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      date 
+    end.unshift('x')
+  end
+
+  def format_rev_counts_for_c3
+    self.group_and_count_revs_per_day.collect do |date, count|
+      count
+    end.unshift('Revisions Per Day')
+
   def edit_activity_amount
     case self.days_between_revisions
     when (0..5)
