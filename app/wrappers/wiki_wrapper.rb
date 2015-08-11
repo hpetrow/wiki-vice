@@ -9,10 +9,12 @@ class WikiWrapper
     json = load_json(url)
     persistor = JsonPersistor.new(json) 
     if json["query"]["pages"]["-1"].nil?
-
       page = persistor.insert_page
+
       title = page.title
+
       id = page.id
+
       page_id = json["query"]["pages"].keys.first.to_s
 
       revisions = json["query"]["pages"][page_id]["revisions"]
@@ -60,8 +62,8 @@ class WikiWrapper
     continue = 10
     i = 1
     revisions = []
-    page_id = json["query"]["pages"].keys.first.to_s
     while (!!json["continue"] && i < continue)
+      page_id = json["query"]["pages"].keys.first.to_s
       json = load_json(page_revisions_url(page_title, {rvcontinue: json["continue"]["rvcontinue"]}))
       revisions << json["query"]["pages"][page_id]["revisions"]
       i += 1
