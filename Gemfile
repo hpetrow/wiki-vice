@@ -34,6 +34,8 @@ gem 'diffy', '~> 3.0.7'
 gem 'wikitext', '~> 4.1.2'
 
 gem "typhoeus"
+
+gem "activerecord-import", ">= 0.2.0"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

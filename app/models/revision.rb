@@ -13,4 +13,5 @@ class Revision < ActiveRecord::Base
     WikiWrapper.new.get_revision_content(self) if !self.content
     self.content
   end
+
 end
