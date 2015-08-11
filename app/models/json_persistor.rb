@@ -13,7 +13,6 @@ class JsonPersistor
 
   def insert_authors
     values = []
-    author_ids = []
     json.each do |r|
       if r["user"]
         author_name = r["user"]
@@ -24,14 +23,6 @@ class JsonPersistor
     columns = [:name, :anonymous]
     Author.import(columns, values)   
   end  
-
-  def insert_revisions(model)
-    if model.class == Page
-      insert_revisions_into_page(model)
-    elsif model.class == Author
-      insert_revisions_into_author(model)
-    end
-  end
 
   def insert_pages
     values = []
@@ -47,24 +38,24 @@ class JsonPersistor
     Revision.create(revid: json["revid"], timestamp: json["timestamp"], page_id: page.id)
   end
 
-  def insert_revisions_into_page(page)
+  def insert_revisions_into_page(page_id)
     values = []
     json.each do |r|
       if !(r["minor"]) && !(r["bot"]) && r["user"]
         vandalism = vandalism?(r["tags"])
-        author = Author.find_by(name: r["user"])
-        values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
+        author = Author.find_or_create_by(name: r["user"])
+        values << [r['revid'], r["timestamp"], vandalism, page_id, author.id]
       end
     end
     columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
     Revision.import(columns, values)    
   end
 
-  def insert_revisions_into_author(author)
+  def insert_revisions_into_author(author_id)
     values = []
     json.each do |uc|
       page = Page.find_or_create_by(title: uc["title"])
-      values << [uc['revid'], uc["timestamp"], page.id, author.id]
+      values << [uc['revid'], uc["timestamp"], page.id, author_id]
     end
     columns = [:revid, :timestamp, :page_id, :author_id]
     Revision.import(columns, values)        
@@ -83,7 +74,7 @@ class JsonPersistor
     revisions = json["query"]["pages"][page.page_id.to_s]["revisions"] || []
     revisions.each do |r|
       author_name = !!r["user"] ? r["user"] : "anonymous"
-      ip_address?(author_name) ? anonymous = true : anonymous = false
+      anonymous = ip_address?(author_name)
       author = Author.find_or_create_by(name: author_name, anonymous: anonymous)
       if !(r["minor"]) && !(r["bot"])
         revision = Revision.new(revid: r['revid'], timestamp: r["timestamp"], vandalism: vandalism?(r["tags"]), size: r["size"])
@@ -161,7 +152,7 @@ class JsonPersistor
   end
 
   def ip_address?(name)
-    /\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)    
+    !!(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)) 
   end
 
   def vandalism?(tags)

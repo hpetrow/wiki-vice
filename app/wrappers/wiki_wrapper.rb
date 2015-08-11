@@ -11,20 +11,23 @@ class WikiWrapper
     if json["query"]["pages"]["-1"].nil?
 
       page = persistor.insert_page
+      title = page.title
+      id = page.id
+      page_id = json["query"]["pages"].keys.first.to_s
 
-      revisions = json["query"]["pages"][page.page_id.to_s]["revisions"]
+      revisions = json["query"]["pages"][page_id]["revisions"]
 
-      revisions << more_revisions(page.page_id, page.title, json)
+      revisions << more_revisions(title, json)
 
       persistor.json = revisions.flatten
 
       persistor.insert_authors
 
-      persistor.insert_revisions(page)
+      persistor.insert_revisions_into_page(id)
 
-      persistor.json = vandalism_revisions(page.title)
+      persistor.json = vandalism_revisions(title)
 
-      persistor.insert_revisions(page) if !(persistor.json.nil?)
+      persistor.insert_revisions_into_page(id) if !(persistor.json.nil?)
 
       page
     else
@@ -37,13 +40,13 @@ class WikiWrapper
     json = load_json(url)
     json = json["query"]["usercontribs"]
     persistor = JsonPersistor.new(json)
-    persistor.insert_revisions(author)
+    persistor.insert_revisions_into_author(author.id)
   end
 
   def revision_content(revision)
     json = load_json(revision_content_url(revision))
-    page_id = json["query"]["pages"].keys.first
-    revision = json["query"]["pages"][page_id.to_s]["revisions"].first
+    page_id = json["query"]["pages"].keys.first.to_s
+    revision = json["query"]["pages"][page_id]["revisions"].first
     if revision["texthidden"] 
       content = "text hidden" 
     else
@@ -53,13 +56,14 @@ class WikiWrapper
 
   private
 
-  def more_revisions(page_id, page_title, json)
+  def more_revisions(page_title, json)
     continue = 10
     i = 1
     revisions = []
+    page_id = json["query"]["pages"].keys.first.to_s
     while (!!json["continue"] && i < continue)
       json = load_json(page_revisions_url(page_title, {rvcontinue: json["continue"]["rvcontinue"]}))
-      revisions << json["query"]["pages"][page_id.to_s]["revisions"]
+      revisions << json["query"]["pages"][page_id]["revisions"]
       i += 1
     end
     revisions.flatten
@@ -78,8 +82,8 @@ class WikiWrapper
 
   def vandalism_revisions(page_title)
     json = load_json(vandalism_url(page_title))
-    page_id = json["query"]["pages"].keys.first
-    json["query"]["pages"][page_id.to_s]["revisions"]
+    page_id = json["query"]["pages"].keys.first.to_s
+    json["query"]["pages"][page_id]["revisions"]
   end
 
   def page_revisions_url(title, options = {})
