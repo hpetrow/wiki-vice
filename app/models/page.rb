@@ -29,7 +29,7 @@ class Page < ActiveRecord::Base
   def days_between_revisions
     first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp.to_date
     last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp.to_date
-    (last_date - first_date).to_f / revisions.size
+    ((last_date - first_date).to_f / revisions.size).round
   end
 
   def anonymous_author_location
@@ -41,6 +41,16 @@ class Page < ActiveRecord::Base
         end
       end.compact
   end
+
+  def anonymous_location_for_map
+    locations = self.anonymous_author_location.group_by(&:country_code2)
+    location_key = {}
+    locations.each do |country_code, location|
+      location_key[country_code] = location.count
+    end
+    location_key.sort_by{|code, location_count| location_count}.reverse.to_h
+  end
+
 
   def group_anonymous_users_by_location
     locations = self.anonymous_author_location.group_by(&:country_code)
