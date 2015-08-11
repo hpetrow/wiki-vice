@@ -1,7 +1,9 @@
+<br>
 <div class="row">
     <h1><%= @page.title %></h1>
     <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
 </div>
+<br><br><br>
   
 <div class="row"> 
   <div class="col-md-3 col-sm-6">
@@ -18,7 +20,7 @@
       <% if @page.get_number_of_anonymous_authors > 1 %>
       <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
       <% else %>
-      <h3>This page has 0 edits from anonymous authors.</h3>
+      <h3>This page has no edits from anonymous authors.</h3>
       <% end %>
       </div>
     </div>
@@ -42,11 +44,18 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
+    <h2>Anonymous authors by location:</h2>
     <div id="map" style="width: 600px; height: 400px"></div>
   </div>
-  <div class="col-md-6">
-    <canvas id="authorContributionsChart" width="300" height="300"></canvas>
+  <div class="col-md-4">
+    <!-- <canvas id="authorContributionsChart" width="300" height="300"></canvas> -->
+    <h2>Count:</h2>
+    <br>
+    <% @anonymous_revisions_by_country.each do |revision| %>
+    <h3><%= revision[0] %> : <b><%= revision[1] %></b></h3>
+    <% end %>
+
   </div>
 
 </div>
@@ -75,10 +84,15 @@
 </div>
 
     <p><%=  render partial: 'page_revision', locals: {revisions: @revisions, first_revision: @first_revision, last_ten_revisions: @last_ten_revisions} %></p>
-</ul>
+  <br>
+  <% if @page.most_recent_vandalism_content != "" %>
+    <h2>Most Recent Vandalism:</h2>
+    <h3><%= @page.most_recent_vandalism_regex %></h3>
+  <% else %>
+  <%end %>
 
-  <h2>Most Recent Vandalism:</h2>
-  <h3><%= @page.most_recent_vandalism_regex %></h3>
+<h1><div class="text-center">Timeline of revisions</div></h1>
+<%= render partial: 'layouts/timeline', locals: {revisions: @revisions} %>
 
 
 <script type="text/javascript">
@@ -171,3 +185,4 @@ $(function(){
 
 });
 </script>
+
