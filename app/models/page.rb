@@ -122,7 +122,11 @@ class Page < ActiveRecord::Base
   end
 
   def get_dates
-    all_dates = self.revisions.pluck(:timestamp)
+    self.revisions.pluck(:timestamp)
+  end
+
+  def group_timestamps_by_date
+    self.get_dates.group_by{|timestamp| timestamp.to_date }
   end
 
 #Old method. refactored to be kinda clearer below, but keeping because this one
@@ -135,22 +139,22 @@ class Page < ActiveRecord::Base
   #     }.sort.reverse.to_h  
   # end
 
-  def group_count_revs_per_day
+  def group_and_count_revs_per_day
     counted_revisions = {}
-    self.get_dates.group_by{|timestamp| timestamp.to_date }.map {|timestamp, counter| 
+    self.group_timestamps_by_date.map {|timestamp, counter| 
         counted_revisions[:date] = timestamp.strftime("%F"),
         counted_revisions[:count] = counter.count
       }.to_h
   end
 
   def format_rev_dates_for_c3
-    self.count_revs_per_day.collect do |date, count|
+    self.group_and_count_revs_per_day.collect do |date, count|
       date 
     end.unshift('x')
   end
 
   def format_rev_counts_for_c3
-    self.count_revs_per_day.collect do |date, count|
+    self.group_and_count_revs_per_day.collect do |date, count|
       count
     end.unshift('Revisions Per Day')
   end
