@@ -17,8 +17,10 @@ class Author < ActiveRecord::Base
   def get_user_comments
     user_contribs = []
     self.get_user_contributions_wiki.take(50).each do |contribution|
-      #user_contribs[:size_diff] = contribution["sizediff"]
-      user_contribs << contribution["comment"].gsub("/* ","").gsub("*/ ","").gsub("--", "")
+      binding.pry
+      if !contribution["comment"].nil?
+        user_contribs << contribution["comment"].gsub("/* ","").gsub("*/ ","").gsub("--", "") # add in some regex love here
+      end
     end
     user_contribs.collect{|comment| comment.split(" ") }.flatten.sort
   end
