@@ -28,7 +28,6 @@
                   <span class="arrow-left"></span>
                 <% end %>
                   <div class="timeline-icon"><i class="fa fa-pencil"></i></div>
-                  <p>Author: <%= revision.author.name %></p>
                   <%= render partial: 'revisions/revision', locals: { revision: revision, revision_parser: @revision_parser} %>
                 </div>
               </div>
