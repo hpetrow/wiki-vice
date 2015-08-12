@@ -4,6 +4,7 @@
     <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
 </div>
 <br><br><br>
+<img src="<%= @photo_url %>" height="200">
   
 <div class="row"> 
   <div class="col-md-3 col-sm-6">
@@ -80,9 +81,9 @@
     <p><%= contribution[0]%></p>
     <% end %>
   </div>
-
 </div>
 
+  <p><%=  render partial: 'page_revision', locals: { top_revisions: @top_revisions, revision_parser: @revision_parser} %></p>
 
   <br>
   <% if @page.most_recent_vandalism_content != "" %>
@@ -92,8 +93,7 @@
   <%end %>
 
 <h1><div class="text-center">Timeline of revisions</div></h1>
-<%= render partial: 'layouts/timeline', locals: {revisions: @revisions} %>
-
+<%= render partial: 'layouts/timeline', locals: {top_revisions: @top_revisions} %>
 
 <h1>Revisions per day</h1>
 <div class="row">

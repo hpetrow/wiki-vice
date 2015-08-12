@@ -1,0 +1,3 @@
+var revisionId = <%= @revision.id %>
+
+$("#" + revisionId + ".tab-pane").html("<%= j render partial: 'revision', locals: { revision: @revision, revision_parser: @revision_parser } %>");
