@@ -22,11 +22,11 @@ class TweetVandalism
   end
 
   def tweet_suffix
-    " #{page_title}" + " #wikivice" + " wikivice.herokuapp.com" + url
+    " ##{page_title.gsub(" ","")}" + " #wikivice" + " wikivice.herokuapp.com" + url
   end
 
   def format_tweet
-    content.slice(0, 160 - tweet_suffix.size) + "..." + tweet_suffix
+    content.slice(0, 128 - tweet_suffix.size) + "..." + tweet_suffix
 
   end
 
