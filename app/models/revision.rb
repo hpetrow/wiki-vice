@@ -15,8 +15,5 @@ class Revision < ActiveRecord::Base
     self.content
   end
 
-  def all_vandalism
-    Revision.where(revisions: {vandalism: true})
-  end
 
 end

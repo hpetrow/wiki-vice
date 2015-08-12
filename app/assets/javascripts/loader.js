@@ -1,7 +1,11 @@
 $(function() {
-  $('#search-loader').click(function() {
-    $('.loader').show();
-    $('#page-dimmer').show();
+  var button = $('#search-loader');
+  var loadPopUp = $('.loader');
+  var pageDimmer = $('#page-dimmer');
+  
+  button.click(function() {
+    loadPopUp.show();
+    pageDimmer.show();
   });
 
 });

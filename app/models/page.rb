@@ -102,12 +102,6 @@ class Page < ActiveRecord::Base
     Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).take
   end
 
-  def self.most_recent_revision_vandalism
-    recent_vandalism = Revision.where(revisions: {vandalism: true, content: true}).take
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(recent_vandalism).to_s.gsub("\"><div>","")
-  end
-
   def most_recent_vandalism_content
     vandalism = self.most_recent_vandalism
     if vandalism 
