@@ -10,25 +10,15 @@ class WikiWrapper
     persistor = JsonPersistor.new(json) 
     if json["query"]["pages"]["-1"].nil?
       page = persistor.insert_page
-
       title = page.title
-
       id = page.id
-
       page_id = json["query"]["pages"].keys.first.to_s
-
       revisions = paged_revisions(title, json)
-
       persistor.json = revisions.flatten
-
       persistor.insert_authors
-
       persistor.insert_revisions_into_page(id)
-
       persistor.json = vandalism_revisions(title)
-
       persistor.insert_revisions_into_page(id) if !(persistor.json.nil?)
-
       page
     else
       false
@@ -55,6 +45,10 @@ class WikiWrapper
     end
   end
 
+  def recent_changes
+    json = load_json(recent_changes_url)
+  end
+
   private
 
   def paged_revisions(page_title, json)
@@ -73,6 +67,13 @@ class WikiWrapper
     end
     revisions.flatten
   end  
+
+  def recent_changes_url
+    list = "list=recentchanges"
+    rcnamespace = "rcnamespace=0"
+    rcshow = "rcshow=!minor|!bot"
+    [CALLBACK, list, rcnamespace, rcshow].join("&")
+  end
 
   def vandalism_url(title)
     prop = "prop=revisions"
