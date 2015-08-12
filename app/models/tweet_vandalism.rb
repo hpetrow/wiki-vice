@@ -21,8 +21,13 @@ class TweetVandalism
     client.update(format_tweet)
   end
 
+  def tweet_suffix
+    " ##{page_title.gsub(" ","")}" + " #wikivice" + " wikivice.herokuapp.com" + url
+  end
+
   def format_tweet
-    content.slice(0, 80) + "..." + "from #{page_title}" + " #wikivice" + " http://localhost:3000/" + url
+    content.slice(0, 128 - tweet_suffix.size) + "..." + tweet_suffix
+
   end
 
 end
