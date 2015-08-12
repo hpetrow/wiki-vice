@@ -146,4 +146,17 @@ class Page < ActiveRecord::Base
     search = Google::Search::Image.new(:query => title, :image_size => :medium)
     search.first.uri
   end
+
+
+  def new_vandalism
+        binding.pry
+      if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
+        binding.pry
+      TweetVandalism.new("content test")
+    end
+  end
+
+
 end
+
+

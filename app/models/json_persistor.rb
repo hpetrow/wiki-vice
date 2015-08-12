@@ -8,7 +8,7 @@ class JsonPersistor
   def insert_page
     page_id = json["query"]["pages"].keys.first
     page_data = json["query"]["pages"][page_id]
-    Page.create(page_id: page_id, title: page_data["title"])
+    Page.find_or_create_by(page_id: page_id, title: page_data["title"])
   end
 
   def insert_authors
