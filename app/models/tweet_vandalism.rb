@@ -18,12 +18,15 @@ class TweetVandalism
   end
 
   def send_tweet
-    binding.pry
     client.update(format_tweet)
   end
 
+  def tweet_suffix
+    " #{page_title}" + " #wikivice" + " wikivice.herokuapp.com" + url
+  end
+
   def format_tweet
-    content.slice(0, 80) + "..." + "from #{page_title}" + " #wikivice" + " wikivice.herokuapp.com" + url
+    content.slice(0, 160 - tweet_suffix.size) + "..." + tweet_suffix
   end
 
 end

@@ -57,7 +57,7 @@ class Page < ActiveRecord::Base
     location_key.sort_by{|code, location_count| location_count}.reverse.to_h
   end
 
-    def anonymous_location_for_view
+  def anonymous_location_for_view
     locations = self.anonymous_author_location.group_by(&:country_name)
     location_key = {}
     locations.each do |country_code, location|
@@ -167,6 +167,7 @@ class Page < ActiveRecord::Base
 
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
+      binding.pry
       @twitter = TweetVandalism.new(self.most_recent_vandalism_regex, self.title, wiki_vice_link)
       @twitter.send_tweet
     end
@@ -186,8 +187,6 @@ class Page < ActiveRecord::Base
      regex = /(?<=diff-addedline).+?(?=<\/)/
      regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
    end  
-
-
 end
 
 
