@@ -18,7 +18,6 @@ class TweetVandalism
   end
 
   def send_tweet
-    binding.pry
     client.update(format_tweet)
   end
 
