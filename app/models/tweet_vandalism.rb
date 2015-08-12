@@ -27,6 +27,7 @@ class TweetVandalism
 
   def format_tweet
     content.slice(0, 160 - tweet_suffix.size) + "..." + tweet_suffix
+
   end
 
 end
