@@ -7,16 +7,7 @@
   </p>
 <% end %>
 
-<% if !!revision.content %>
-  <% revision_parser.parse(revision) %>
-  <p>
-    <%= revision_parser.line_number %>
-  </p>
-  <p>
-    <%= revision_parser.change.html_safe %>
-  </p>
-<% else %>
-  <p>
-    "Content Unavailable"
-  </p>
-<% end %>
+
+<p>
+  <%= revision.get_content.html_safe %>
+</p>
