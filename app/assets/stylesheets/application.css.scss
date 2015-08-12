@@ -57,7 +57,14 @@
 
  .loader{
     display:none;
-    position: relative;
-    margin-left:auto;
-    margin-right:auto;
+    position: absolute;
+    z-index:1001;
+    margin-left:9%;
+    margin-right:10%;
+
+    width: 80%;
+ }
+
+ .panel-body {
+    height:200px;
  }

@@ -1,31 +1,5 @@
-<!-- <div class="row"> -->
-  <div class="col-md-10 col-md-offset-1">
-    <h1>Welcome to Wikipedia Vice!</h1>
-    <%= form_tag("/pages", method: "post", class: "form col-md-12") do %>
-      <div class="form-group col-md-10">
-        <%= text_field_tag(:query, "", class: "form-control index-search-bar", placeholder:"Search For...", id: "query-welcome") %>  
-      </div>
-      <div class="form-group col-md-2">
-        <%= submit_tag("Search", class: "btn btn-default", id: "search-loader") %>
-      </div>
-    <% end %>
-
-
-    <% if flash[:notice] %>
-      <div class="row">
-        <div class="alert alert-danger fade in col-md-4">
-          <%= flash[:notice] %>
-        </div>    
-      </div>
-    <% end %>
-  </div>
-<!-- </div> -->
-
-<!-- <div class="row"> -->
-<!-- <div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div> -->
-<!-- </div> -->
 <div class="loader">
-  <div class="col-md-6 col-md-offset-3">
+  <div class="">
     <div class="panel panel-solid-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
@@ -42,3 +16,31 @@
     </div>
   </div>
 </div>
+
+<!-- <div class="row"> -->
+  <div class="col-md-10 col-md-offset-1">
+    <h1>Welcome to Wikipedia Vice!</h1>
+    <%= form_tag("/pages", method: "post", class: "form col-md-12") do %>
+      <div class="form-group col-md-10">
+        <%= text_field_tag(:query, "", class: "form-control index-search-bar", placeholder:"Search For...", id: "query-welcome") %>  
+      </div>
+      <div class="form-group col-md-2">
+        <%= submit_tag("Search", class: "btn btn-default", id: "sear") %>
+      </div>
+    <% end %>
+
+
+    <% if flash[:notice] %>
+      <div class="row">
+        <div class="alert alert-danger fade in col-md-4">
+          <%= flash[:notice] %>
+        </div>    
+      </div>
+    <% end %>
+  </div>
+<!-- </div> -->
+
+<!-- <div class="row"> -->
+<div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div>
+<!-- </div> -->
+
