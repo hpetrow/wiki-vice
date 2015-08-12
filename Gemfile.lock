@@ -97,6 +97,8 @@ GEM
       multi_json
       request_store (>= 1.0)
     google-analytics-rails (0.0.6)
+    google-search (1.0.3)
+      json
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -282,6 +284,7 @@ DEPENDENCIES
   geoip
   gon
   google-analytics-rails
+  google-search (~> 1.0.3)
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
