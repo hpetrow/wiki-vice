@@ -1,9 +1,11 @@
 class TweetVandalism 
-  attr_accessor :content, :client
+  attr_accessor :content, :client, :page_title, :url
 
-  def initialize(content)
+  def initialize(content, page_title, url)
     @content = content
     @client = create_client
+    @page_title = page_title
+    @url = url
   end
 
   def create_client
@@ -15,4 +17,14 @@ class TweetVandalism
     end
   end
 
+  def send_tweet
+    binding.pry
+    client.update(format_tweet)
+  end
+
+  def format_tweet
+    content.slice(0, 100) + "..." + "from #{page_title}" + " #wikivice" + " wikivice.herokuapp.com" + url
+  end
+
 end
+

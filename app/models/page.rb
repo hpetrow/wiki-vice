@@ -167,9 +167,8 @@ class Page < ActiveRecord::Base
 
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
-      @twitter = TweetVandalism.new("content test")
-      binding.pry
-      @twitter.client.update(self.most_recent_vandalism_regex.slice(0, 100) + "##{self.title}" + " #wikivice")
+      @twitter = TweetVandalism.new(self.most_recent_vandalism_regex, self.title, wiki_vice_link)
+      @twitter.send_tweet
     end
   end
 
