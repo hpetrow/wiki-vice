@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807134403) do
+ActiveRecord::Schema.define(version: 20150803192248) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -28,26 +28,22 @@ ActiveRecord::Schema.define(version: 20150807134403) do
   end
 
   create_table "pages", force: :cascade do |t|
-    t.string   "url"
     t.string   "title"
+    t.integer  "page_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "page_id"
   end
 
   create_table "revisions", force: :cascade do |t|
     t.text     "content"
-    t.integer  "lines"
+    t.integer  "revid"
+    t.text     "comment"
+    t.datetime "timestamp"
+    t.boolean  "vandalism"
     t.integer  "page_id"
     t.integer  "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "revid"
-    t.integer  "size"
-    t.integer  "size_diff"
-    t.datetime "timestamp"
-    t.string   "comment"
-    t.boolean  "vandalism"
   end
 
 end
