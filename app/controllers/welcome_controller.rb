@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
 
   def index
-    @vandalism = Page.first
+    @vandalism = Page.most_recent_revision_vandalism
   end
 end
