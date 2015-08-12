@@ -3,12 +3,13 @@
     <div class="panel panel-solid-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
-          While you wait...
+          LOADING...
           <hr>
         </h3>
       </div>
       <div class="panel-body">
-        <h4></h4>
+        <h1 class="col-md-10 col-md-offset-1">Sit tight. </h1>
+        <h3 class="col-md-10 col-md-offset-1">We're gathering <b>500</b> recent edits, <b>500</b> most recent page editors, getting the locations of anonymous authors, and generating some neat graphics for you. </h3>
         <p>
           <%= @vandalism%>
         </p>
@@ -19,13 +20,13 @@
 
 <!-- <div class="row"> -->
   <div class="col-md-10 col-md-offset-1">
-    <h1>Welcome to Wikipedia Vice!</h1>
+    <h1 class="hideOnSubmit">Welcome to Wikipedia Vice!</h1>
     <%= form_tag("/pages", method: "post", class: "form col-md-12") do %>
       <div class="form-group col-md-10">
-        <%= text_field_tag(:query, "", class: "form-control index-search-bar", placeholder:"Search For...", id: "query-welcome") %>  
+        <%= text_field_tag(:query, "", class: "form-control index-search-bar hideOnSubmit", placeholder:"Search For...", id: "query-welcome") %>  
       </div>
       <div class="form-group col-md-2">
-        <%= submit_tag("Search", class: "btn btn-default", id: "sear") %>
+        <%= submit_tag("Search", class: "btn btn-default hideOnSubmit", id: "search-loader") %>
       </div>
     <% end %>
 
@@ -41,6 +42,6 @@
 <!-- </div> -->
 
 <!-- <div class="row"> -->
-<div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div>
+<!-- <div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div> -->
 <!-- </div> -->
 
