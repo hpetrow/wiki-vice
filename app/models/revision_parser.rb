@@ -35,7 +35,7 @@ class RevisionParser
 
   def change
     if !diff_change.empty?
-      "#{diff_change_type} #{parse_change(diff_change_context)}"
+      "#{diff_change_type} #{parse_change(diff_change)}"
     elsif !added_line.empty?
       "Added Line #{parse_change(added_line)}"
     elsif !deleted_line.empty?

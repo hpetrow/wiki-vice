@@ -33,11 +33,35 @@
 
  */
 
+ body {
+  
+ }
+
  .main-content-wrapper {
-  margin-left: 15%;
-  margin-right: 15%;
+    margin-left: 15%;
+    margin-right: 15%;
  }
 
  .dashboard-tile {
-  /*height:180px;*/
+    /*height:180px;*/
+ }
+
+ .loader{
+    display:none;
+    position: absolute;
+    z-index:1001;
+    margin-left:9%;
+    margin-right:10%;
+
+    width: 80%;
+ }
+
+ .panel-body {
+    height:280px;
+ }
+
+ .page-title {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 70px;
+  font-weight:400;
  }

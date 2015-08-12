@@ -173,6 +173,21 @@ class Page < ActiveRecord::Base
   end
 
 
+  def most_recent_vandalism_content
+     vandalism = self.most_recent_vandalism
+     if vandalism 
+       WIKI.revision_content(vandalism).html_safe
+     else
+       ""
+     end
+   end
+
+   def most_recent_vandalism_regex
+     regex = /(?<=diff-addedline).+?(?=<\/)/
+     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+   end  
+
+
 end
 
 
