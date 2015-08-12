@@ -1,12 +1,12 @@
 <br>
 <div class="row">
   <div class="col-md-8">
-    <div class="page-title"><%= @page.title %></div>
+    <div><h1 id="page_title"><%= @page.title %></h1></div>
     <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>
     <hr>
   </div>
   <div class="col-md-4">
-    <img src="<%= @photo_url %>" height="200">
+    <img class="pull-right" src="<%= @photo_url %>" height="200">
   </div>
 </div>
 <br><br><br>
