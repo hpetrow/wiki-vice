@@ -11,22 +11,23 @@
 
 
 <body class="off-canvas">
-  <div id="container">
-    <%= render 'layouts/header' %>
-    <%= render 'layouts/nav' %>
-    <section class="main-content-wrapper">
-      <section id="main-content">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-            <%= yield %>
+  <div id="page-dimmer">
+    <div id="container">
+      <%= render 'layouts/header' %>
+      <%= render 'layouts/nav' %>
+      <section class="main-content-wrapper">
+        <section id="main-content">
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <%= yield %>
+            </div>
           </div>
-        </div>
-        
+          
+        </section>
       </section>
-    </section>
-    
+      
+    </div>
+
   </div>
-
-
 </body>
 </html>
