@@ -30,10 +30,19 @@ class Page < ActiveRecord::Base
     self.get_anonymous_authors.count
   end
 
-  def days_between_revisions
+  def time_between_revisions
     first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
     last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    ((last_date.to_date - first_date.to_date).to_f / revisions.size).round
+    time = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
+    if time >= 1
+      time = time.round
+      period = "day".pluralize(time)
+      "This page changes every #{time} #{period}"
+    else
+      time = (time * 24).round
+      period = "hour".pluralize(time)
+      "This page changes every #{time} #{period}"
+    end
   end
 
   def anonymous_author_location
@@ -147,7 +156,10 @@ class Page < ActiveRecord::Base
   end
 
   def edit_activity_amount
-    case self.days_between_revisions
+    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
+    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
+    time = ((last_date.to_date - first_date.to_date).to_f / revisions.size)    
+    case time
     when (0..5)
       "highly active"
     when (5..15)
