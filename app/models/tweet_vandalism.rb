@@ -1,5 +1,5 @@
 class TweetVandalism 
-  attr_accessor :content :client
+  attr_accessor :content, :client
 
   def initialize(content)
     @content = content
@@ -14,8 +14,5 @@ class TweetVandalism
       config.access_token_secret = ENV["TWITTER_ACCESS_TOKEN_SECRET"]
     end
   end
-
-  
-
 
 end
