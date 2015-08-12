@@ -1,7 +1,8 @@
 <br>
 <div class="row">
-    <h1><%= @page.title %></h1>
-    <%= link_to("Wikipedia", @page.wiki_link, target: "_blank") %>
+    <div class="page-title"><%= @page.title %></div>
+    <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>
+    <hr>
 </div>
 <br><br><br>
   
@@ -48,16 +49,25 @@
     <h2>Anonymous authors by location:</h2>
     <div id="map" style="width: 600px; height: 400px"></div>
   </div>
-  <div class="col-md-4">
+  <!-- <div class="col-md-4"> -->
     <!-- <canvas id="authorContributionsChart" width="300" height="300"></canvas> -->
-    <h2>Count:</h2>
-    <br>
-    <% @anonymous_revisions_by_country.each do |revision| %>
-    <h3><%= revision[0] %> : <b><%= revision[1] %></b></h3>
-    <% end %>
-
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <h3>Count:</h3>
+        </div>
+      </div>
+      <div class="panel-body">
+        <span class="arrow"></span>
+        <p>
+          <% @anonymous_revisions_by_country.each do |revision| %>
+            <%= revision[0] %> : <b><%= revision[1] %></b>
+          <% end %>
+        </p>
+      </div>
+    </div>
   </div>
-
 </div>
 
     <h3>Top 5 Page Contributors</h3>
@@ -68,7 +78,7 @@
       <% @top_five_authors.each do |top_five_author| %>
         <li><h3> <%= link_to "#{top_five_author[:author].name}",  
             author_path(top_five_author[:author].id) %><br> 
-            <small><strong><%= top_five_author[:count] %></strong> contributions</small></h3>  
+            <small><b><%= top_five_author[:count] %></b> contributions</small></h3>  
         </li>
       <% end %>
     </ol>
@@ -77,7 +87,7 @@
   <div class="col-md-6">
     <h3><%= link_to "#{@top_five_authors.first[:author].name}",author_path(@top_five_authors.first[:author].id) %> also contributes to: </h3>
     <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
-    <p><strong><%= contribution[0]%></strong><br> <small><%= contribution[1] %> contributions</small></p>
+    <p><b><%= contribution[0]%></b><br> <small><%= contribution[1] %> contributions</small></p>
     <% end %>
   </div>
 
