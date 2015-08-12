@@ -30,10 +30,14 @@ class Page < ActiveRecord::Base
     self.get_anonymous_authors.count
   end
 
-  def time_between_revisions
+  def revision_rate
     first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
     last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    time = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
+    ((last_date.to_date - first_date.to_date).to_f / revisions.size)    
+  end
+
+  def time_between_revisions
+    time = revision_rate
     if time >= 1
       time = time.round
       period = "day".pluralize(time)
@@ -155,11 +159,8 @@ class Page < ActiveRecord::Base
     end.unshift('Revisions Per Day')
   end
 
-  def edit_activity_amount
-    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
-    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    time = ((last_date.to_date - first_date.to_date).to_f / revisions.size)    
-    case time
+  def edit_activity_amount  
+    case revision_rate
     when (0..5)
       "highly active"
     when (5..15)
