@@ -17,6 +17,7 @@ class PagesController < ApplicationController
     @top_revisions = @page.top_revisions
     @revision_parser = RevisionParser.new(@top_revisions.first)
     @anonymous_revisions_by_country = @page.anonymous_location_for_view
+    @new_vandalism = @page.new_vandalism
     gon.revDates = @page.format_rev_dates_for_c3
     gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
