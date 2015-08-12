@@ -2,7 +2,6 @@ Rails.application.routes.draw do
 
   resources :authors
   resources :pages, only: [:show, :create]
-  resources :revisions, only: [:show]
 
 
   # The priority is based upon order of creation: first created -> highest priority.

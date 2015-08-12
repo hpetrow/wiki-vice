@@ -15,7 +15,7 @@ class PagesController < ApplicationController
     @page = Page.find(params[:id])
     @top_five_authors = @page.top_five_authors
     @top_revisions = @page.top_revisions
-    @revision_parser = RevisionParser.new(@top_revisions.first)
+    @revision_parser = RevisionParser.new
     @anonymous_revisions_by_country = @page.anonymous_location_for_view
     @new_vandalism = @page.new_vandalism
     gon.revDates = @page.format_rev_dates_for_c3

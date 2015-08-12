@@ -9,7 +9,7 @@ class Page < ActiveRecord::Base
   def top_revisions
     max = self.revisions.size >= 5 ? 5 : revisions.length
     self.revisions.slice(0, max).each { |revision|
-      revision.get_content
+      revision.with_content
     }
   end
 
@@ -103,21 +103,8 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).take
-  end
-
-  def most_recent_vandalism_content
-    vandalism = self.most_recent_vandalism
-    if vandalism 
-      WIKI.revision_content(vandalism).html_safe
-    else
-      ""
-    end
-  end
-
-  def most_recent_vandalism_regex
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+    vandalism = self.revisions.where('vandalism = ?', true).first
+    vandalism.with_content if !!vandalism
   end
 
   def get_dates
@@ -170,6 +157,20 @@ class Page < ActiveRecord::Base
       @twitter.client.update(self.most_recent_vandalism_regex.slice(0, 100) + "##{self.title}" + " #wikivice")
     end
   end
+
+  def most_recent_vandalism_content
+     vandalism = self.most_recent_vandalism
+     if vandalism 
+       WIKI.revision_content(vandalism).html_safe
+     else
+       ""
+     end
+   end
+
+   def most_recent_vandalism_regex
+     regex = /(?<=diff-addedline).+?(?=<\/)/
+     regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+   end  
 
 
 end

@@ -15,4 +15,5 @@
 </div>
 
 <h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
-<p><%= @author.most_recent_revision.content.html_safe %> </p>
+
+<%= render partial: 'revisions/revision', locals: { revision: @author.most_recent_revision, revision_parser: @revision_parser} %>
