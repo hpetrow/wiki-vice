@@ -15,4 +15,5 @@ class Revision < ActiveRecord::Base
     self
   end
 
+
 end
