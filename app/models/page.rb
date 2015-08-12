@@ -8,9 +8,7 @@ class Page < ActiveRecord::Base
 
   def top_revisions
     max = self.revisions.size >= 5 ? 5 : revisions.length
-    self.revisions.slice(0, max).each { |revision|
-      revision.with_content
-    }
+    self.revisions.slice(0, max)
   end
 
   def top_five_authors
@@ -104,7 +102,6 @@ class Page < ActiveRecord::Base
 
   def most_recent_vandalism
     vandalism = self.revisions.where('vandalism = ?', true).first
-    vandalism.with_content if !!vandalism
   end
 
   def get_dates

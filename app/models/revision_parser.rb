@@ -1,8 +1,8 @@
 class RevisionParser
   attr_accessor :html_content
 
-  def parse(revision)
-    @html_content = Nokogiri::HTML(revision.content)
+  def parse(content)
+    @html_content = Nokogiri::HTML(content)
   end
 
   def line_number
@@ -33,13 +33,14 @@ class RevisionParser
     diff_change_context.parent.attr('class') == 'diff-deletedline' ? 'Deleted Line' : 'Added Line'
   end
 
-  def change
+  def diff_html
+    result = "<p>#{line_number}</p>"
     if !diff_change.empty?
-      "#{diff_change_type} #{parse_change(diff_change)}"
+      result << "#{diff_change_type} #{parse_change(diff_change)}"
     elsif !added_line.empty?
-      "Added Line #{parse_change(added_line)}"
+      result << "Added Line #{parse_change(added_line)}"
     elsif !deleted_line.empty?
-      "Deleted Line #{parse_change(deleted_line)}"
+      result << "Deleted Line #{parse_change(deleted_line)}"
     else
       ""
     end
@@ -47,7 +48,7 @@ class RevisionParser
 
   def parse_change(change)
     result = "#{change}".gsub("&lt;", "<").gsub("&gt", ">")
-    result = result.gsub(/({{)|(}})|(\[\[)|(]])/, " ")
+    result = result.gsub(/({{)|(}})|(\[\[)|(\]\])/, " ")
     result.gsub(/(<ref[^<]+<\/ref>;)/, "")
   end
 end
