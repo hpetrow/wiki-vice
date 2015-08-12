@@ -39,7 +39,7 @@ class RevisionParser
     elsif !added_line.empty?
       "Added Line #{parse_change(added_line)}"
     elsif !deleted_line.empty?
-      "Deleted Line #{parse_change(delete_line)}"
+      "Deleted Line #{parse_change(deleted_line)}"
     else
       ""
     end

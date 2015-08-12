@@ -84,9 +84,9 @@
 </div>
 
   <br>
-  <% if @page.most_recent_vandalism_content != "" %>
+  <% if @page.most_recent_vandalism %>
     <h2>Most Recent Vandalism:</h2>
-    <h3><%= @page.most_recent_vandalism_regex %></h3>
+    <%= render partial: 'revisions/revision', locals: { revision: @page.most_recent_vandalism, revision_parser: @revision_parser} %>
   <% else %>
   <%end %>
 

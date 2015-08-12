@@ -9,10 +9,10 @@ class Revision < ActiveRecord::Base
     DateTime.parse(self.timestamp.to_s, formatted_date).to_formatted_s(:long_ordinal)
   end
 
-  def get_content
+  def with_content
     self.content = WikiWrapper.new.revision_content(self) if !self.content
     self.save
-    self.content
+    self
   end
 
 end
