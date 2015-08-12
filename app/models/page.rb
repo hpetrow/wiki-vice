@@ -123,6 +123,20 @@ class Page < ActiveRecord::Base
       }.to_h
   end
 
+  def most_recent_vandalism_content
+    vandalism = self.most_recent_vandalism
+    if vandalism 
+      WIKI.revision_content(vandalism).html_safe
+    else
+      ""
+    end
+  end
+
+  def most_recent_vandalism_regex
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  end
+
   def format_rev_dates_for_c3
     self.group_and_count_revs_per_day.collect do |date, count|
       date 
@@ -153,10 +167,11 @@ class Page < ActiveRecord::Base
 
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
-      @twitter = TweetVandalism.new("content test")
-      @twitter.client.update(self.most_recent_vandalism_regex.slice(0, 100) + "##{self.title}" + " #wikivice")
+      @twitter = TweetVandalism.new(self.most_recent_vandalism_regex, self.title, wiki_vice_link)
+      @twitter.send_tweet
     end
   end
+
 
   def most_recent_vandalism_content
      vandalism = self.most_recent_vandalism
