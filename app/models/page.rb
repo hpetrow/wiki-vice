@@ -141,4 +141,9 @@ class Page < ActiveRecord::Base
       "relatively stable"
     end
   end
+
+  def get_photo(title)
+    search = Google::Search::Image.new(:query => title, :image_size => :medium)
+    search.first.uri
+  end
 end
