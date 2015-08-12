@@ -1,12 +1,12 @@
 <br>
 <div class="row">
   <div class="col-md-8">
-    <div class="page-title"><%= @page.title %></div>
+    <div><h1 id="page_title"><%= @page.title %></h1></div>
     <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>
     <hr>
   </div>
   <div class="col-md-4">
-    <img src="<%= @photo_url %>" height="200">
+    <img class="pull-right" src="<%= @photo_url %>" height="200">
   </div>
 </div>
 <br><br><br>
@@ -50,29 +50,25 @@
 </div>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-9">
     <h2>Anonymous authors by location:</h2>
     <div id="map" style="width: 600px; height: 400px"></div>
   </div>
-  <!-- <div class="col-md-4"> -->
-    <!-- <canvas id="authorContributionsChart" width="300" height="300"></canvas> -->
-  <div class="row">
     <div class="col-md-3">
       <div class="panel-heading">
         <div class="panel-title">
-          <h3>Count:</h3>
+          <h2>Count:</h2>
         </div>
       </div>
       <div class="panel-body">
         <span class="arrow"></span>
         <p>
           <% @anonymous_revisions_by_country.each do |revision| %>
-            <%= revision[0] %> : <b><%= revision[1] %></b>
+            <p><%= revision[0] %> : <b><%= revision[1] %></b></p>
           <% end %>
         </p>
       </div>
     </div>
-  </div>
 </div>
 
     <h3>Top 5 Page Contributors</h3>
