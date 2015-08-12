@@ -123,6 +123,20 @@ class Page < ActiveRecord::Base
       }.to_h
   end
 
+  def most_recent_vandalism_content
+    vandalism = self.most_recent_vandalism
+    if vandalism 
+      WIKI.revision_content(vandalism).html_safe
+    else
+      ""
+    end
+  end
+
+  def most_recent_vandalism_regex
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  end
+
   def format_rev_dates_for_c3
     self.group_and_count_revs_per_day.collect do |date, count|
       date 
