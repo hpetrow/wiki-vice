@@ -41,11 +41,11 @@ class Page < ActiveRecord::Base
     if time >= 1
       time = time.round
       period = "day".pluralize(time)
-      "This page changes every #{time} #{period}"
+      "#{time} #{period}"
     else
       time = (time * 24).round
       period = "hour".pluralize(time)
-      "This page changes every #{time} #{period}"
+      "#{time} #{period}"
     end
   end
 

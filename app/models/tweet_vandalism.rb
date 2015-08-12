@@ -22,7 +22,7 @@ class TweetVandalism
   end
 
   def tweet_suffix
-    " ##{page_title.gsub(" ","")}" + " #wikivice" + " wikivice.herokuapp.com" + url
+    " ##{page_title.gsub(" ","")}" + " #wikivice"
   end
 
   def format_tweet
