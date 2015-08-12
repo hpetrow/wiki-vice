@@ -41,6 +41,7 @@ gem "activerecord-import", ">= 0.2.0"
 
 gem 'google-search', '~> 1.0.3'
 gem 'figaro'
+gem 'twitter'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
