@@ -61,9 +61,13 @@ class WikiWrapper
     continue = 10
     i = 1
     revisions = []
-    while (!!json["continue"] && i < continue)
+    while ((!!json["continue"] || true) && i < continue)
       page_id = json["query"]["pages"].keys.first.to_s
-      json = load_json(page_revisions_url(page_title, {rvcontinue: json["continue"]["rvcontinue"]}))
+      if json["continue"].nil?
+        json = load_json(page_revisions_url(page_title))
+      else
+        json = load_json(page_revisions_url(page_title, {rvcontinue: json["continue"]["rvcontinue"]}))
+      end
       revisions << json["query"]["pages"][page_id]["revisions"]
       i += 1
     end
@@ -123,5 +127,10 @@ class WikiWrapper
   def load_json(url)
     json = JSON.load(open(url))
   end 
+
+  def revisions_json(json)
+    page_id = json["query"]["pages"].keys.first
+    json["query"]["pages"][page_id]["revisions"]
+  end
 
 end

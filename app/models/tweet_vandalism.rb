@@ -22,7 +22,7 @@ class TweetVandalism
   end
 
   def format_tweet
-    content.slice(0, 80) + "..." + "from #{page_title}" + " #wikivice" + " wikivice.herokuapp.com" + url
+    content.slice(0, 80) + "..." + "from #{page_title}" + " #wikivice" + " http://localhost:3000/" + url
   end
 
 end
