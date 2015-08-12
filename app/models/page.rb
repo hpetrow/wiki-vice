@@ -98,6 +98,10 @@ class Page < ActiveRecord::Base
     url = "https://en.wikipedia.org/wiki/" + self.title.gsub(" ", "_")
   end
 
+  def wiki_vice_link
+    url = "/pages/#{self.id}"
+  end
+
   def most_recent_vandalism
     Revision.includes(:page).where(revisions: {vandalism: true}, pages: {id: self.id}).take
   end
@@ -154,4 +158,20 @@ class Page < ActiveRecord::Base
       "relatively stable"
     end
   end
+
+  def get_photo(title)
+    search = Google::Search::Image.new(:query => title, :image_size => :medium)
+    search.first.uri
+  end
+
+  def new_vandalism
+    if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
+      @twitter = TweetVandalism.new("content test")
+      @twitter.client.update(self.most_recent_vandalism_regex.slice(0, 100) + "##{self.title}" + " #wikivice")
+    end
+  end
+
+
 end
+
+
