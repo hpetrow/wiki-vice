@@ -2,7 +2,6 @@ $(function(){
 
 	var anonLocationData = gon.anonLocationMap; 
 
-
 	$('#map').vectorMap({
 	    map: 'world_mill_en',
 	    series: {
@@ -19,7 +18,8 @@ $(function(){
 	        },
 	        hover: {
 	            "fill-opacity": 0.8
-	        }
+	        },
+	        zoomOnScroll: false
 	    }
 	});
 });
