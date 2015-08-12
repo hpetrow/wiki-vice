@@ -4,6 +4,7 @@ $(function(){
 
 	$('#map').vectorMap({
 	    map: 'world_mill_en',
+	    zoomOnScroll: false,
 	    series: {
 	      regions: [{
 	        values: anonLocationData,
@@ -18,8 +19,7 @@ $(function(){
 	        },
 	        hover: {
 	            "fill-opacity": 0.8
-	        },
-	        zoomOnScroll: false
+	        }
 	    }
 	});
 });
