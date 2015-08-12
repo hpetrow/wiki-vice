@@ -21,5 +21,7 @@ class PagesController < ApplicationController
     gon.revCounts = @page.format_rev_counts_for_c3
     gon.anonLocationMap = @page.anonymous_location_for_map
     @photo_url = @page.get_photo(@page.title)
+    gon.extractTitle = @page.title
+    gon.extractPageId = @page.page_id
   end
 end

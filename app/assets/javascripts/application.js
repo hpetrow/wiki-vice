@@ -21,3 +21,4 @@
 //= require d3.v3.min.js
 //= require c3.js
 //= require c3-demo.js
+//= require wiki_extract.js
