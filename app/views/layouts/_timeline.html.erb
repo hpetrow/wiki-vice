@@ -3,6 +3,7 @@
     <div class="col-sm-11">
       <div class="timeline">
         <% @top_revisions.each.with_index do |revision, i| %>
+          <% @revision_parser = RevisionParser.new(revision) %>
           <article class="timeline-item left">
             <div class="text-right">
               <div class="time-layer">
@@ -29,7 +30,7 @@
                 <% end %>
                   <div class="timeline-icon"><i class="fa fa-pencil"></i></div>
                   <p>Author: <%= revision.author.name %></p>
-                  <p> CONTENT HERE</p>
+                  <%= render partial: 'revisions/revision', locals: { revision: revision, revision_parser: @revision_parser} %>
                 </div>
               </div>
             </div>
