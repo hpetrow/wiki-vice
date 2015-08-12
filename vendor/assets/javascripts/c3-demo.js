@@ -17,10 +17,11 @@ $(function () {
           x : {
             type: 'timeseries',
             tick : {
-            rotate: -45,
-            multiline: false,
-            format: '%m/%d/%Y'
-           }     
+              rotate: -45,
+              multiline: false,
+              format: '%m/%d/%Y'
+           } ,
+           height: 130    
           }
         },
         zoom: {

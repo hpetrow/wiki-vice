@@ -33,6 +33,10 @@
 
  */
 
+ body {
+  
+ }
+
  .main-content-wrapper {
     margin-left: 15%;
     margin-right: 15%;
@@ -54,4 +58,10 @@
 
  .panel-body {
     height:280px;
+ }
+
+ .page-title {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 70px;
+  font-weight:400;
  }

@@ -1,26 +1,19 @@
-<h1><small>Author: </small> <%= @author.name %></h1><br>
-
+<h1><small>Author: </small> <%= @author.name %></h1>
+<br>
 
 <div class="row">
 	<div class="col-md-7">
 		<ol>
 			<% @top_contributions.each do |contribution| %>
 				<li>
-					<h3><%= link_to(contribution[0], pages_path(query: contribution[0]), method: :post) %><br> <small><strong><%= contribution[1] %></strong> contributions</small></h3>
-					<%= link_to("Wikipedia", Page.find_by(title: contribution[0]).wiki_link, target: "_blank") %>
+					<h3><%= link_to(contribution[0], pages_path(query: contribution[0]), method: :post) %><br> <small><b><%= contribution[1] %></b> contributions</small></h3>
+					<%= link_to("Wikipedia »", Page.find_by(title: contribution[0]).wiki_link, target: "_blank") %>	
 				</li>
 			<% end %>
 		</ol>
 	</div>
-
-	<div class="col-md-5">
-		
-	</div>
 </div>
 
-<div id="world-map" style="width: 600px; height: 400px"></div>
-
 <h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
-<p><%= @author.most_recent_revision.content.html_safe %> </p>
 
-
+<%= render partial: 'revisions/revision', locals: { revision: @author.most_recent_revision, revision_parser: @revision_parser} %>
