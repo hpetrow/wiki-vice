@@ -2,7 +2,7 @@ class Vandalism
   #belongs_to :author, :page
   # Table: author_id, page_id, anon_authors, content
 
-  attr_accessor:
+  # attr_accessor:
 
   def initialize
   end
