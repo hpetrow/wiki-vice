@@ -50,14 +50,28 @@ class Page < ActiveRecord::Base
   end
 
   def anonymous_author_location
-      self.get_anonymous_authors.collect do |aa| 
+      thing = self.get_anonymous_authors.collect do |aa| 
         begin
-          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+          if aa.name.match(/\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/)
+            nil
+          else 
+              GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+          end
         rescue Exception => e
           puts e
         end
+        
       end.compact
   end
+
+ #  => #<struct GeoIP::Country
+ # request="2600:1006:B12F:7076:14E8:C473:9B00:7111",
+ # ip="2600:1006:b12f:7076:14e8:c473:9b00:7111",
+ # country_code=0,
+ # country_code2="--",
+ # country_code3="--",
+ # country_name="N/A",
+ # continent_code="--">
 
   def anonymous_location_for_map
     locations = self.anonymous_author_location.group_by(&:country_code2)
@@ -69,7 +83,12 @@ class Page < ActiveRecord::Base
   end
 
   def anonymous_location_for_view
-    self.group_anonymous_users_by_location.first(5)
+    locations = self.anonymous_author_location.group_by(&:country_name)
+    location_key = {}
+    locations.each do |country_code, location|
+      location_key[country_code] = location.count
+    end
+    location_key.sort_by{|code, location_count| location_count}.reverse.to_h.first(5)
   end
 
 
