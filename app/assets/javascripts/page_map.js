@@ -2,9 +2,9 @@ $(function(){
 
 	var anonLocationData = gon.anonLocationMap; 
 
-
 	$('#map').vectorMap({
 	    map: 'world_mill_en',
+	    zoomOnScroll: false,
 	    series: {
 	      regions: [{
 	        values: anonLocationData,
