@@ -168,22 +168,6 @@ class Page < ActiveRecord::Base
     #vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
-  # def most_recent_vandalism_content
-  #   # self.vandalisms.first.content
-  #   vandalism = self.most_recent_vandalism
-  #   if vandalism 
-  #     WIKI.revision_content(vandalism).html_safe
-  #   else
-  #     ""
-  #   end
-  # end
-
-  # def most_recent_vandalism_regex
-  #   #
-  #   regex = /(?<=diff-addedline).+?(?=<\/)/
-  #   regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
-  # end
-
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
       @twitter = TweetVandalism.new(self.most_recent_vandalism.parse_diff_content, self.title, wiki_vice_link)
