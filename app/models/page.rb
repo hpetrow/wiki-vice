@@ -63,15 +63,6 @@ class Page < ActiveRecord::Base
       end.compact
   end
 
- #  => #<struct GeoIP::Country
- # request="2600:1006:B12F:7076:14E8:C473:9B00:7111",
- # ip="2600:1006:b12f:7076:14e8:c473:9b00:7111",
- # country_code=0,
- # country_code2="--",
- # country_code3="--",
- # country_name="N/A",
- # continent_code="--">
-
   def anonymous_location_for_map
     locations = self.anonymous_author_location.group_by(&:country_code2)
     location_key = {}
@@ -174,9 +165,9 @@ class Page < ActiveRecord::Base
 
   def edit_activity_amount  
     case revision_rate
-    when (0..5)
+    when (0...2)
       "highly active"
-    when (5..15)
+    when (2...15)
       "moderately active"
     else 
       "relatively stable"
