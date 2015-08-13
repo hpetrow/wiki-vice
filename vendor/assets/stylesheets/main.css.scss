@@ -786,7 +786,9 @@ label.valid {
   display: inline-block;
 }
 #header .btn-default {
-  padding: 3px 9px;
+  margin-left: 81px;
+  margin-top: 22px;
+  padding: 6px 11px;
   background: #F6F6F6;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -1018,7 +1020,7 @@ label.valid {
   -o-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  background: #f1f2f7;
+  /*background: #f1f2f7;*/
   min-height: 1000px;
 }
 .main-content-wrapper #main-content {
