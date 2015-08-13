@@ -24,6 +24,9 @@ gem "font-awesome-rails"
 gem 'gon'
 # Adds functionality to search for location based on IP address.
 gem 'geoip'
+
+#adds way to make connections between classes without tables
+gem 'activerecord-tableless', '~> 1.3.4'
 #adds turbolinks
 gem 'turbolinks'
 # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.

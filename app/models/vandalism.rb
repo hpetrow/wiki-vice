@@ -1,6 +1,7 @@
-class Vandalism
-  #include ActiveModel::Model
-  # belongs_to :author, :page, :revision
+class Vandalism < ActiveRecord::Base
+  has_no_table
+  column :revision_id
+  belongs_to :revision
   # Table: author_id, page_id
           # anon_authors, content
 
@@ -9,22 +10,36 @@ class Vandalism
   def initialize
   end
 
+  # Given a page, find all instances of vandalism on that page.
   def find_vandalism_for_page(page)
     #for console testing: page = Page.find(1)
     Revision.where(vandalism: true, page_id: page.id).select(:content)
-
   end
 
+  # *** Given a revision, get the content for that revision
+  def get_revision_content
+    self.revision.content
+  end
 
+  # Given a revision, parse that revision so humans can read it
+  def vandalism_regex(revision)
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(revision.content).to_s.gsub("\"><div>","")
+  end
 
+  # Class method: find all pages that include vandalism.
   def self.all_pages_with_vandalism
     Page.includes(:revisions).where(revisions: {vandalism: true}).select(:title)
   end
 
+  #Class method: For each page with vandalism, 
+  #find which pages have the most instances
   def self.pages_with_most_vandalism
-
+    self.all_pages_with_vandalism.group(:title).count(:title)
+    .sort_by{|title, count| count}.reverse
   end
 
+  
   def self.get_all_vandalism_authors
     Author.includes(:revisions).where(revision)
   end
