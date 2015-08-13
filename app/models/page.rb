@@ -159,28 +159,4 @@ class Page < ActiveRecord::Base
       @twitter.send_tweet
     end
   end
-
-  # ======================== do we still need these????? ========================
-
-  # def latest_revision
-  #   first_revision = Revision.includes(:page).where(pages: {id: self.id}).take
-  #   if first_revision.content.nil?
-  #     WIKI.get_revision_content(first_revision)
-  #   end
-  #   first_revision
-  # end
-
-  # def most_recent_vandalism_content
-  #   vandalism = self.most_recent_vandalism
-  #   if vandalism 
-  #     WIKI.revision_content(vandalism).html_safe
-  #   else
-  #     ""
-  #   end
-  # end
-
-  # def most_recent_vandalism_regex
-  #   regex = /(?<=diff-addedline).+?(?=<\/)/
-  #   regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
-  # end
 end
