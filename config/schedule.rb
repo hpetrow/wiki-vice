@@ -18,4 +18,8 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+
+every :hour do 
+  rake "db:reset"
+end
  

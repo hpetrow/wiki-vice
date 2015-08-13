@@ -41,11 +41,11 @@ class Page < ActiveRecord::Base
     if time >= 1
       time = time.round
       period = "day".pluralize(time)
-      "This page changes every #{time} #{period}"
+      "#{time} #{period}"
     else
       time = (time * 24).round
       period = "hour".pluralize(time)
-      "This page changes every #{time} #{period}"
+      "#{time} #{period}"
     end
   end
 
@@ -97,14 +97,6 @@ class Page < ActiveRecord::Base
     Author.includes(:page).where(pages: {id: self.id}).distinct
   end
 
-  def latest_revision
-    first_revision = Revision.includes(:page).where(pages: {id: self.id}).take
-    if first_revision.content.nil?
-      WIKI.get_revision_content(first_revision)
-    end
-    first_revision
-  end
-
   def wiki_link
     url = "https://en.wikipedia.org/wiki/" + self.title.gsub(" ", "_")
   end
@@ -131,20 +123,6 @@ class Page < ActiveRecord::Base
         counted_revisions[:date] = timestamp.strftime("%F"),
         counted_revisions[:count] = counter.count
       }.to_h
-  end
-
-  def most_recent_vandalism_content
-    vandalism = self.most_recent_vandalism
-    if vandalism 
-      WIKI.revision_content(vandalism).html_safe
-    else
-      ""
-    end
-  end
-
-  def most_recent_vandalism_regex
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
   def format_rev_dates_for_c3
@@ -182,15 +160,27 @@ class Page < ActiveRecord::Base
     end
   end
 
+  # ======================== do we still need these????? ========================
 
-  def most_recent_vandalism_content
-     vandalism = self.most_recent_vandalism
-     if vandalism 
-       WIKI.revision_content(vandalism).html_safe
-     else
-       ""
-     end
-  end
+  # def latest_revision
+  #   first_revision = Revision.includes(:page).where(pages: {id: self.id}).take
+  #   if first_revision.content.nil?
+  #     WIKI.get_revision_content(first_revision)
+  #   end
+  #   first_revision
+  # end
 
+  # def most_recent_vandalism_content
+  #   vandalism = self.most_recent_vandalism
+  #   if vandalism 
+  #     WIKI.revision_content(vandalism).html_safe
+  #   else
+  #     ""
+  #   end
+  # end
+
+  # def most_recent_vandalism_regex
+  #   regex = /(?<=diff-addedline).+?(?=<\/)/
+  #   regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  # end
 end
-
