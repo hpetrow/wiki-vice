@@ -45,7 +45,23 @@ class WikiWrapper
     end
   end
 
+  def random_page
+    json = load_json(random_page_url)
+    title = random_title(json)
+    get_page(title)
+  end
+
   private
+
+  def random_title(json)
+    json["query"]["random"].first["title"]
+  end
+
+  def random_page_url
+    list = "list=random"
+    rnnamespace = "rnnamespace=0"
+    [CALLBACK, list, rnnamespace].join("&")
+  end
 
   def paged_revisions(page_title, json)
     continue = 14

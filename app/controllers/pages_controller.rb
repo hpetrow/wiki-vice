@@ -20,4 +20,10 @@ class PagesController < ApplicationController
     gon.extractTitle = @page.title
     gon.extractPageId = @page.page_id
   end
+
+  def random
+    wiki = WikiWrapper.new
+    @page = wiki.random_page
+    redirect_to page_path(@page)
+  end
 end
