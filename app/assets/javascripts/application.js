@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require loader.js
+//= require toggle.js
+//= require twitter_widget.js
 //= require jquery-jvectormap-2.0.2.min.js
 //= require jquery-jvectormap-world-mill-en.js
 //= require authors.js
@@ -22,3 +24,5 @@
 //= require c3.js
 //= require c3-demo.js
 //= require wiki_extract.js
+//= require jquery.countTo.js
+//= require initialize_counter.js

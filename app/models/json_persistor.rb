@@ -26,8 +26,8 @@ class JsonPersistor
 
   def insert_pages
     values = []
-    json.each do |uc|
-      values << [uc["pageid"], uc["title"]]
+    json.each do |data|
+      values << [data["pageid"], data["title"]]
     end
     columns = [:page_id, :title]
     Page.import(columns, values)
