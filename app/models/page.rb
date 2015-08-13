@@ -163,25 +163,26 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    #Vandalism.most_recent_page_vandalism(self)
-    vandalism = self.revisions.where('vandalism = ?', true).first
+    vandalism = Vandalism.new 
+    vandalism.most_recent_page_vandalism(self)
+    #vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
-  def most_recent_vandalism_content
-    # self.vandalisms.first.content
-    vandalism = self.most_recent_vandalism
-    if vandalism 
-      WIKI.revision_content(vandalism).html_safe
-    else
-      ""
-    end
-  end
+  # def most_recent_vandalism_content
+  #   # self.vandalisms.first.content
+  #   vandalism = self.most_recent_vandalism
+  #   if vandalism 
+  #     WIKI.revision_content(vandalism).html_safe
+  #   else
+  #     ""
+  #   end
+  # end
 
-  def most_recent_vandalism_regex
-    #
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
-  end
+  # def most_recent_vandalism_regex
+  #   #
+  #   regex = /(?<=diff-addedline).+?(?=<\/)/
+  #   regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  # end
 
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
@@ -191,4 +192,7 @@ class Page < ActiveRecord::Base
   end
 
 end
+
+
+
 

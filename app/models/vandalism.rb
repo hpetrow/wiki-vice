@@ -1,14 +1,7 @@
-class Vandalism < ActiveRecord::Base
-   has_no_table
+class Vandalism
   # column :page_id
   # belongs_to :page
-  # Table: author_id, page_id
-          # anon_authors, content
 
-  # attr_accessor:
-
-  def initialize
-  end
 ####################### CLASS METHODS #################
 
   # Class method: find all pages that include vandalism.
@@ -25,13 +18,18 @@ class Vandalism < ActiveRecord::Base
 
   # Class method: Get all vandalism authors
   def self.get_all_vandalism_authors
-    Author.includes(:revisions).where(revision)
+    Author.includes(:revisions).where(revisions: {vandalism: true})
+  end
+
+  # Returns the most common vandalizers
+  def self.the_usual_suspects
+    get_all_vandalism_authors.group(:name).count(:name).sort_by{|name, count| count}.reverse.to_h
   end
 
 ####################### PAGE METHODS #################
   #Given a page, find all instances of vandalism on that page.
   def find_all_vandalism_for_page(page)
-    Revision.where(vandalism: true, page_id: page.id).select('*')
+    Revision.where(vandalism: true, page_id: page.id)
   end
 
   # Most recent vandalism for page
@@ -39,14 +37,11 @@ class Vandalism < ActiveRecord::Base
     self.find_all_vandalism_for_page(page).first
   end
 
-  def most_recent_page_vandalism_content(page)
-    vandalism = self.most_recent_page_vandalism(page)
-    if vandalism 
-      content = WIKI.revision_content(vandalism).html_safe
-    else
-      content = ""
-    end
-    vandalism_regex(content)
+  def most_recent_vandalism_content(page)
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    content = self.most_recent_page_vandalism(page)
+    reg_content = regex.match(content).to_s.gsub("\"><div>","")
+    binding.pry
   end
 
   #Given a page, get all vandalism authors for a page
@@ -79,11 +74,6 @@ class Vandalism < ActiveRecord::Base
     self.get_anon_authors.select(:name)
   end
 
-  def join_content_with_ips
-    # Author.where(anonymous: true).select(:name, :id)
-    # .includes(:revisions).where(anonymous: true, revisions: {vandalism: true, author_id: ?})
-  end
-
   def get_location_of_anon_authors
     self.get_anon_authors.collect do |aa| 
         begin
@@ -94,7 +84,7 @@ class Vandalism < ActiveRecord::Base
       end
   end
 
-  def most_anon_authors_country
+  def countries_with_most_anon_authors
     counted_countries = {}
     self.get_location_of_anon_authors.group_by(&:country_name).map{|country, counter|
       counted_countries[:name] = country,
@@ -102,27 +92,7 @@ class Vandalism < ActiveRecord::Base
     }.to_h.sort_by{|country, count| count}.reverse
   end
 
-  def the_usual_suspects_anonymous
-    self.get_ips_from_anon_authors.group(:name).count(:name)
-    .to_h.sort_by{|ip, count| count}.reverse
-  end
-
-  def the_usual_suspects_by_country_anonymous
-    self.the_usual_suspects_anonymous.collect do |aa|
-      begin
-        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
-        if regex.match(aa.name)
-          nil
-        else
-        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-        end
-      rescue Exception => e 
-        puts e 
-      end
-    end.compact
-  end
-
-  def get_country_anonymous_authors(author_collection)
+  def get_country_for_anonymous_authors(author_collection)
     self.author_collection.collect do |aa|
       begin
         regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
@@ -137,66 +107,11 @@ class Vandalism < ActiveRecord::Base
     end.compact
   end
 
-  def the_usual_suspects_by_country
-    self.get_anon_authors.group(:name).count(:name)
-  end
+  # def self.the_usual_suspects_by_country_anonymous
+  # end
 
-
-#  Already in there:
-
-#JSON Persistor:
-# private
-
-#   def ip_address?(name)
-     #regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/
-#     !!(regex.match(name)) 
-#   end
-
-#   def vandalism?(tags)
-#     tags.include?("possible libel or vandalism")
-#   end
-
-# WikiWrapper
-
-# def insert_vandalism(page)
-#     author = Author.find_or_create_by(name: json["user"])
-#     Revision.create(revid: json["revid"], timestamp: json["timestamp"], page_id: page.id)
-#   end
-
-
-# def insert_revisions_into_page(page_id)
-#     values = []
-#     json.each do |r|
-#       if !(r["minor"]) && !(r["bot"]) && r["user"]
-#         vandalism = vandalism?(r["tags"])  ########
-#         author = Author.find_or_create_by(name: r["user"])
-#         values << [r['revid'], r["timestamp"], vandalism, page_id, author.id]
-#       end
-#     end
-#     columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
-#     Revision.import(columns, values)    
-#   end
-
-# private
-
-# def vandalism_url(title)
-#     prop = "prop=revisions"
-#     titles = "titles=#{title.gsub(" ", "%20")}"
-#     rvlimit = "rvlimit=1"
-#     rvtag = "rvtag=possible%20libel%20or%20vandalism"
-#     rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size"
-#     rvdiffto ="rvdiffto=prev"
-#     redirects = "redirects"    
-#     [CALLBACK, prop, titles, rvprop, rvlimit, rvtag, rvdiffto, redirects].join("&")
-#   end
-
-# def vandalism_revisions(page_title)
-#     json = load_json(vandalism_url(page_title))
-#     page_id = json["query"]["pages"].keys.first.to_s
-#     json["query"]["pages"][page_id]["revisions"]
-#   end
-
-
-
+  # def self.the_usual_suspects_by_country
+  #   get_anon_authors.group(:name).count(:name)
+  # end
 
 end
