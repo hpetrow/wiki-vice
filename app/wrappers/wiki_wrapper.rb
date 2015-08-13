@@ -135,4 +135,8 @@ class WikiWrapper
     json["query"]["pages"][page_id]["revisions"]
   end
 
+  def valid_page?(json)
+    json["query"]["pages"]["-1"].nil?    
+  end
+
 end
