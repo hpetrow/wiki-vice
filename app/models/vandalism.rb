@@ -10,6 +10,7 @@ class Vandalism
   end
 
   def get_authors
+    Author
 
   end
 
@@ -25,7 +26,7 @@ class Vandalism
   end
 
   def get_anon_authors
-    Author.where(anonymous: true).select(:name, :id)
+    Author.includes(:revisions).where(anonymous: true, revisions: {vandalism: true}).select(:name, :id) #add join to vandalism here
   end
 
   def get_ips_from_anon_authors
@@ -55,13 +56,17 @@ class Vandalism
     }.to_h.sort_by{|country, count| count}.reverse
   end
 
-  def the_usual_suspects
+  def the_usual_suspects_anonymous
     self.get_ips_from_anon_authors.group(:name).count(:name)
     .to_h.sort_by{|ip, count| count}.reverse
   end
 
-  def the_usual_suspects_by_country
+  def the_usual_suspects_by_country_anonymous
 
+  end
+
+  def the_usual_suspects_by_country
+    self.get_anon_authors.group(:name).count(:name)
   end
 
 
@@ -71,7 +76,7 @@ class Vandalism
 # private
 
 #   def ip_address?(name)
-#     !!(/\d{4}:\d{4}:\w{4}:\d{4}:\w{4}:\w{4}:\w{3}:\w{4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)) 
+#     !!(/\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)) 
 #   end
 
 #   def vandalism?(tags)
