@@ -163,8 +163,8 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-
-    vandalism = self.revisions.where('vandalism = ?', true).first
+    Vandalism.most_recent_page_vandalism(self)
+    #vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
   def most_recent_vandalism_content

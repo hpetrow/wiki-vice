@@ -1,7 +1,7 @@
 class Vandalism < ActiveRecord::Base
-  has_no_table
-  column :revision_id
-  belongs_to :revision
+   has_no_table
+  # column :page_id
+  # belongs_to :page
   # Table: author_id, page_id
           # anon_authors, content
 
@@ -39,29 +39,25 @@ class Vandalism < ActiveRecord::Base
     .sort_by{|title, count| count}.reverse
   end
 
-  
+  # Get all vandalism authors
   def self.get_all_vandalism_authors
     Author.includes(:revisions).where(revision)
   end
-
-  def get_vandalism_authors_for_page
+  #Given a page, get all vandalism authors for a page
+  def get_vandalism_authors_for_page(page)
   end
 
+  #Given revision, find its author
   def find_author(revision)
     author = Author.find_by(revision.author_id)
   end
 
-  def get_content
-    Revision.where(vandalism: true)
-    author = Author.find_by(revision.author_id)
-    #go through parser
-    #where(revisions: :author_id, authors: :id)
-  end
-
+  #Find all anonymous authors with vandalism content
   def get_anon_authors
     Author.includes(:revisions).where(anonymous: true, revisions: {vandalism: true}).select(:name, :id) #add join to vandalism here
   end
 
+  #Get the ip addresses from anonymous 
   def get_ips_from_anon_authors
     self.get_anon_authors.select(:name)
   end
@@ -95,11 +91,42 @@ class Vandalism < ActiveRecord::Base
   end
 
   def the_usual_suspects_by_country_anonymous
+    self.the_usual_suspects_anonymous.collect do |aa|
+      begin
+        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
+        if regex.match(aa.name)
+          nil
+        else
+        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+        end
+      rescue Exception => e 
+        puts e 
+      end
+    end.compact
+  end
 
+  def get_country_anonymous_authors(author_collection)
+    self.author_collection.collect do |aa|
+      begin
+        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
+        if regex.match(aa.name)
+          nil
+        else
+        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+        end
+      rescue Exception => e 
+        puts e 
+      end
+    end.compact
   end
 
   def the_usual_suspects_by_country
     self.get_anon_authors.group(:name).count(:name)
+  end
+
+  #FOR PAGE MODEL
+
+  def most_recent_page_vandalism(page)
   end
 
 

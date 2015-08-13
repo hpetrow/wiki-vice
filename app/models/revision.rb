@@ -1,7 +1,6 @@
 class Revision < ActiveRecord::Base
   belongs_to :page
   belongs_to :author
-  has_many :vandalisms
   delegate :categories, to: :page
   validates :revid, uniqueness: true
 
