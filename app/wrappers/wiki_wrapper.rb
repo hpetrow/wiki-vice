@@ -13,7 +13,6 @@ class WikiWrapper
       title = page.title
       id = page.id
       revisions = paged_revisions(title, json)
-
       persistor.json = revisions
       persistor.insert_authors
       persistor.insert_revisions_into_page(id)
@@ -45,6 +44,13 @@ class WikiWrapper
     end
   end
 
+  def recent_changes(num)
+    json = load_json(recent_changes_url(num))
+    persistor = JsonPersistor.new(parse_recent_changes(json))
+    persistor.insert_pages
+    Page.order(id: :desc).limit(num)
+  end
+
   def random_page
     json = load_json(random_page_url)
     title = random_title(json)
@@ -52,6 +58,19 @@ class WikiWrapper
   end
 
   private
+
+  def parse_recent_changes(json)
+    json["query"]["recentchanges"]
+  end
+
+  def recent_changes_url(num)
+    list = "list=recentchanges"
+    rcnamespace = "rcnamespace=0"
+    rcshow = "rcshow=!minor|!bot"
+    rcprop = "rcprop=titles|ids"
+    rclimit = "rclimit=#{num}"
+    [CALLBACK, list, rcnamespace, rcshow, rclimit].join("&")
+  end  
 
   def random_title(json)
     json["query"]["random"].first["title"]
@@ -78,6 +97,7 @@ class WikiWrapper
     end
     revisions
   end  
+
 
   def parsed_revisions(json)
     page_id = json["query"]["pages"].keys.first.to_s

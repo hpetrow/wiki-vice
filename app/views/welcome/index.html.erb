@@ -47,4 +47,12 @@
 <!-- <div class="row"> -->
 <!-- <div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div> -->
 <!-- </div> -->
+<div class="row hideOnSubmit">
+<div class="col-md-10 col-md-offset-1">
+  <h3>Recently Changed Articles</h3>
+    <% @recent_changes.each do |page| %>
+      <%= link_to page.title, page, class: "btn search-loader"%>
+    <% end %>  
+</div>
 
+</div>
