@@ -50,17 +50,16 @@ class Page < ActiveRecord::Base
   end
 
   def anonymous_author_location
-      thing = self.get_anonymous_authors.collect do |aa| 
+      self.get_anonymous_authors.collect do |aa| 
         begin
           if aa.name.match(/\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/)
             nil
           else 
-              GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+            GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
           end
         rescue Exception => e
           puts e
         end
-        
       end.compact
   end
 
