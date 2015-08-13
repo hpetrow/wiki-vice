@@ -11,7 +11,7 @@
     <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>
   </div>
   <div class="col-md-4">
-    <img class="pull-right" src="<%= @photo_url %>" height="200">
+    <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
   </div>
 </div>
 <br><br><br>
@@ -68,7 +68,7 @@
       <div class="panel-body">
         <span class="arrow"></span>
         <p>
-          <% @anonymous_revisions_by_country.each do |revision| %>
+          <% @page.anonymous_location_for_view.each do |revision| %>
             <p><%= revision[0] %> : <b><%= revision[1] %></b></p>
           <% end %>
         </p>
@@ -81,7 +81,7 @@
 <div class="row">
   <div class="col-md-6">
     <ol>
-      <% @top_five_authors.each do |top_five_author| %>
+      <% @page.top_five_authors.each do |top_five_author| %>
         <li><h3> <%= link_to "#{top_five_author[:author].name}",  
             author_path(top_five_author[:author].id) %><br> 
             <small><b><%= top_five_author[:count] %></b> contributions</small></h3>  
@@ -91,8 +91,8 @@
   </div>
 
   <div class="col-md-6">
-    <h3><%= link_to "#{@top_five_authors.first[:author].name}",author_path(@top_five_authors.first[:author].id) %> also contributes to: </h3>
-    <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
+    <h3><%= link_to "#{@page.top_five_authors.first[:author].name}",author_path(@page.top_five_authors.first[:author].id) %> also contributes to: </h3>
+    <% @page.top_five_authors.first[:author].top_contributions.each do |contribution| %>
     <p><b><%= contribution[0]%></b><br> <small><%= contribution[1] %> contributions</small></p>
     <% end %>
   </div>
@@ -106,7 +106,7 @@
   <%end %>
 
 <h1><div class="text-center">Timeline of revisions</div></h1>
-<%= render partial: 'layouts/timeline', locals: { top_revisions: @top_revisions } %>
+<%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
 
 <h1>Revisions per day</h1>
 <div class="row">
