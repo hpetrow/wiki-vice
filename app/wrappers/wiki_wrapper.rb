@@ -7,13 +7,8 @@ class WikiWrapper
   def get_page(title)
     url = page_revisions_url(title)
     json = load_json(url)
-<<<<<<< HEAD
     persistor = JsonPersistor.new(json)   
     if valid_page?(json)
-=======
-    persistor = JsonPersistor.new(json) 
-    if json["query"]["pages"]["-1"].nil?
->>>>>>> master
       page = persistor.insert_page
 
       title = page.title
