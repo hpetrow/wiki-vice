@@ -163,7 +163,7 @@ class Page < ActiveRecord::Base
   end
 
   def most_recent_vandalism
-    # self.vandalisms.first
+
     vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
@@ -188,15 +188,6 @@ class Page < ActiveRecord::Base
       @twitter = TweetVandalism.new(self.most_recent_vandalism.parse_diff_content, self.title, wiki_vice_link)
       @twitter.send_tweet
     end
-  end
-
-  def most_recent_vandalism_content
-     vandalism = self.most_recent_vandalism
-     if vandalism 
-       WIKI.revision_content(vandalism).html_safe
-     else
-       ""
-     end
   end
 
 end
