@@ -50,17 +50,18 @@ class Page < ActiveRecord::Base
   end
 
   def anonymous_author_location
-      self.get_anonymous_authors.collect do |aa| 
-        begin
-          if aa.name.match(/\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/)
-            nil
-          else 
-            GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-          end
-        rescue Exception => e
-          puts e
+    self.get_anonymous_authors.collect do |aa| 
+      begin
+        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
+        if regex.match(aa.name)
+          nil
+        else 
+          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
         end
-      end.compact
+      rescue Exception => e
+        puts e
+      end
+    end.compact
   end
 
   def anonymous_location_for_map
@@ -117,10 +118,6 @@ class Page < ActiveRecord::Base
     url = "/pages/#{self.id}"
   end
 
-  def most_recent_vandalism
-    vandalism = self.revisions.where('vandalism = ?', true).first
-  end
-
   def get_dates
     self.revisions.pluck(:timestamp)
   end
@@ -135,20 +132,6 @@ class Page < ActiveRecord::Base
         counted_revisions[:date] = timestamp.strftime("%F"),
         counted_revisions[:count] = counter.count
       }.to_h
-  end
-
-  def most_recent_vandalism_content
-    vandalism = self.most_recent_vandalism
-    if vandalism 
-      WIKI.revision_content(vandalism).html_safe
-    else
-      ""
-    end
-  end
-
-  def most_recent_vandalism_regex
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
   end
 
   def format_rev_dates_for_c3
@@ -179,13 +162,33 @@ class Page < ActiveRecord::Base
     search.first.uri
   end
 
+  def most_recent_vandalism
+    # self.vandalisms.first
+    vandalism = self.revisions.where('vandalism = ?', true).first
+  end
+
+  def most_recent_vandalism_content
+    # self.vandalisms.first.content
+    vandalism = self.most_recent_vandalism
+    if vandalism 
+      WIKI.revision_content(vandalism).html_safe
+    else
+      ""
+    end
+  end
+
+  def most_recent_vandalism_regex
+    #
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(most_recent_vandalism_content).to_s.gsub("\"><div>","")
+  end
+
   def new_vandalism
     if self.most_recent_vandalism && self.most_recent_vandalism.created_at > DateTime.now - 3.minutes
       @twitter = TweetVandalism.new(self.most_recent_vandalism.parse_diff_content, self.title, wiki_vice_link)
       @twitter.send_tweet
     end
   end
-
 
   def most_recent_vandalism_content
      vandalism = self.most_recent_vandalism

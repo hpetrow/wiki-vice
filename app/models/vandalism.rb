@@ -1,17 +1,35 @@
 class Vandalism
-  # belongs_to :author, :page
+  #include ActiveModel::Model
+  # belongs_to :author, :page, :revision
   # Table: author_id, page_id
           # anon_authors, content
 
   # attr_accessor:
 
   def initialize
+  end
+
+  def find_vandalism_for_page(page)
+    #for console testing: page = Page.find(1)
+    Revision.where(vandalism: true, page_id: page.id).select(:content)
 
   end
 
-  def get_authors
-    Author
 
+
+  def self.all_pages_with_vandalism
+    Page.includes(:revisions).where(revisions: {vandalism: true}).select(:title)
+  end
+
+  def self.pages_with_most_vandalism
+
+  end
+
+  def self.get_all_vandalism_authors
+    Author.includes(:revisions).where(revision)
+  end
+
+  def get_vandalism_authors_for_page
   end
 
   def find_author(revision)
@@ -76,7 +94,8 @@ class Vandalism
 # private
 
 #   def ip_address?(name)
-#     !!(/\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/.match(name)) 
+     #regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}|\d{2,3}\.\d{2,3}\.\d{2,3}\.\d{2,3}/
+#     !!(regex.match(name)) 
 #   end
 
 #   def vandalism?(tags)
