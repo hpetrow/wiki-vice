@@ -26,10 +26,13 @@
         <%= text_field_tag(:query, "", class: "form-control index-search-bar hideOnSubmit", placeholder:"Search For...", id: "query-welcome") %>  
       </div>
       <div class="form-group col-md-2">
-        <%= submit_tag("Search", class: "btn btn-default hideOnSubmit", id: "search-loader") %>
+        <%= submit_tag("Search", class: "btn btn-default hideOnSubmit search-loader", id: "search-loader") %>
       </div>
     <% end %>
 
+    <div class="col-md-4">
+      <%= link_to "Random!", random_path, class: "btn btn-primary search-loader" %>
+    </div>    
 
     <% if flash[:notice] %>
       <div class="row">
@@ -44,4 +47,12 @@
 <!-- <div class="row"> -->
 <!-- <div class="col-md-2" id="search-loader" style="background-color: #fff; width:100px; height:100px;"> heyeyeyeye</div> -->
 <!-- </div> -->
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+  <h3>Recently Changed Articles</h3>
+    <% @recent_changes.each do |page| %>
+      <div class="col-md-3"><%= link_to page.title, page %></div>
+    <% end %>  
+</div>
 
+</div>
