@@ -32,7 +32,9 @@ gem 'whenever', :require => false
 gem 'diffy', '~> 3.0.7'
 # Wikitext is a fast wikitext-to-HTML translator written in C.
 gem 'wikitext', '~> 4.1.2'
-# Bulk assignment  
+
+gem "typhoeus"
+
 gem "activerecord-import", ">= 0.2.0"
 # colorizes terminal output
 gem "colorize"
