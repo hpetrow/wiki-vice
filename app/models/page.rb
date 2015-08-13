@@ -5,6 +5,7 @@ class Page < ActiveRecord::Base
   validates :title, uniqueness: true
   validates :page_id, uniqueness: true
   WIKI = WikiWrapper.new
+  include Findable::InstanceMethods
 
   def top_revisions
     max = self.revisions.size >= 5 ? 5 : revisions.length
@@ -50,18 +51,20 @@ class Page < ActiveRecord::Base
   end
 
   def anonymous_author_location
-    self.get_anonymous_authors.collect do |aa| 
-      begin
-        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
-        if regex.match(aa.name)
-          nil
-        else 
-          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-        end
-      rescue Exception => e
-        puts e
-      end
-    end.compact
+    author_collection = self.get_anonymous_authors
+    self.get_geoip_location(author_collection)
+    # self.get_anonymous_authors.collect do |aa| 
+    #   begin
+    #     regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
+    #     if regex.match(aa.name)
+    #       nil
+    #     else 
+    #       GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
+    #     end
+    #   rescue Exception => e
+    #     puts e
+    #   end
+    # end.compact
   end
 
   def anonymous_location_for_map

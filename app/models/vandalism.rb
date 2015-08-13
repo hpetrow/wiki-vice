@@ -1,4 +1,5 @@
 class Vandalism
+  include Findable::InstanceMethods
   # column :page_id
   # belongs_to :page
 
@@ -74,16 +75,6 @@ class Vandalism
     self.get_anon_authors.select(:name)
   end
 
-  def get_location_of_anon_authors
-    self.get_anon_authors.collect do |aa| 
-        begin
-          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-        rescue Exception => e
-          puts e
-        end
-      end
-  end
-
   def countries_with_most_anon_authors
     counted_countries = {}
     self.get_location_of_anon_authors.group_by(&:country_name).map{|country, counter|
@@ -93,18 +84,8 @@ class Vandalism
   end
 
   def get_country_for_anonymous_authors(author_collection)
-    self.author_collection.collect do |aa|
-      begin
-        regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
-        if regex.match(aa.name)
-          nil
-        else
-        GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-        end
-      rescue Exception => e 
-        puts e 
-      end
-    end.compact
+    author_collection = self.get_anon_authors
+    self.get_geoip_location(author_collection)
   end
 
   # def self.the_usual_suspects_by_country_anonymous
