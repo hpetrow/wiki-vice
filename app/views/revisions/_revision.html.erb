@@ -1,5 +1,5 @@
 <div class="scroll-flow" >
-<h3><strong><%= revision.author.name %></strong> <br>
+<h3><b><%= revision.author.display_name %></b> <br>
 <small><%= revision.get_date %></small></h3><hr>
 
 <% if !!revision.comment %>
@@ -12,3 +12,4 @@
   <%= revision.get_content.html_safe %>
 </div>
 </div>
+

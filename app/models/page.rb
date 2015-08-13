@@ -43,6 +43,10 @@ class Page < ActiveRecord::Base
       time = time.round
       period = "day".pluralize(time)
       "#{time} #{period}"
+    elsif (time * 24) < 1
+      time = ((time * 24) * 60).round
+      period = "minute".pluralize(time)
+      "#{time} #{period}"
     else
       time = (time * 24).round
       period = "hour".pluralize(time)
@@ -53,18 +57,6 @@ class Page < ActiveRecord::Base
   def anonymous_author_location
     author_collection = self.get_anonymous_authors
     self.get_geoip_location(author_collection)
-    # self.get_anonymous_authors.collect do |aa| 
-    #   begin
-    #     regex = /\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}:\w{3,4}/
-    #     if regex.match(aa.name)
-    #       nil
-    #     else 
-    #       GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-    #     end
-    #   rescue Exception => e
-    #     puts e
-    #   end
-    # end.compact
   end
 
   def anonymous_location_for_map
@@ -103,14 +95,6 @@ class Page < ActiveRecord::Base
 
   def unique_authors
     Author.includes(:page).where(pages: {id: self.id}).distinct
-  end
-
-  def latest_revision
-    first_revision = Revision.includes(:page).where(pages: {id: self.id}).take
-    if first_revision.content.nil?
-      WIKI.get_revision_content(first_revision)
-    end
-    first_revision
   end
 
   def wiki_link
@@ -177,9 +161,4 @@ class Page < ActiveRecord::Base
       @twitter.send_tweet
     end
   end
-
 end
-
-
-
-

@@ -71,6 +71,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    colorize (0.7.7)
     columnize (0.9.0)
     daemons (1.2.3)
     database_cleaner (1.4.1)
@@ -306,6 +307,7 @@ DEPENDENCIES
   byebug
   capybara
   coffee-rails (~> 4.1.0)
+  colorize
   database_cleaner
   diffy (~> 3.0.7)
   factory_girl_rails

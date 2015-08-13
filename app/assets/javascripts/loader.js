@@ -1,5 +1,5 @@
  $(function() {
-    var button = $('#search-loader');
+    var button = $('.search-loader');
       var loadPopUp = $('.loader');
       var hideOnSubmit = $('.hideOnSubmit');
 
