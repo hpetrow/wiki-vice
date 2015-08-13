@@ -11,16 +11,15 @@ class Author < ActiveRecord::Base
   end
 
   def most_recent_revision
-    revision = self.revisions.order("timestamp desc").limit(1).first
-    if revision.content.nil?
-      revision.content =  WIKI.revision_content(revision)
-      revision.save
-    end
-    revision
+    self.revisions.order("timestamp desc").limit(1).first
   end
 
   def unique_pages
     self.pages.uniq
+  end
+
+  def display_name
+    self.anonymous ? 'Anonymous' : self.name
   end
 
 end
