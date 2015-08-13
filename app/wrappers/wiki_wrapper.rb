@@ -7,7 +7,7 @@ class WikiWrapper
   def get_page(query)
     url = page_revisions_url(query)
     json = load_json(url)
-    persistor = JsonPersistor.new(json) 
+    persistor = JsonPersistor.new(json)   
     if valid_page?(json)
       page = persistor.insert_page
       title = page.title
@@ -78,7 +78,7 @@ class WikiWrapper
     rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size"
     rvdiffto ="rvdiffto=prev"
     redirects = "redirects"    
-    [CALLBACK, prop, titles, rvprop, rvlimit, rvtag, rvdiffto, redirects].join("&")
+    [CALLBACK, prop, rvprop, rvlimit, rvtag, rvdiffto, redirects, titles].join("&")
   end
 
   def vandalism_revisions(page_title)
@@ -90,7 +90,7 @@ class WikiWrapper
   def page_revisions_url(title, options = {})
     prop = "prop=revisions"
     rvlimit = "rvlimit=50"
-    titles = "titles=#{title.gsub(" ", "%20")}"
+    titles = "titles=#{title}"
     rvtag = "&rvtag=possible%20libel%20or%20vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size|userid"
     redirects = "redirects"
@@ -121,7 +121,8 @@ class WikiWrapper
   end
 
   def load_json(url)
-    url = WEBrick::HTTPUtils.escape(url)
+    url = URI.escape(url)
+    puts "\e[31m#{url}\e[0m"
     json = JSON.load(open(url))
   end 
 
