@@ -26,6 +26,8 @@ class PagesController < ApplicationController
   end
 
   def random
-    
+    wiki = WikiWrapper.new
+    @page = wiki.random_page
+    redirect_to page_path(@page)
   end
 end
