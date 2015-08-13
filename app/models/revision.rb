@@ -31,12 +31,10 @@ class Revision < ActiveRecord::Base
   def parse_diff_content
     parser = RevisionParser.new
     parser.parse(self.get_content)
-    parser.diff_change.text
+    "#{parser.get_diff_type}: #{parser.diff_change.text}"
   end
 
   def get_content_from_wiki
     WikiWrapper.new.revision_content(self)
   end
-
-
 end
