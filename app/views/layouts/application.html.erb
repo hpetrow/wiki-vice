@@ -10,24 +10,15 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">  
 </head>
 
-
 <body class="off-canvas">
-  <div id="page-dimmer">
-    <div id="container">
-      <%= render 'layouts/header' %>
-      <%= render 'layouts/nav' %>
-
-      <section class="main-content-wrapper">
-        <section id="main-content">
-          <div class="row">
-            <div class="col-md-12 col-sm-12">
-              <%= yield %>
-            </div>
-          </div>
-        </section>
-      </section>
-    </div>
-    <%= render 'layouts/twitter_widget' %>
+  <div id="container">
+    <%= render 'layouts/header' %>
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <%= yield %>
+        </div>
+      </div>
   </div>
+    <%= render 'layouts/twitter_widget' %>
 </body>
 </html>

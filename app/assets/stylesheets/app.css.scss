@@ -13,6 +13,24 @@ del.diffchange {
   font-weight: bold;
 }
 
+.full-bleed{
+  background: #f1f2f7;
+  z-index: 10;
+  height: 300px;
+}
+.full-bleed.b{
+  background: #fafafa;
+  z-index: 10;
+}
+
+#padding-top-80{
+  padding-top: 80px;
+}
+
+#padding-top-40{
+  padding-top: 40px;
+}
+
 #icon {
   font-size:55px;
   line-height: 100px;
@@ -20,6 +38,10 @@ del.diffchange {
 
 #page_title{
   font-size: 60px;
+}
+
+.center-vertical {
+  vertical-align: middle;
 }
 
 body.off-canvas.off-canvas-open #container {
