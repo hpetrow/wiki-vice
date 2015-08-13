@@ -49,7 +49,7 @@ class Page < ActiveRecord::Base
     else
       time = (time * 24).round
       period = "hour".pluralize(time)
-      "#{time} #{period}"
+      "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
     end
   end
 
@@ -162,5 +162,9 @@ class Page < ActiveRecord::Base
       @twitter = TweetVandalism.new(self.most_recent_vandalism.parse_diff_content, self.title, wiki_vice_link)
       @twitter.send_tweet
     end
+  end
+
+  def author_count
+    Author.includes(:pages).where(pages: {id: self.id}).count
   end
 end

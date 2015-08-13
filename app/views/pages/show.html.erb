@@ -29,7 +29,7 @@
     <div class="dashboard-tile detail tile-turquoise">
       <div class="content">
       <% if @page.get_number_of_anonymous_authors > 1 %>
-      <h3>There are <b><%= @page.get_number_of_anonymous_authors %></b> anonymous authors from <b><%= @page.find_country_name.count %></b> countries contributing.</h3>
+      <h3>There are <b class="timer" data-from="0" data-to="<%= @page.get_number_of_anonymous_authors %>" data-speed="2500"></b> anonymous authors from <b class="timer" data-from="0" data-to="<%= @page.find_country_name.count %>" data-speed="2500"></b> countries contributing.</h3>
       <% else %>
       <h3>This page has no edits from anonymous authors.</h3>
       <% end %>
@@ -40,7 +40,7 @@
   <div class="col-md-3 col-sm-6">
     <div class="dashboard-tile detail tile-blue">
       <div class="content">
-        <h3><b><%=@page.authors.all.count%></b> authors have edited this page</h3>
+        <h3><b class="timer" data-from="0" data-to="<%=@page.author_count%>" data-speed="2500"></b> authors have edited this page</h3>
       </div>
     </div>
   </div>
@@ -116,3 +116,6 @@
     </div>
 </div>
 </div>
+<script type="text/javascript">
+  $('.timer').countTo();
+</script>

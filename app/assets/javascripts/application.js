@@ -24,3 +24,5 @@
 //= require c3.js
 //= require c3-demo.js
 //= require wiki_extract.js
+//= require jquery.countTo.js
+//= require initialize_counter.js
