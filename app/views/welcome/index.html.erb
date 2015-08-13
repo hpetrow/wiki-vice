@@ -51,7 +51,7 @@
 <div class="col-md-10 col-md-offset-1">
   <h3>Recently Changed Articles</h3>
     <% @recent_changes.each do |page| %>
-      <%= link_to page.title, page, class: "btn"%>
+      <%= link_to page.title, page, class: "btn search-loader"%>
     <% end %>  
 </div>
 
