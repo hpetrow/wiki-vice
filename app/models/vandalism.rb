@@ -1,10 +1,12 @@
 class Vandalism
-  #belongs_to :author, :page
-  # Table: author_id, page_id, anon_authors, content
+  # belongs_to :author, :page
+  # Table: author_id, page_id
+          # anon_authors, content
 
   # attr_accessor:
 
   def initialize
+
   end
 
   def get_authors
@@ -27,12 +29,12 @@ class Vandalism
   end
 
   def get_ips_from_anon_authors
-    Author.where(anonymous: true).select(:name)
+    self.get_anon_authors.select(:name)
   end
 
   def join_content_with_ips
-    Author.where(anonymous: true).select(:name, :id)
-    #.includes(:revisions).where(anonymous: true, revisions: {vandalism: true, author_id: ?})
+    # Author.where(anonymous: true).select(:name, :id)
+    # .includes(:revisions).where(anonymous: true, revisions: {vandalism: true, author_id: ?})
   end
 
   def get_location_of_anon_authors
@@ -54,6 +56,11 @@ class Vandalism
   end
 
   def the_usual_suspects
+    self.get_ips_from_anon_authors.group(:name).count(:name)
+    .to_h.sort_by{|ip, count| count}.reverse
+  end
+
+  def the_usual_suspects_by_country
 
   end
 
