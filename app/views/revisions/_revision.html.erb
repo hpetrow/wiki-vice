@@ -1,4 +1,4 @@
-<h3><strong><%= revision.author.name %></strong> <br>
+<h3><strong><%= revision.author.display_name %></strong> <br>
 <small><%= revision.get_date %></small></h3><hr>
 
 <% if !!revision.comment %>
@@ -7,7 +7,4 @@
   </p>
 <% end %>
 
-
-<p>
-  <%= revision.get_content.html_safe %>
-</p>
+<%= revision.get_content.html_safe %>

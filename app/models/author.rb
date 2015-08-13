@@ -18,4 +18,8 @@ class Author < ActiveRecord::Base
     self.pages.uniq
   end
 
+  def display_name
+    self.anonymous ? 'Anonymous' : self.name
+  end
+
 end
