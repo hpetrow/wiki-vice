@@ -1,7 +1,5 @@
 class Vandalism
   include Findable::InstanceMethods
-  # column :page_id
-  # belongs_to :page
 
 ####################### CLASS METHODS #################
 
@@ -42,11 +40,11 @@ class Vandalism
     regex = /(?<=diff-addedline).+?(?=<\/)/
     content = self.most_recent_page_vandalism(page)
     reg_content = regex.match(content).to_s.gsub("\"><div>","")
-    binding.pry
   end
 
   #Given a page, get all vandalism authors for a page
   def get_vandalism_authors_for_page(page)
+    Author.includes(:revisions, :pages).where(anonymous: true, revisions: {vandalism: true, page_id: page.id})
   end
 
 #################### REVISION METHODS #################
