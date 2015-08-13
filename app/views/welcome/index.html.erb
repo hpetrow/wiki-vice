@@ -26,12 +26,12 @@
         <%= text_field_tag(:query, "", class: "form-control index-search-bar hideOnSubmit", placeholder:"Search For...", id: "query-welcome") %>  
       </div>
       <div class="form-group col-md-2">
-        <%= submit_tag("Search", class: "btn btn-default hideOnSubmit", id: "search-loader") %>
+        <%= submit_tag("Search", class: "btn btn-default hideOnSubmit search-loader", id: "search-loader") %>
       </div>
     <% end %>
 
     <div class="col-md-4">
-      <%= link_to "Random!", random_path, class: "btn btn-primary" %>
+      <%= link_to "Random!", random_path, class: "btn btn-primary search-loader" %>
     </div>    
 
     <% if flash[:notice] %>
