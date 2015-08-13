@@ -9,23 +9,7 @@ class Vandalism < ActiveRecord::Base
 
   def initialize
   end
-
-  # Given a page, find all instances of vandalism on that page.
-  def find_vandalism_for_page(page)
-    #for console testing: page = Page.find(1)
-    Revision.where(vandalism: true, page_id: page.id).select(:content)
-  end
-
-  # *** Given a revision, get the content for that revision
-  def get_revision_content
-    self.revision.content
-  end
-
-  # Given a revision, parse that revision so humans can read it
-  def vandalism_regex(revision)
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(revision.content).to_s.gsub("\"><div>","")
-  end
+####################### CLASS METHODS #################
 
   # Class method: find all pages that include vandalism.
   def self.all_pages_with_vandalism
@@ -39,18 +23,51 @@ class Vandalism < ActiveRecord::Base
     .sort_by{|title, count| count}.reverse
   end
 
-  # Get all vandalism authors
+  # Class method: Get all vandalism authors
   def self.get_all_vandalism_authors
     Author.includes(:revisions).where(revision)
   end
+
+####################### PAGE METHODS #################
+  #Given a page, find all instances of vandalism on that page.
+  def find_all_vandalism_for_page(page)
+    Revision.where(vandalism: true, page_id: page.id).select('*')
+  end
+
+  # Most recent vandalism for page
+  def most_recent_page_vandalism(page)
+    self.find_all_vandalism_for_page(page).first
+  end
+
+  def most_recent_page_vandalism_content(page)
+    vandalism = self.most_recent_page_vandalism(page)
+    if vandalism 
+      content = WIKI.revision_content(vandalism).html_safe
+    else
+      content = ""
+    end
+    vandalism_regex(content)
+  end
+
   #Given a page, get all vandalism authors for a page
   def get_vandalism_authors_for_page(page)
   end
+
+#################### REVISION METHODS #################
+
+  # Given a revision, parse that revision so humans can read it
+  def vandalism_regex(content)
+    regex = /(?<=diff-addedline).+?(?=<\/)/
+    regex.match(content).to_s.gsub("\"><div>","")
+  end
+
 
   #Given revision, find its author
   def find_author(revision)
     author = Author.find_by(revision.author_id)
   end
+
+#################### ANONYMOUS METHODS #################
 
   #Find all anonymous authors with vandalism content
   def get_anon_authors
@@ -122,11 +139,6 @@ class Vandalism < ActiveRecord::Base
 
   def the_usual_suspects_by_country
     self.get_anon_authors.group(:name).count(:name)
-  end
-
-  #FOR PAGE MODEL
-
-  def most_recent_page_vandalism(page)
   end
 
 
