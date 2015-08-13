@@ -15,6 +15,7 @@
 //= require bootstrap
 //= require loader.js
 //= require toggle.js
+//= require twitter_widget.js
 //= require jquery-jvectormap-2.0.2.min.js
 //= require jquery-jvectormap-world-mill-en.js
 //= require authors.js
