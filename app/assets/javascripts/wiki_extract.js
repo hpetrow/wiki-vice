@@ -3,7 +3,7 @@ $(function() {
   var action = 'query';
   var format = 'json';
   var prop = 'extracts';
-  var exsentences = '2';
+  var exsentences = '3';
   var explaintext = 'true';
   var extract;
   var pages;
