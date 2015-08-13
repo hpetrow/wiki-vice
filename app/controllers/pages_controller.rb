@@ -24,4 +24,8 @@ class PagesController < ApplicationController
     gon.extractTitle = @page.title
     gon.extractPageId = @page.page_id
   end
+
+  def random
+    
+  end
 end
