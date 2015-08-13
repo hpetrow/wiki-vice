@@ -36,25 +36,12 @@ class Vandalism
     self.find_all_vandalism_for_page(page).first
   end
 
-  def most_recent_vandalism_content(page)
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    content = self.most_recent_page_vandalism(page)
-    reg_content = regex.match(content).to_s.gsub("\"><div>","")
-  end
-
   #Given a page, get all vandalism authors for a page
   def get_vandalism_authors_for_page(page)
     Author.includes(:revisions, :pages).where(anonymous: true, revisions: {vandalism: true, page_id: page.id})
   end
 
 #################### REVISION METHODS #################
-
-  # Given a revision, parse that revision so humans can read it
-  def vandalism_regex(content)
-    regex = /(?<=diff-addedline).+?(?=<\/)/
-    regex.match(content).to_s.gsub("\"><div>","")
-  end
-
 
   #Given revision, find its author
   def find_author(revision)
@@ -75,10 +62,11 @@ class Vandalism
 
   def countries_with_most_anon_authors
     counted_countries = {}
-    self.get_location_of_anon_authors.group_by(&:country_name).map{|country, counter|
+    author_collection = self.get_ips_from_anon_authors
+    self.get_country_for_anonymous_authors(author_collection).group_by(&:country_name).map{|country, counter|
       counted_countries[:name] = country,
       counted_countries[:count] = counter.count 
-    }.to_h.sort_by{|country, count| count}.reverse
+    }.sort_by{|country, count| count}.reverse.to_h
   end
 
   def get_country_for_anonymous_authors(author_collection)
