@@ -13,7 +13,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   position: relative;
-  height: 100%;
+  /*height: 100%;*/
 }
 a:link,
 a:visited {
@@ -1021,7 +1021,7 @@ label.valid {
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   /*background: #f1f2f7;*/
-  min-height: 1000px;
+  /*min-height: 1000px;*/
 }
 .main-content-wrapper #main-content {
   border-top: solid thin #e7e8ec;
