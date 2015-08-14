@@ -32,24 +32,28 @@ class Page < ActiveRecord::Base
   end
 
   def revision_rate
-    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
-    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    rate = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
+    if self.revisions.size > 0
+      first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
+      last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
+      rate = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
+    end
   end
 
   def time_between_revisions
-    time = revision_rate
-    if time >= 1
-      time = time.round
-      period = "day".pluralize(time)
-      "#{time} #{period}"
-    elsif (time * 24) < 1
-      time = ((time * 24) * 60).round
-      period = "minute".pluralize(time)
-      "#{time} #{period}"
-    else
-      period = "hour".pluralize(time)
-      "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+    if self.revisions.size > 0
+      time = revision_rate
+      if time >= 1
+        time = time.round
+        period = "day".pluralize(time)
+        "#{time} #{period}"
+      elsif (time * 24) < 1
+        time = ((time * 24) * 60).round
+        period = "minute".pluralize(time)
+        "#{time} #{period}"
+      else
+        period = "hour".pluralize(time)
+        "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+      end
     end
   end
 
