@@ -5,6 +5,7 @@ class Page < ActiveRecord::Base
   validates :title, uniqueness: true
   validates :page_id, uniqueness: true
   WIKI = WikiWrapper.new
+  include Findable::InstanceMethods
 
   def top_revisions
     max = self.revisions.size >= 5 ? 5 : revisions.length
@@ -31,36 +32,34 @@ class Page < ActiveRecord::Base
   end
 
   def revision_rate
-    first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
-    last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    ((last_date.to_date - first_date.to_date).to_f / revisions.size)    
+    if self.revisions.size > 0
+      first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
+      last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
+      rate = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
+    end
   end
 
   def time_between_revisions
-    time = revision_rate
-    if time >= 1
-      time = time.round
-      period = "day".pluralize(time)
-      "#{time} #{period}"
-    elsif (time * 24) < 1
-      time = ((time * 24) * 60).round
-      period = "minute".pluralize(time)
-      "#{time} #{period}"
-    else
-      time = (time * 24).round
-      period = "hour".pluralize(time)
-      "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+    if self.revisions.size > 0
+      time = revision_rate
+      if time >= 1
+        time = time.round
+        period = "day".pluralize(time)
+        "#{time} #{period}"
+      elsif (time * 24) < 1
+        time = ((time * 24) * 60).round
+        period = "minute".pluralize(time)
+        "#{time} #{period}"
+      else
+        period = "hour".pluralize(time)
+        "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+      end
     end
   end
 
   def anonymous_author_location
-      self.get_anonymous_authors.collect do |aa| 
-        begin
-          GeoIP.new('lib/assets/GeoIP.dat').country(aa.name)
-        rescue Exception => e
-          puts e
-        end
-      end.compact
+    author_collection = self.get_anonymous_authors
+    self.get_geoip_location(author_collection)
   end
 
   def anonymous_location_for_map
@@ -109,10 +108,6 @@ class Page < ActiveRecord::Base
     url = "/pages/#{self.id}"
   end
 
-  def most_recent_vandalism
-    vandalism = self.revisions.where('vandalism = ?', true).first
-  end
-
   def get_dates
     self.revisions.pluck(:timestamp)
   end
@@ -143,9 +138,9 @@ class Page < ActiveRecord::Base
 
   def edit_activity_amount  
     case revision_rate
-    when (0..5)
+    when (0...2)
       "highly active"
-    when (5..15)
+    when (2...15)
       "moderately active"
     else 
       "relatively stable"
@@ -155,6 +150,12 @@ class Page < ActiveRecord::Base
   def get_photo(title)
     search = Google::Search::Image.new(:query => title, :image_size => :medium)
     search.first.uri
+  end
+
+  def most_recent_vandalism
+    vandalism = Vandalism.new 
+    vandalism.most_recent_page_vandalism(self)
+    #vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
   def new_vandalism

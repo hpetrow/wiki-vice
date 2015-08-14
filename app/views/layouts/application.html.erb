@@ -7,10 +7,12 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
   <%= analytics_init if Rails.env.production? %>
+  <%= favicon_link_tag 'wiki-vice-favicon.png' %>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">  
 </head>
 
 <body class="off-canvas">
+<!--  -->
   <div id="container">
     <%= render 'layouts/header' %>
       <div class="row">
