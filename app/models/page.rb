@@ -40,11 +40,15 @@ class Page < ActiveRecord::Base
   def time_between_revisions
     time = revision_rate
     if time >= 1
-      time = time.round
+      time = time
       period = "day".pluralize(time)
       "#{time} #{period}"
+    elsif (time * 24) < 1
+      time = ((time * 24) * 60)
+      period = "minute".pluralize(time)
+      "#{time} #{period}"
     else
-      time = (time * 24).round
+      time = (time * 24)
       period = "hour".pluralize(time)
       "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
     end
