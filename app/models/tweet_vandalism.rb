@@ -35,16 +35,17 @@ class TweetVandalism
 
   def replace_words
     better_words = {
-      /fuck/ => "f*ck",
-      /rape\w{1}/ => "r****",
-      /rape/ => "r***",
-      /rapist/ => "r*****",
-      /faggots/ => "f****ts",
-      /faggot/ => "f****t",
-      /cunts/ => "c*nts",
-      /cunt/ => "c*nt",
-      /niggers/ => "n*****s",
-      /nigger/ => "n****"
+      /[f][u][c][k][e][d]/i => "f*cked",
+      /[f][u][c][k]/i => "f*ck",
+      /[r][a][p][e]\w{1}/i => "r****",
+      /[r][a][p][e]/i => "r***",
+      /[r][a][p][i][s][t]/i => "r*****",
+      /[f][a][g][g][o][t][s]/i => "f*****s",
+      /[f][a][g][g][o][t]/i => "f****t",
+      /[c][u][n][t][s]/i => "c*nts",
+      /[c][u][n][t]/i => "c*nt",
+      /[n][i][g][g][e][r][s]/i => "n*****s",
+      /n[i][g][g][e][r]/i => "n****"
     }
   end
 
@@ -58,7 +59,7 @@ class TweetVandalism
           word
         end
       end
-    end
+    end.join(" ")
   end
 
 end
