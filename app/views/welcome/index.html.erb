@@ -15,22 +15,27 @@
   </div>
 </div>
 
+<div class="col-md-12">
+    <h3 class="hideOnSubmit col-md-12" align="center">Welcome to</h3>
+    <div class="col-md-12 wiki-vice-logo" align="center">
+      <img src="assets/wiki-vice-02.png" alt="" height="300">
+    </div>
+</div>
+
 <div class="full-bleed">
   <div class="main-content-wrapper">
-    <div class="col-md-10 col-md-offset-1" id="padding-top-80">
-      <h1 class="hideOnSubmit">Welcome to Wikipedia Vice!</h1>
+    <div class="col-md-12" id="padding-top-80">
+     </div> 
+  </div>    
 
-      <div class="col-md-4">
-        <%= link_to "Random!", random_path, class: "btn btn-primary search-loader" %>
-      </div>    
+    <% if flash[:notice] %>
+      <div class="row">
+        <div class="alert alert-danger fade in col-md-4">
+          <%= flash[:notice] %>
+        </div>    
+      </div>
+    <% end %>
 
-      <% if flash[:notice] %>
-        <div class="row">
-          <div class="alert alert-danger fade in col-md-4">
-            <%= flash[:notice] %>
-          </div>    
-        </div>
-      <% end %>
     </div>
   </div>
 </div>

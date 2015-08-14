@@ -5,25 +5,25 @@
   </div>
   <!--logo end-->
 
-<!--   <div class="toggle-navigation toggle-left col-sm-1">
-      <button type="button" class="btn btn-default" id="toggle-left" data-toggle="tooltip" data-placement="right" title="Toggle Navigation">
-          <i class="fa fa-bars"></i>
-      </button>
-  </div> -->
 
-  <div class="col-md-8 navsearch">
+<div class="row">
+  <div class="col-md-7 navsearch">
       <%= form_tag("/pages", method: "post", class: "form") do %>
       <div class="form-group col-md-10">
           <%= text_field_tag(:query, "", class: "form-control navsearchbar", placeholder: "Search Wikipedia...") %>
       </div>
-      <div class="form-group col-md-2 navbutton">
+      <div class="form-group col-md-1 navbutton">
       <button type="submit" class="btn btn-primary"> <i class="fa fa-search fa-2x"></i></button>
       </div>
       <% end %>
   </div>
-  <div class="toggle-navigation toggle-right" id="circle-around-twitter-bird">
+
+      <%= button_to "Random!", random_path, class: " search-loader col-md-1 link_text btn btn-primary btn-3d", method: "get"%>
+
+  <div class="toggle-navigation toggle-right col-md-1">
     <a href="javascript:void(0)" class="btn btn-default" id="toggle-right">
-        <i class="fa fa-twitter" id="twitter-bird"></i>
+        <i class="fa fa-twitter"></i>
     </a>
+  </div>
   </div>
 </header>

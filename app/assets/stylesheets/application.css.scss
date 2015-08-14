@@ -71,10 +71,22 @@
   height:250px;
  }
 
- #circle-around-twitter-bird {
-  padding-top: 20px;
+ .link_text, .link_text a {
+  font-family: 'Source Sans Pro', sans-serif;
+  left:-45px;
+  color: #fff;
+  margin-top:13px;
  }
 
- #twitter-bird {
-  padding-top:7px;
+ .search-loader .btn a:hover {
+  border-bottom: solid 3px #1abc9c;
  }
+
+ .wiki-vice-logo {
+  height: 120px;
+ }
+
+ .welcome-to {
+  padding-left: 7%;
+ }
+
