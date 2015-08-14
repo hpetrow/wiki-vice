@@ -45,20 +45,11 @@ class Page < ActiveRecord::Base
       "#{time} #{period}"
     elsif (time * 24) < 1
       time = ((time * 24) * 60).round
-      if time.class == Infinity
-        "0 minutes"
-      else
-        period = "minute".pluralize(time)
-        "#{time} #{period}"
-      end
+      period = "minute".pluralize(time)
+      "#{time} #{period}"
     else
-      time = (time * 24).round
-      if time.class == Infinity
-        "0 hours"
-      else
-        period = "hour".pluralize(time)
-        "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
-      end
+      period = "hour".pluralize(time)
+      "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
     end
   end
 
