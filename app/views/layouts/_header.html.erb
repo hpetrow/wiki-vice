@@ -21,11 +21,11 @@
       </div>
       <% end %>
   </div>
-  <button type="button" class="col-md-1 link_text btn btn-primary btn-3d">
-  <i class="fa fa-random"> </i>
-      <%= link_to "Random!", random_path, class: " search-loader" %>
+<!--   <button type="button" class="col-md-1 link_text btn btn-primary btn-3d"> -->
+  
+      <%= button_to "Random!", random_path, class: " search-loader col-md-1 link_text btn btn-primary btn-3d", method: "get"%>
       
-    </button> 
+ <!--    </button>  -->
   <div class="toggle-navigation toggle-right col-md-1" id="circle-around-twitter-bird">
     <a href="javascript:void(0)" class="btn btn-default" id="toggle-right">
         <i class="fa fa-twitter" id="twitter-bird"></i>
