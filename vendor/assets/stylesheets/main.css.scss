@@ -786,7 +786,8 @@ label.valid {
   display: inline-block;
 }
 #header .btn-default {
-  margin-left: 81px;
+  z-index: 100;
+  margin-left: 60px;
   margin-top: 22px;
   padding: 6px 11px;
   background: #F6F6F6;
