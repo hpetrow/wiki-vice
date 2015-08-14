@@ -13,6 +13,20 @@ del.diffchange {
   font-weight: bold;
 }
 
+span.added_line > div {
+  background-color: $green;
+  color: #eee;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+span.deleted_line > div {
+  background-color: $red;
+  color: #eee;
+  font-weight: bold;
+  text-decoration: line-through;
+}
+
 .full-bleed{
   background: #f1f2f7;
   z-index: 10;
