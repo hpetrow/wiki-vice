@@ -48,7 +48,7 @@ class TweetVandalism
       /n[i][g][g][e][r]/i => "n****"
     }
   end
-
+ 
   def tweet_parser
     test = @content.split(" ")
     test.each do |word|
