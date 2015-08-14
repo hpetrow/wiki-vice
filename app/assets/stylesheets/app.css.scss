@@ -31,6 +31,10 @@ del.diffchange {
   padding-top: 40px;
 }
 
+#footer {
+  padding: 50px;
+}
+
 #icon {
   font-size:55px;
   line-height: 100px;
@@ -41,7 +45,9 @@ del.diffchange {
 }
 
 .center-vertical {
-  vertical-align: middle;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 body.off-canvas.off-canvas-open #container {
