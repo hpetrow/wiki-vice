@@ -34,7 +34,7 @@ class Page < ActiveRecord::Base
   def revision_rate
     first_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :asc).take.timestamp
     last_date = Revision.includes(:page).where(pages: {id: self.id}).order(timestamp: :desc).take.timestamp
-    ((last_date.to_date - first_date.to_date).to_f / revisions.size)    
+    rate = ((last_date.to_date - first_date.to_date).to_f / revisions.size)
   end
 
   def time_between_revisions
@@ -44,13 +44,21 @@ class Page < ActiveRecord::Base
       period = "day".pluralize(time)
       "#{time} #{period}"
     elsif (time * 24) < 1
-      time = ((time * 24) * 60)
-      period = "minute".pluralize(time)
-      "#{time} #{period}"
+      time = ((time * 24) * 60).round
+      if time.class == Infinity
+        "0 minutes"
+      else
+        period = "minute".pluralize(time)
+        "#{time} #{period}"
+      end
     else
-      time = (time * 24)
-      period = "hour".pluralize(time)
-      "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+      time = (time * 24).round
+      if time.class == Infinity
+        "0 hours"
+      else
+        period = "hour".pluralize(time)
+        "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
+      end
     end
   end
 
