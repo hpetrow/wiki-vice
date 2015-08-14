@@ -31,7 +31,7 @@ class Revision < ActiveRecord::Base
   def parse_diff_content
     parser = RevisionParser.new
     parser.parse(self.get_content)
-    "#{parser.get_diff_type}: #{parser.diff_change.text}"
+    "#{parser.get_diff_type}: #{parser.send(parser.diff_type).text}"
   end
 
   def get_content_from_wiki

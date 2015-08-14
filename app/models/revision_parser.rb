@@ -75,7 +75,9 @@ class RevisionParser
 
   def diff_html
     preprocessed_diff = reference(self.send(diff_type))
-    "<p>#{line_number}</p><p>#{get_diff_type}</p> #{parse_diff(preprocessed_diff)}"
+    css_class = diff_type.to_s
+
+    "<p>#{line_number}</p><p>#{get_diff_type}</p> <span class='#{css_class}'>" << "#{parse_diff(preprocessed_diff)}" << "</span>"
   end
 
   def parse_diff(diff)
