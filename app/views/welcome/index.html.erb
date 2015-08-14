@@ -20,7 +20,10 @@
 
 <div class="row">
   <div class="col-md-10">
-    <h1 class="hideOnSubmit">Welcome to Wikipedia Vice!</h1>
+    <h1 class="hideOnSubmit">Welcome to</h1>
+    <div class="col-md-6 col-md-offset-3">
+      <img src="wiki-vice-04.png" alt="">
+    </div>
     <%= form_tag("/pages", method: "post", class: "form col-md-12") do %>
       <div class="form-group col-md-6">
         <%= text_field_tag(:query, "", class: "form-control index-search-bar hideOnSubmit", placeholder:"Search For...", id: "query-welcome") %>  
