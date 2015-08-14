@@ -15,7 +15,7 @@
       <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
     </div>
   </div>
-  <br><br><br>
+<br><br><br>
     
   <div class="row"> 
     <div class="col-md-3 col-sm-6">
@@ -46,10 +46,6 @@
       </div>
     </div>
 
-  </div>
-
-</div>
-
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-purple">
         <div class="content">
@@ -58,7 +54,6 @@
       </div>
     </div>
   </div>
-
   <div class="row">
     <div class="col-md-9">
       <h2>Anonymous authors by location:</h2>
@@ -100,26 +95,6 @@
       <% @page.top_five_authors.first[:author].top_contributions.each do |contribution| %>
       <p><b><%= contribution[0]%></b><br> <small><%= contribution[1] %> contributions</small></p>
       <% end %>
-<<<<<<< HEAD
-    </ol>
-  </div>
-
-  <div class="col-md-6">
-    <h3><%= link_to "#{@top_five_authors.first[:author].name}",author_path(@top_five_authors.first[:author].id) %> also contributes to: </h3>
-    <% @top_five_authors.first[:author].top_contributions.each do |contribution| %>
-    <p><strong><%= contribution[0] %>,</strong> <small><%= contribution[1] %> contributions</small></p>
-    <% end %>
-  </div>
-
-</div>
-
-  <br>
-  <% if @page.most_recent_vandalism_content != "" %>
-    <h2>Most Recent Vandalism:</h2>
-    <h3><%= @page.most_recent_vandalism_regex %></h3>
-  <% else %>
-  <%end %>
-=======
     </div>
   </div>
 
@@ -138,7 +113,7 @@
       </div>
     </div>
   </div>
->>>>>>> b4e7a1b256e97d772aa7375e7ecabf62908a761c
+
 
   <h1><div class="text-center">Timeline of revisions</div></h1>
   <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>

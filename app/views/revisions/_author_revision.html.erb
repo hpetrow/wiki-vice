@@ -1,0 +1,15 @@
+<div class="scroll-flow" >
+<h3><b><%= @author.most_recent_revision.page.title %></b> <br>
+<small><%= revision.get_date %></small></h3><hr>
+
+<% if !!revision.comment %>
+  <p>
+    Comment: <%= revision.comment %>
+  </p>
+<% end %>
+
+<div>
+  <%= revision.get_content.html_safe %>
+</div>
+</div>
+

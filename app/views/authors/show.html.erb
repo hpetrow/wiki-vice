@@ -1,6 +1,4 @@
 <div class="main-content-wrapper">
-	
-
 <div class="row">
 
 	<div class="col-md-5">
@@ -16,8 +14,7 @@
 		</div>
 		<div class="col-md-6">
 			<h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
-			<h2><small>(<%= @author.most_recent_revision.page.title %>)</small></h2>
-			<%= render partial: 'revisions/revision', locals: { revision: @author.most_recent_revision } %>
+			<%= render partial: 'revisions/author_revision', locals: { revision: @author.most_recent_revision } %>
 					
 		</div>
 

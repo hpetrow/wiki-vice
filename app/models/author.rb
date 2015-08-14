@@ -36,13 +36,6 @@ class Author < ActiveRecord::Base
     Regexp.new('to' 'and' 'the' 'on' 'in' 'of', true)
     self.count_comment_words
   end
-    #look through all words in comments
-    #look for matching words
-    #count how many times repeat terms occur
-    #.sort
-    #Ignore dumb words like to/and/the/in/on/of/--/
-    #Return a list of most used terms with how many times they occur
-
 
   def most_recent_revision
     self.revisions.order("timestamp desc").limit(1).first
