@@ -41,7 +41,9 @@ del.diffchange {
 }
 
 .center-vertical {
-  vertical-align: middle;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 body.off-canvas.off-canvas-open #container {
