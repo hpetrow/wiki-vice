@@ -1,9 +1,10 @@
-<h1><%= @author.name %>  <small><i>(Author)</i></small></h1>
-
-<br>
+<div class="main-content-wrapper">
+	
 
 <div class="row">
-	<div class="col-md-7">
+
+	<div class="col-md-5">
+	<h2><%= @author.name %>  <small><i>(Author)</i></small></h2>
 		<ol>
 			<% @top_contributions.each do |contribution| %>
 				<li>
@@ -12,9 +13,14 @@
 				</li>
 			<% end %>
 		</ol>
-	</div>
+		</div>
+		<div class="col-md-6">
+			<h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
+			<h2><small>(<%= @author.most_recent_revision.page.title %>)</small></h2>
+			<%= render partial: 'revisions/revision', locals: { revision: @author.most_recent_revision } %>
+					
+		</div>
+
 </div>
 
-<h2>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago:</h2>
-
-<%= render partial: 'revisions/revision', locals: { revision: @author.most_recent_revision } %>
+</div>
