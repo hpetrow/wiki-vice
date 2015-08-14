@@ -73,3 +73,57 @@ body.off-canvas.off-canvas-open #container {
   -ms-transition: -ms-transform 0.3s;
   -webkit-transition: -webkit-transform 0.3s;
 }
+
+body {
+  
+ }
+
+ .main-content-wrapper {
+    margin-left: 15%;
+    margin-right: 15%;
+ }
+
+ .dashboard-tile {
+    /*height:180px;*/
+ }
+
+ .loader{
+    display:none;
+    position: absolute;
+    z-index:1001;
+    width: 100%;
+ }
+
+ .panel-body {
+    height:231px;
+ }
+
+ .page-title {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 70px;
+  font-weight:400;
+ }
+
+ .scroll-flow{
+  overflow:scroll;
+  height:250px;
+ }
+
+ .link_text, .link_text a {
+  font-family: 'Source Sans Pro', sans-serif;
+  left:-45px;
+  color: #fff;
+  margin-top:13px;
+ }
+
+ .search-loader .btn a:hover {
+  border-bottom: solid 3px #1abc9c;
+ }
+
+ .wiki-vice-logo {
+  height: 120px;
+ }
+
+ .welcome-to {
+  padding-left: 7%;
+ }
