@@ -25,9 +25,40 @@ class TweetVandalism
     " ##{page_title.gsub(" ","")}" + " #wikivice"
   end
 
-  def format_tweet
-    content.slice(0, 128 - tweet_suffix.size) + "..." + tweet_suffix
+  def safe_tweet
+    self.tweet_parser
+  end
 
+  def format_tweet
+    self.safe_tweet.slice(0, 128 - tweet_suffix.size) + "..." + tweet_suffix
+  end
+
+  def replace_words
+    better_words = {
+      /fuck/ => "f*ck",
+      /rape\w{1}/ => "r****",
+      /rape/ => "r***",
+      /rapist/ => "r*****",
+      /faggots/ => "f****ts",
+      /faggot/ => "f****t",
+      /cunts/ => "c*nts",
+      /cunt/ => "c*nt",
+      /niggers/ => "n*****s",
+      /nigger/ => "n****"
+    }
+  end
+
+  def tweet_parser
+    test = @content.split(" ")
+    test.each do |word|
+      self.replace_words.collect do |bad_word, better_word|
+        if word.match(bad_word)
+          word.replace(better_word)
+        else
+          word
+        end
+      end
+    end
   end
 
 end
