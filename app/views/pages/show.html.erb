@@ -66,7 +66,7 @@
             <h2>Count:</h2>
           </div>
         </div>
-        <div class="panel-body">
+        <div class="">
           <span class="arrow"></span>
           <p>
             <% @page.anonymous_location_for_view.each do |revision| %>
@@ -106,17 +106,19 @@
     <% else %>
     <%end %>
 
-  <h1><div class="text-center">Timeline of revisions</div></h1>
-  <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
-
-  <h1>Revisions per day</h1>
+    <h1>Revisions per day</h1>
   <div class="row">
-   <div class="panel-body text-center">
+   <div class="text-center">
       <div class="chart">
           <div id="zoom"></div>
       </div>
+    </div>
   </div>
-  </div>
+
+  <h1><div class="text-center">Timeline of revisions</div></h1>
+  <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
+
+
   <script type="text/javascript">
     $('.timer').countTo();
   </script>
