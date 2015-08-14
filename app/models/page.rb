@@ -40,7 +40,7 @@ class Page < ActiveRecord::Base
   def time_between_revisions
     time = revision_rate
     if time >= 1
-      time = time
+      time = time.round
       period = "day".pluralize(time)
       "#{time} #{period}"
     elsif (time * 24) < 1
