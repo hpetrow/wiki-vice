@@ -1,6 +1,12 @@
 class RevisionParser
   attr_accessor :html_content, :diff_type
 
+  REFERENCE = {
+    "[[]]" => "== link ==",
+    "{{}}" => "== reference ==",
+    "" => "== white space =="
+  }
+
   def parse(content)
     @html_content = Nokogiri::HTML(content)
     @diff_type = self.set_diff_type
@@ -14,12 +20,20 @@ class RevisionParser
     html_content.css(".diff-context")
   end
 
+  def reference(diff)
+    if REFERENCE.has_key?(diff.text.strip)
+      REFERENCE[diff.text.strip]
+    else
+      diff
+    end
+  end
+
   def deleted_line
     html_content.css(".diff-deletedline")
   end
 
   def added_line
-    html_content.css(".diff-addedline")
+    html_content.css('.diff-addedline')
   end
 
   def diff_change
@@ -60,7 +74,8 @@ class RevisionParser
   end
 
   def diff_html
-    "<p>#{line_number}</p><p>#{get_diff_type}</p> #{parse_diff(self.send(diff_type))}"
+    preprocessed_diff = reference(self.send(diff_type))
+    "<p>#{line_number}</p><p>#{get_diff_type}</p> #{parse_diff(preprocessed_diff)}"
   end
 
   def parse_diff(diff)
