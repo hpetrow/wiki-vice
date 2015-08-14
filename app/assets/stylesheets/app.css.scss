@@ -46,11 +46,6 @@ del.diffchange {
   font-size: 60px;
 }
 
-.center-vertical {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
 
 #twitter-toggle{
   z-index: 100;
@@ -95,7 +90,9 @@ body {
  }
 
  .panel-body {
-    height:231px;
+    height:200px;
+    margin: 50px;
+    margin-right: 80px;
  }
 
  .page-title {
