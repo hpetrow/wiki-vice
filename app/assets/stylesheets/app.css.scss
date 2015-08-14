@@ -52,11 +52,22 @@ del.diffchange {
   transform: translateY(-50%);
 }
 
+#twitter-toggle{
+  z-index: 100;
+  position: relative;
+
+}
+
+#header-search {
+  margin-top: 3px;
+
+}
+
 body.off-canvas.off-canvas-open #container {
-  -webkit-transform: translate(-200px, 0px);
-  -ms-transform: translate(-180px, 0px);
-  -o-transform: translate(-180px, 0px);
-  transform: translate(-180px, 0px);
+  -webkit-transform: translate(-80, 0px);
+  -ms-transform: translate(-80, 0px);
+  -o-transform: translate(-80, 0px);
+  transform: translate(-80, 0px);
   transition: transform 0.3s;
   -o-transition: -o-transform 0.3s;
   -ms-transition: -ms-transform 0.3s;
