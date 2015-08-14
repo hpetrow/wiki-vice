@@ -7,26 +7,21 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
   <%= analytics_init if Rails.env.production? %>
+  <%= favicon_link_tag 'wiki-vice-favicon.png' %>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">  
 </head>
 
-
 <body class="off-canvas">
+<!--  -->
   <div id="container">
     <%= render 'layouts/header' %>
-    <%= render 'layouts/nav' %>
-    <section class="main-content-wrapper">
-      <section id="main-content">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-            <%= yield %>
-          </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <%= yield %>
         </div>
-        
-      </section>
-    </section>
-    
+      </div>
   </div>
-
-
+    <%= render 'layouts/twitter_widget' %>
+    <%= render 'layouts/footer' %>
 </body>
 </html>

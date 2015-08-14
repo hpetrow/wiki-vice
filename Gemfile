@@ -24,6 +24,9 @@ gem "font-awesome-rails"
 gem 'gon'
 # Adds functionality to search for location based on IP address.
 gem 'geoip'
+
+#adds way to make connections between classes without tables
+gem 'activerecord-tableless', '~> 1.3.4'
 #adds turbolinks
 gem 'turbolinks'
 # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.
@@ -34,8 +37,16 @@ gem 'diffy', '~> 3.0.7'
 gem 'wikitext', '~> 4.1.2'
 
 gem "typhoeus"
+
+gem "activerecord-import", ">= 0.2.0"
+# colorizes terminal output
+gem "colorize"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+
+gem 'google-search', '~> 1.0.3'
+gem 'figaro'
+gem 'twitter'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

@@ -13,7 +13,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   position: relative;
-  height: 100%;
+  /*height: 100%;*/
 }
 a:link,
 a:visited {
@@ -786,7 +786,10 @@ label.valid {
   display: inline-block;
 }
 #header .btn-default {
-  padding: 3px 9px;
+  z-index: 100;
+  margin-left: 60px;
+  margin-top: 22px;
+  padding: 6px 11px;
   background: #F6F6F6;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -1018,8 +1021,8 @@ label.valid {
   -o-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  background: #f1f2f7;
-  min-height: 1000px;
+  /*background: #f1f2f7;*/
+  /*min-height: 1000px;*/
 }
 .main-content-wrapper #main-content {
   border-top: solid thin #e7e8ec;

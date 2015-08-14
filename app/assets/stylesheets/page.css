@@ -3,6 +3,10 @@
   overflow:scroll;
 }
 
- .tab_box {
-    overflow: scroll; height: 389px;
-  }
+.tab_box {
+  overflow: scroll; height: 389px;
+}
+
+.panel-body {
+  overflow: scroll;
+}
