@@ -16,26 +16,16 @@
 </div>
 
 <div class="col-md-12">
-    <h3 class="hideOnSubmit col-md-4 col-md-offset-4 welcome-to">Welcome to</h3>
-    <div class="col-md-4 col-md-offset-4 wiki-vice-logo">
-      <img src="assets/wiki-vice-02.png" alt=""  height="250">
+    <h3 class="hideOnSubmit col-md-12" align="center">Welcome to</h3>
+    <div class="col-md-12 wiki-vice-logo" align="center">
+      <img src="assets/wiki-vice-02.png" alt="" height="300">
     </div>
 </div>
 
 <div class="full-bleed">
   <div class="main-content-wrapper">
     <div class="col-md-12" id="padding-top-80">
-      
-    <%= form_tag("/pages", method: "post", class: "form col-md-12") do %>
-      <div class="form-group col-md-6 col-md-offset-2">
-        <%= text_field_tag(:query, "", class: "form-control index-search-bar hideOnSubmit", placeholder:"Search For...", id: "query-welcome") %>  
-      </div>
-      <div class="form-group col-md-1">
-        <%= submit_tag("Search", class: " btn btn-primary btn-3d hideOnSubmit search-loader", id: "search-loader") %>
-      </div>
-    <% end %>
      </div> 
- 
   </div>    
 
     <% if flash[:notice] %>
