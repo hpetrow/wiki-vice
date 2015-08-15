@@ -47,6 +47,7 @@ gem "colorize"
 gem 'google-search', '~> 1.0.3'
 gem 'figaro'
 gem 'twitter'
+gem 'sidekiq'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

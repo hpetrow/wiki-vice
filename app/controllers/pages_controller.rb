@@ -13,6 +13,8 @@ class PagesController < ApplicationController
         redirect_to root_path
       end      
     end
+
+    #@job = WikiWorker.perform_async
   end
 
   def show
