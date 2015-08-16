@@ -5,7 +5,7 @@ class PagesController < ApplicationController
     if params["query"] == ""
       redirect_to random_path
     else
-      @page = wiki.get_page(params[:query])
+      @page = wiki.get_title(params[:query])
       if @page
         redirect_to page_path(@page)
       else

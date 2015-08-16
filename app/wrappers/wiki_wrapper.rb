@@ -3,6 +3,12 @@ class WikiWrapper
   require 'open-uri'
 
   CALLBACK = "https://en.wikipedia.org/w/api.php?format=json&action=query"
+  def get_title(query)
+    url = title_url(query)
+    json = load_json(url)
+    persistor = JsonPersistor.new(json)   
+    page = persistor.insert_page   
+  end
 
   def get_page(title)
     url = page_revisions_url(title)
@@ -123,6 +129,15 @@ class WikiWrapper
     json = load_json(vandalism_url(page_title))
     page_id = json["query"]["pages"].keys.first.to_s
     json["query"]["pages"][page_id]["revisions"]
+  end
+
+  def title_url(query)
+    prop = "prop=revisions"
+    rvlimit = "rvlimit=1"
+    titles = "titles=#{query}"
+    rvprop = "rvprop=ids"
+    redirects = "redirects"
+    [CALLBACK, prop, rvlimit, titles, rvprop, redirects].join("&")
   end
 
   def page_revisions_url(title, options = {})
