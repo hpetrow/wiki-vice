@@ -20,6 +20,8 @@ class PagesController < ApplicationController
   def show
     @page = Page.find(params[:id])
     @job = WikiWorker.perform_async(params[:id])
+    # format.html { render :show }
+    # render json: :success
     # if @page.revisions.size < 10
     #   wiki = WikiWrapper.new
     #   @page = wiki.get_page(@page.title)
