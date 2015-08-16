@@ -7,3 +7,13 @@
     <div id="page-data"></div>
     </div>
 </div>
+<script src="https://js.pusher.com/2.2/pusher.min.js"></script>
+<script>
+  var pusher = new Pusher('0c88ff9f8382fb32596e', {
+    encrypted: true
+  });
+  var channel = pusher.subscribe('page_results');
+  channel.bind('my_event', function(data) {
+    alert(data.message);
+  })
+</script>

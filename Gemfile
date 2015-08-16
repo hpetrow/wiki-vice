@@ -24,7 +24,8 @@ gem "font-awesome-rails"
 gem 'gon'
 # Adds functionality to search for location based on IP address.
 gem 'geoip'
-
+# push notifications
+gem 'pusher'
 #adds way to make connections between classes without tables
 gem 'activerecord-tableless', '~> 1.3.4'
 #adds turbolinks
