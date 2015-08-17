@@ -3,10 +3,16 @@
   <div class="row">
     <div class="col-md-8">
       <div><h1 id="page_title"><%= @page.title %></h1></div>
-      <div id="page_id"><%= @page.id %></div>
+      <div id="page_id" style="display:none;"><%= @page.id %></div>
       <hr>
-    <div id="page-data"></div>
+    
     </div>
+  </div>
+  <div id="chart"></div>
+  <div id="page-data">
+    <div class="col-md-offset-4">
+      <%= image_tag("extract-spinner.gif") %>
+    </div>
+    
 
-  <% end %>
-</div>
+  </div>

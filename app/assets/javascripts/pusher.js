@@ -17,14 +17,14 @@ $(function() {
     channel.bind('get_page', function(data) {
       // alert(data.title);
       console.log(data.id);
-      // alert(data.revisionRate);
-      // pusher.unsubscribe("page_results");
+
       $.ajax({
         method: "GET",
         url: "/dashboard",
         data: {id: data.id},
         dataType: "script"
       });
+      pusher.unsubscribe("page_results_" + id);
     });
   });
 });
