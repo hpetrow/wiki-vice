@@ -32,6 +32,7 @@ span.deleted_line > div {
   z-index: 10;
   height: 300px;
 }
+
 .full-bleed.b{
   background: #fafafa;
   z-index: 10;
@@ -83,10 +84,6 @@ body.off-canvas.off-canvas-open #container {
   -webkit-transition: -webkit-transform 0.3s;
 }
 
-body {
-  
- }
-
  .main-content-wrapper {
     margin-left: 15%;
     margin-right: 15%;
@@ -104,10 +101,9 @@ body {
  }
 
  .loader .panel-body {
-    height:200px;
-    margin: 50px;
-    margin-right: 80px;
- }
+    margin-top: 50px;
+    height: 300px;
+ } 
 
  .page-title {
   font-family: 'Source Sans Pro', sans-serif;
