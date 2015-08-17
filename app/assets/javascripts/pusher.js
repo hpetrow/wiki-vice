@@ -5,7 +5,7 @@ $(function() {
     }
   };
 
-   var pusher = new Pusher('0c88ff9f8382fb32596e', {
+  var pusher = new Pusher('0c88ff9f8382fb32596e', {
     encrypted: true
   });
   var channel = pusher.subscribe('page_results');
@@ -13,12 +13,14 @@ $(function() {
 
   channel.bind('pusher:subscription_succeeded', function() {
     channel.bind('get_page', function(data) {
-      alert(data.title);
-      alert(data.id);
-      alert(data.revisionRate);
+      // alert(data.title);
+      console.log(data.id);
+      // alert(data.revisionRate);
       // pusher.unsubscribe("page_results");
-    });  
+      $.ajax({
+        method: "GET",
+        url: "/pages/" + data.id
+      });
+    });
   });
-
-  
 });

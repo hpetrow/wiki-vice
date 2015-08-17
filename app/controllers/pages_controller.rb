@@ -28,10 +28,7 @@ class PagesController < ApplicationController
         WikiWorker.perform_async(@page.id)
         render json: :success
       end
-      format.js do 
-        WikiWorker.perform_async(@page.id)
-        render :done
-      end
+      format.js{}
     end
     # Pusher["page_results"].trigger("get_page", {
     #           title: "WTF",
