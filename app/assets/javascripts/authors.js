@@ -39,5 +39,5 @@ var options = {
     animationSteps: 40,
   };
   
-  var myChart = new Chart(document.getElementById("authorContributionsChart").getContext("2d")).Pie(data, options);
+  var myChart = new Chart(document.getElementById("authorContributionsChart").getContext("2d")).PolarArea(data, options);
 });
