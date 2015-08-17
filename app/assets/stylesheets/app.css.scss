@@ -2,27 +2,33 @@ $green: #1ABC9C;
 $red: #e84c3d;
 
 ins.diffchange {
-  background-color: $green;
-  color: #eee;
+  /*background-color: $green;
+  color: #eee;*/
+  background-color: #fff;
+  color: $green;
   font-weight: bold;
 }
 
 del.diffchange {
-  background-color: $red;
-  color: #eee;
+  /*background-color: $red;
+  color: #eee;*/
+  background-color: #fff;
+  color: $red;
   font-weight: bold;
 }
 
 span.added_line > div {
-  background-color: $green;
-  color: #eee;
+  /*background-color: $green;
+  color: #eee;*/
+  color: $green;
   font-weight: bold;
   text-decoration: underline;
 }
 
 span.deleted_line > div {
-  background-color: $red;
-  color: #eee;
+  /*background-color: $red;
+  color: #eee;*/
+  color: $red;
   font-weight: bold;
   text-decoration: line-through;
 }
