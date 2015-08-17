@@ -1,7 +1,6 @@
 class WikiWorker
   require "pusher"
   include Sidekiq::Worker
-  sidekiq_options :queue => :critical
 
   def perform(id)
     page = Page.find(id)
@@ -15,7 +14,8 @@ class WikiWorker
       secret: '6e55dd3d3001f6ed63f7'
     }
     ) 
-    Pusher.trigger("page_results", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
+    sleep(10)
+    pusher.trigger("page_results", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 end
 
