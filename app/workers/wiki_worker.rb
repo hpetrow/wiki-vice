@@ -15,7 +15,7 @@ class WikiWorker
     }
     ) 
     sleep(10)
-    pusher.trigger("page_results", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
+    pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 end
 

@@ -5,10 +5,12 @@ $(function() {
     }
   };
 
+  var id = $("#page_id").text();
+
   var pusher = new Pusher('0c88ff9f8382fb32596e', {
     encrypted: true
   });
-  var channel = pusher.subscribe('page_results');
+  var channel = pusher.subscribe('page_results_' + id);
 
 
   channel.bind('pusher:subscription_succeeded', function() {
@@ -19,7 +21,9 @@ $(function() {
       // pusher.unsubscribe("page_results");
       $.ajax({
         method: "GET",
-        url: "/pages/" + data.id
+        url: "/dashboard",
+        data: {id: data.id},
+        dataType: "script"
       });
     });
   });

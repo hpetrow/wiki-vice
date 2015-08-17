@@ -49,6 +49,10 @@ class PagesController < ApplicationController
     # gon.extractPageId = @page.page_id
   end
 
+  def dashboard
+    @page = Page.find(params[:id])
+  end
+
   def random
     wiki = WikiWrapper.new
     @page = wiki.random_page
