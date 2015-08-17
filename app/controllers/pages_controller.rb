@@ -7,6 +7,7 @@ class PagesController < ApplicationController
     else
       @page = wiki.get_title(params[:query])
       if @page
+        WikiWorker.perform_async(@page.id)
         redirect_to page_path(@page)
       else
         flash[:notice] = "Can't find #{params[:query]}. Please try again."
@@ -19,7 +20,10 @@ class PagesController < ApplicationController
 
   def show
     @page = Page.find(params[:id])
-    @job = WikiWorker.perform_async(params[:id])
+    WikiWorker.perform_async(@page.id)
+    # Pusher['page_results'].trigger('my_event', {
+    #   message: 'hello world'
+    # })        
     # if @page.revisions.size < 10
     #   wiki = WikiWrapper.new
     #   @page = wiki.get_page(@page.title)
