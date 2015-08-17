@@ -22,6 +22,7 @@
 				<h4>Last revision made <%= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now) %> ago</h4>
 				<%= render partial: 'revisions/author_revision', locals: { revision: @author.most_recent_revision } %>	
 			</div>
-			
+			<%= javascript_include_tag 'Chart.min.js' %>
+			<%= javascript_include_tag 'authors.js' %>
 	</div>
 </div>

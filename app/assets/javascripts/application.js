@@ -19,12 +19,12 @@
 //= require jquery-jvectormap-2.0.2.min.js
 //= require jquery-jvectormap-world-mill-en.js
 //= require page_map.js
-//= require d3.v3.min.js
-//= require c3.js
-//= require authors.js
-//= require c3-demo.js
+// require d3.v3.min.js
+// require c3.js
+// require c3-demo.js
+// require authors.js
 //= require wiki_extract.js
 
 //= require jquery.countTo.js
 //= require initialize_counter.js
-//= require Chart.min.js
+// require Chart.min.js
