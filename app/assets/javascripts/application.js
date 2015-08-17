@@ -26,4 +26,5 @@
 //= require wiki_extract.js
 //= require jquery.countTo.js
 //= require initialize_counter.js
+//= require pusher-source.js
 //= require pusher.js

@@ -49,6 +49,7 @@ gem 'google-search', '~> 1.0.3'
 gem 'figaro'
 gem 'twitter'
 gem 'sidekiq'
+gem 'sinatra', :require => nil
 
 # Use Unicorn as the app server
 # gem 'unicorn'

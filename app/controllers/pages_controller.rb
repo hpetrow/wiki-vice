@@ -7,7 +7,7 @@ class PagesController < ApplicationController
     else
       @page = wiki.get_title(params[:query])
       if @page
-        WikiWorker.perform_async(@page.id)
+        WikiWorker.perform_async(@page.id) 
         redirect_to page_path(@page)
       else
         flash[:notice] = "Can't find #{params[:query]}. Please try again."
@@ -19,8 +19,24 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = Page.find(params[:id])
-    WikiWorker.perform_async(@page.id)
+    respond_to do |format|
+      format.html do 
+        @page = Page.find(params[:id])
+        WikiWorker.perform_async(@page.id)
+      end
+      format.json do 
+        WikiWorker.perform_async(@page.id)
+        render json: :success
+      end
+      format.js do 
+        WikiWorker.perform_async(@page.id)
+        render :done
+      end
+    end
+    # Pusher["page_results"].trigger("get_page", {
+    #           title: "WTF",
+    #           revisionRate: "WTF"
+    #           })          
     # Pusher['page_results'].trigger('my_event', {
     #   message: 'hello world'
     # })        
