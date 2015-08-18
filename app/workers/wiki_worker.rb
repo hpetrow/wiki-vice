@@ -18,6 +18,3 @@ class WikiWorker
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 end
-
-# bundle exec sidekiq
-# WikiWorker.perform_async

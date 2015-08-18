@@ -14,7 +14,6 @@ class PagesController < ApplicationController
       end      
     end
 
-    #@job = WikiWorker.perform_async
   end
 
   def show
@@ -25,18 +24,6 @@ class PagesController < ApplicationController
       end
       format.js{}
     end
-    # Pusher["page_results"].trigger("get_page", {
-    #           title: "WTF",
-    #           revisionRate: "WTF"
-    #           })          
-    # Pusher['page_results'].trigger('my_event', {
-    #   message: 'hello world'
-    # })        
-    # if @page.revisions.size < 10
-    #   wiki = WikiWrapper.new
-    #   @page = wiki.get_page(@page.title)
-    # end
-    # @page.new_vandalism
     @page.new_vandalism 
     gon.revDates = @page.format_rev_dates_for_c3
     gon.revCounts = @page.format_rev_counts_for_c3
