@@ -15,7 +15,7 @@
       <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
     </div>
   </div>
-  <br><br><br>
+<br><br><br>
     
   <div class="row"> 
     <div class="col-md-3 col-sm-6">
@@ -54,7 +54,6 @@
       </div>
     </div>
   </div>
-
   <div class="row">
     <div class="col-md-9">
       <h2>Anonymous authors by location:</h2>
@@ -115,6 +114,7 @@
     </div>
   </div>
 
+
   <h1><div class="text-center">Timeline of revisions</div></h1>
   <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
 
@@ -122,4 +122,12 @@
   <script type="text/javascript">
     $('.timer').countTo();
   </script>
+
+  <%= javascript_include_tag 'd3.v3.min.js' %>
+  <%= javascript_include_tag 'c3.js' %>
+  <%= javascript_include_tag 'c3-demo.js' %>
+
+<!-- <script src="/vendor/assets/d3.v3.min.js"></script>
+<script src="/vendor/assets/c3.js"></script>
+<script src="/vendor/assets/c3-demo.js"></script> -->
 </div>
