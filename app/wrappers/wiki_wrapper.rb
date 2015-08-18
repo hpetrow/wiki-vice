@@ -89,7 +89,7 @@ class WikiWrapper
   end
 
   def paged_revisions(page_title, json)
-    continue = 2
+    continue = 10
     i = 1
     revisions = []
     while ((more_pages?(json) || true) && i < continue)
