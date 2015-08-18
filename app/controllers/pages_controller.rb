@@ -42,6 +42,15 @@ class PagesController < ApplicationController
     gon.extractPageId = @page.page_id      
   end
 
+  def map
+    @page = Page.find(params[:id])
+    respond_to do |format|
+      format.json {
+        render json: {:mapData => @page.anonymous_location_for_map}
+      }
+    end
+  end
+
   def random
     wiki = WikiWrapper.new
     @page = wiki.random_page

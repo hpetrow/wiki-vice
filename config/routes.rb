@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'random' => 'pages#random'
   get 'dashboard' => "pages#dashboard"
+  get 'map' => 'pages#map'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

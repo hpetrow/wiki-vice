@@ -15,7 +15,6 @@ $(function() {
 
   channel.bind('pusher:subscription_succeeded', function() {
     channel.bind('get_page', function(data) {
-      // alert(data.title);
       console.log(data.id);
 
       $.ajax({

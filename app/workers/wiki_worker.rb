@@ -14,7 +14,7 @@ class WikiWorker
       secret: '6e55dd3d3001f6ed63f7'
     }
     ) 
-
+    sleep(5)
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 end
