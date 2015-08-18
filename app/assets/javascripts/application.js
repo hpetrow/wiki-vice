@@ -26,7 +26,6 @@
 // require c3-demo.js
 // require authors.js
 //= require wiki_extract.js
-//= require histogram.js
 //= require jquery.countTo.js
 //= require initialize_counter.js
 // require Chart.min.js
