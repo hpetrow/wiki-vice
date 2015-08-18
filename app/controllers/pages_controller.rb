@@ -51,6 +51,18 @@ class PagesController < ApplicationController
     end
   end
 
+  def histogram
+    @page = Page.find(params[:id])
+    respond_to do |format|
+      format.json {
+        render json: {
+          revDates: @page.format_rev_dates_for_c3,
+          revCounts: @page.format_rev_counts_for_c3
+        }
+      }
+    end
+  end
+
   def random
     wiki = WikiWrapper.new
     @page = wiki.random_page

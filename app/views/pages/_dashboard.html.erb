@@ -116,13 +116,15 @@
   <h1><div class="text-center">Timeline of revisions</div></h1>
   <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
 
-
+  <%= javascript_include_tag 'd3.v3.min.js' %>
+  <%= javascript_include_tag 'c3.js' %>
+  <%= javascript_include_tag 'c3-demo.js' %>
+  
   <script type="text/javascript">
     $('.timer').countTo();
     wikiExtract();
     pageMap();
+    histogram();
   </script>
-  
-  <%= javascript_include_tag 'd3.v3.min.js' %>
-  <%= javascript_include_tag 'c3.js' %>
-  <%= javascript_include_tag 'c3-demo.js' %>
+
+

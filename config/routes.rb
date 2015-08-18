@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'random' => 'pages#random'
   get 'dashboard' => "pages#dashboard"
   get 'map' => 'pages#map'
-
+  get 'histogram' => 'pages#histogram'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
