@@ -51,6 +51,7 @@ gem 'twitter'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
 
+gem 'redis'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

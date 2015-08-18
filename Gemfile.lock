@@ -354,6 +354,7 @@ DEPENDENCIES
   pusher
   rails (= 4.2.0)
   rails_12factor
+  redis
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
