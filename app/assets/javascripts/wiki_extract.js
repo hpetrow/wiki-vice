@@ -28,5 +28,4 @@ function wikiExtract() {
     extract = response.query.pages[gon.extractPageId].extract;
     $("#extract").html(extract);
   });
-  
 };

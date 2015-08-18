@@ -18,7 +18,24 @@
     <%= render 'layouts/header' %>
       <div class="row">
         <div class="col-md-12 col-sm-12">
-          <%= yield %>
+          <div class="loader">
+            <div class="panel-solid-primary col-md-6 col-md-offset-3">
+              <div class="panel-body">
+               
+                <h1 class="col-md-4 col-md-offset-1">Sit tight.</h1>
+                <hr class="col-md-8 col-md-offset-1" style="margin-left:70px;">
+                <br>
+                <div class="col-md-8 col-md-offset-1">
+                <h3>We're looking through <b>500</b> revisions, <b>500</b> authors, and generating some neat graphics for you.</h3>
+                <br>
+                 <%= image_tag("home-spinner.gif") %>
+                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="hideOnSubmit">
+            <%= yield %>
+          </div>
         </div>
       </div>
   </div>

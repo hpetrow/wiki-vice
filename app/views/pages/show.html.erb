@@ -5,7 +5,64 @@
       <div><h1 id="page_title"><%= @page.title %></h1></div>
       <div id="page_id" style="display:none;"><%= @page.id %></div>
       <hr>
+<<<<<<< HEAD
     
+=======
+      <div id="extract">
+        <div class="col-md-offset-4">
+          <%= image_tag("extract-spinner.gif") %>
+        </div>
+      </div>        
+      <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>
+    </div>
+    <div class="col-md-4">
+      <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
+    </div>
+  </div>
+<br><br><br>
+    
+  <div class="row"> 
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-tile detail tile-red">
+        <div class="content">
+          <h3>This page changes every <b><%=@page.time_between_revisions%></b></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-tile detail tile-turquoise">
+        <div class="content">
+        <% if @page.get_number_of_anonymous_authors > 1 %>
+        <h3>There are <b class="timer" data-from="0" data-to="<%= @page.get_number_of_anonymous_authors %>" data-speed="2500"></b> anonymous authors from <b class="timer" data-from="0" data-to="<%= @page.find_country_name.count %>" data-speed="2500"></b> countries contributing.</h3>
+        <% else %>
+        <h3>This page has no edits from anonymous authors.</h3>
+        <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-tile detail tile-blue">
+        <div class="content">
+          <h3><b class="timer" data-from="0" data-to="<%=@page.author_count%>" data-speed="2500"></b> authors have edited this page</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="dashboard-tile detail tile-purple">
+        <div class="content">
+          <h3>Based on the rate of edits, this page is <b><%=@page.edit_activity_amount%></b></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-9">
+      <h2>Anonymous authors by location:</h2>
+      <div id="map" style="width: 600px; height: 400px"></div>
+>>>>>>> origin/adds-methods-to-author
     </div>
   </div>
   <div id="chart"></div>
@@ -16,3 +73,24 @@
     
 
   </div>
+<<<<<<< HEAD
+=======
+
+
+  <h1><div class="text-center">Timeline of revisions</div></h1>
+  <%= render partial: 'layouts/timeline', locals: { top_revisions: @page.top_revisions } %>
+
+
+  <script type="text/javascript">
+    $('.timer').countTo();
+  </script>
+
+  <%= javascript_include_tag 'd3.v3.min.js' %>
+  <%= javascript_include_tag 'c3.js' %>
+  <%= javascript_include_tag 'c3-demo.js' %>
+
+<!-- <script src="/vendor/assets/d3.v3.min.js"></script>
+<script src="/vendor/assets/c3.js"></script>
+<script src="/vendor/assets/c3-demo.js"></script> -->
+</div>
+>>>>>>> origin/adds-methods-to-author

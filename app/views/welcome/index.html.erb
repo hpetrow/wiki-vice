@@ -1,18 +1,6 @@
-<div class="loader">
-    <div class="panel-solid-primary">
-      <div class="panel-body">
-        <h1 class="col-md-5 col-md-offset-3">Sit tight. </h1>
-        <br>
-        <%= image_tag("home-spinner.gif") %>
-        <h3 class="col-md-5 col-md-offset-3">We're gathering information about the page and it's authors.</h3>
-
-      </div>
-    </div>
-</div>
-
 <div class="col-md-12">
     <h3 class="hideOnSubmit col-md-12" align="center">Welcome to</h3>
-    <div class="col-md-12 wiki-vice-logo hideOnSubmit" align="center">
+    <div class="col-md-12 wiki-vice-logo" align="center">
       <img src="assets/wiki-vice-02.png" alt="" height="300">
     </div>
 </div>
@@ -20,7 +8,7 @@
 <div class="full-bleed">
   <div class="main-content-wrapper">
     <div class="col-md-12" id="padding-top-80">
-     </div> 
+    </div> 
   </div>    
 
     <% if flash[:notice] %>
@@ -33,15 +21,15 @@
 
     </div>
   </div>
-</div>
 
-<div class="full-bleed">
+
+<div class="full-bleed hideOnSubmit">
   <div class="main-content-wrapper">
-    <div class="row hideOnSubmit">
+    <div class="row">
       <div class="col-md-12"><br><br><br>
         <div class="col-md-4">
           <h3>WikiVice</h3>
-          <p>Adding transparency to the Wikipedia editing process. </p>
+          <h4>Adding transparency to the Wikipedia editing process. </h4>
         </div>
         <div class="col-md-4">
           <h3>Instructions</h3>
@@ -57,9 +45,9 @@
     </div>
   </div>
 </div>
-<div class="full-bleed b">
+<div class="full-bleed b hideOnSubmit">
   <div class="main-content-wrapper">
-    <div class="row hideOnSubmit">
+    <div class="row">
       <div class="col-md-10 col-md-offset-1" id="padding-top-80">
         <h3>Recently Changed Articles</h3>
           <% @recent_changes.each do |page| %>
