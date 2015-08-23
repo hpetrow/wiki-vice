@@ -9,9 +9,9 @@ class WikiWorker
 
     pusher = Pusher::Client.new(
     { 
-      app_id: '136049',
-      key: '0c88ff9f8382fb32596e',
-      secret: '6e55dd3d3001f6ed63f7'
+      app_id: ENV["PUSHER_APP_ID"],
+      key: ENV["PUSHER_KEY"],
+      secret: ENV["PUSHER_SECRET"]
     }
     ) 
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
