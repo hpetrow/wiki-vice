@@ -19,7 +19,7 @@ class PagesController < ApplicationController
   def show
     @page = Page.find(params[:id])
     if @page.revisions.empty?
-      WikiWorker.perform_async(@page.id)
+      RevisionsWorker.perform_async(@page.id)
     end
     gon.extractTitle = @page.title
     gon.extractPageId = @page.page_id 
@@ -56,5 +56,9 @@ class PagesController < ApplicationController
     results = wiki.random_page
     @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])
     redirect_to page_path(@page)
+  end
+
+  def top_five_authors
+    @page = Page.find(params[:id])
   end
 end

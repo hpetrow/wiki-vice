@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get 'dashboard' => "pages#dashboard"
   get 'map' => 'pages#map'
   get 'histogram' => 'pages#histogram'
+  get 'top_five_authors' => 'pages#top_five_authors'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

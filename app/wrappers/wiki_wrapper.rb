@@ -18,21 +18,12 @@ class WikiWrapper
   def get_page(title)
     url = page_revisions_url(title)
     json = load_json(url)
-    persistor = JsonPersistor.new(json)   
-    if valid_page?(json)
-      page = persistor.insert_page
-      title = page.title
-      id = page.id
-      revisions = paged_revisions(title, json)
-      persistor.json = revisions
-      persistor.insert_authors
-      persistor.insert_revisions_into_page(id)
-      persistor.json = vandalism_revisions(title)
-      persistor.insert_revisions_into_page(id) if !(persistor.json.nil?)
-      page
-    else
-      false
+    page_id = json["query"]["pages"].keys.first
+    revisions = json["query"]["pages"][page_id]["revisions"]
+    paged_revisions(title, json).each do |rev|
+      revisions << rev
     end
+    revisions
   end
 
   def get_user_contributions(author)
