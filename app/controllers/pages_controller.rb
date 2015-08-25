@@ -5,9 +5,17 @@ class PagesController < ApplicationController
     if params["query"] == ""
       redirect_to random_path
     else
-      @page = wiki.get_title(params[:query])
-      if @page
-        redirect_to page_path(@page)
+      results = wiki.get_title(params[:query])
+      if results
+        @page = Page.find_by_title(results[:title])
+        if @page
+          redirect_to page_path(@page)
+        else
+          @page = Page.create(page_id: results[:page_id], title: results[:title])
+          WikiWorker.perform_async(@page.id)          
+          redirect_to page_path(@page)
+        end
+        
       else
         flash[:notice] = "Can't find #{params[:query]}. Please try again."
         redirect_to root_path
@@ -20,7 +28,6 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.html do 
         @page = Page.find(params[:id])
-        WikiWorker.perform_async(@page.id)
       end
       format.js{}
     end
@@ -65,7 +72,9 @@ class PagesController < ApplicationController
 
   def random
     wiki = WikiWrapper.new
-    @page = wiki.random_page
+    results = wiki.random_page
+    @page = Page.create(page_id: results[:page_id], title: results[:title])
+    WikiWorker.perform_async(@page.id) 
     redirect_to page_path(@page)
   end
 end

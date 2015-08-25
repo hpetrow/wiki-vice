@@ -7,8 +7,9 @@ class WikiWrapper
     url = title_url(query)
     json = load_json(url)
     if valid_page?(json)
-      persistor = JsonPersistor.new(json) 
-      page = persistor.insert_page   
+      page_id = json["query"]["pages"].keys.first
+      page_data = json["query"]["pages"][page_id]
+      {page_id: page_id, title: page_data["title"]}
     else
       false
     end
@@ -63,8 +64,8 @@ class WikiWrapper
 
   def random_page
     json = load_json(random_page_url)
-    title = random_title(json)
-    get_page(title)
+    random = json["query"]["random"].first
+    {page_id: random["id"], title: random["title"]}
   end
 
   private
