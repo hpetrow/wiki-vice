@@ -1,10 +1,10 @@
 class PagesController < ApplicationController
 
   def create
-    wiki = WikiWrapper.new
     if params["query"] == ""
       redirect_to random_path
     else
+      wiki = WikiWrapper.new
       results = wiki.get_title(params[:query])
       if results
         @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])    
@@ -14,18 +14,13 @@ class PagesController < ApplicationController
         redirect_to root_path
       end      
     end
-
   end
 
   def show
     @page = Page.find(params[:id])
     if @page.revisions.empty?
       WikiWorker.perform_async(@page.id)
-    end          
-    @page.new_vandalism 
-    gon.revDates = @page.format_rev_dates_for_c3
-    gon.revCounts = @page.format_rev_counts_for_c3
-    gon.anonLocationMap = @page.anonymous_location_for_map
+    end
     gon.extractTitle = @page.title
     gon.extractPageId = @page.page_id 
   end
