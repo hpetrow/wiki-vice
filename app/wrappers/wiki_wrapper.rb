@@ -6,8 +6,12 @@ class WikiWrapper
   def get_title(query)
     url = title_url(query)
     json = load_json(url)
-    persistor = JsonPersistor.new(json)   
-    page = persistor.insert_page   
+    if valid_page?(json)
+      persistor = JsonPersistor.new(json) 
+      page = persistor.insert_page   
+    else
+      false
+    end
   end
 
   def get_page(title)
@@ -185,7 +189,7 @@ class WikiWrapper
   end
 
   def valid_page?(json)
-    json["query"]["pages"]["-1"].nil?    
+    !json["query"]["pages"]["-1"]    
   end
 
 end
