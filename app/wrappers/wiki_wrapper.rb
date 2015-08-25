@@ -59,6 +59,12 @@ class WikiWrapper
     {page_id: random["id"], title: random["title"]}
   end
 
+  def vandalism_revisions(page_title)
+    json = load_json(vandalism_url(page_title))
+    page_id = json["query"]["pages"].keys.first.to_s
+    json["query"]["pages"][page_id]["revisions"]
+  end  
+
   private
 
   def parse_recent_changes(json)
@@ -112,19 +118,13 @@ class WikiWrapper
 
   def vandalism_url(title)
     prop = "prop=revisions"
-    titles = "titles=#{title.gsub(" ", "%20")}"
+    titles = "titles=#{title}"
     rvlimit = "rvlimit=1"
-    rvtag = "rvtag=possible%20libel%20or%20vandalism"
+    rvtag = "rvtag=possible libel or vandalism"
     rvprop = "rvprop=ids|user|timestamp|comment|tags|flags|size"
     rvdiffto ="rvdiffto=prev"
     redirects = "redirects"    
     [CALLBACK, prop, rvprop, rvlimit, rvtag, rvdiffto, redirects, titles].join("&")
-  end
-
-  def vandalism_revisions(page_title)
-    json = load_json(vandalism_url(page_title))
-    page_id = json["query"]["pages"].keys.first.to_s
-    json["query"]["pages"][page_id]["revisions"]
   end
 
   def title_url(query)

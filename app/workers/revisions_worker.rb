@@ -16,8 +16,10 @@ class RevisionsWorker
         author = Author.find_or_create_by(name: author_name, anonymous: anonymous)
         values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
       end
-    end    
+    end
     Revision.import(columns, values)
+    add_vandalism(id, page.title)
+
     pusher = Pusher::Client.new(
     { 
       app_id: ENV["PUSHER_APP_ID"],
@@ -26,6 +28,16 @@ class RevisionsWorker
     }
     ) 
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
+  end
+
+  def add_vandalism(page_id, title)
+    wiki = WikiWrapper.new
+    revision = wiki.vandalism_revisions(title).first
+    if revision 
+      content = revision["diff"]["*"]
+      author = Author.find_or_create_by(name: revision["user"], anonymous: ip_address?(revision["user"]))
+      Revision.create(revid: revision["revid"], page_id: page_id, author_id: author.id, timestamp: revision["timestamp"], content: content) 
+    end   
   end
 
   def vandalism?(revision)
