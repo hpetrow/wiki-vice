@@ -57,9 +57,9 @@ class WikiWrapper
 
   def recent_changes(num)
     json = load_json(recent_changes_url(num))
-    persistor = JsonPersistor.new(parse_recent_changes(json))
-    persistor.insert_pages
-    Page.order(id: :desc).limit(num)
+    json["query"]["recentchanges"].collect do |rc| 
+      {page_id: rc["pageid"], title: rc["title"]}
+    end
   end
 
   def random_page
