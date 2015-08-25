@@ -32,8 +32,9 @@ class RevisionsWorker
 
   def add_vandalism(page_id, title)
     wiki = WikiWrapper.new
-    revision = wiki.vandalism_revisions(title).first
-    if revision 
+    revisions = wiki.vandalism_revisions(title)
+    if revisions
+      revision = revisions.first
       content = revision["diff"]["*"]
       author = Author.find_or_create_by(name: revision["user"], anonymous: ip_address?(revision["user"]))
       Revision.create(revid: revision["revid"], page_id: page_id, author_id: author.id, timestamp: revision["timestamp"], content: content) 
