@@ -28,11 +28,6 @@ class PagesController < ApplicationController
   def dashboard
     @page = Page.find(params[:id])
     @page.new_vandalism 
-    gon.revDates = @page.format_rev_dates_for_c3
-    gon.revCounts = @page.format_rev_counts_for_c3
-    gon.anonLocationMap = @page.anonymous_location_for_map
-    gon.extractTitle = @page.title
-    gon.extractPageId = @page.page_id      
   end
 
   def map
