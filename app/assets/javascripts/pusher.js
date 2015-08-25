@@ -22,7 +22,7 @@ $(function() {
         url: "/dashboard",
         data: {id: data.id},
         dataType: "script"
-      });
+      });    
       pusher.unsubscribe("page_results_" + id);
     });
   });

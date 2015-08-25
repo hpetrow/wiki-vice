@@ -1,33 +1,26 @@
 class PagesController < ApplicationController
 
   def create
-    wiki = WikiWrapper.new
     if params["query"] == ""
       redirect_to random_path
     else
-      @page = wiki.get_title(params[:query])
-      if @page
+      wiki = WikiWrapper.new
+      results = wiki.get_title(params[:query])
+      if results
+        @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])    
         redirect_to page_path(@page)
       else
         flash[:notice] = "Can't find #{params[:query]}. Please try again."
         redirect_to root_path
       end      
     end
-
   end
 
   def show
-    respond_to do |format|
-      format.html do 
-        @page = Page.find(params[:id])
-        WikiWorker.perform_async(@page.id)
-      end
-      format.js{}
+    @page = Page.find(params[:id])
+    if @page.revisions.empty?
+      RevisionsWorker.perform_async(@page.id)
     end
-    @page.new_vandalism 
-    gon.revDates = @page.format_rev_dates_for_c3
-    gon.revCounts = @page.format_rev_counts_for_c3
-    gon.anonLocationMap = @page.anonymous_location_for_map
     gon.extractTitle = @page.title
     gon.extractPageId = @page.page_id 
   end
@@ -35,11 +28,6 @@ class PagesController < ApplicationController
   def dashboard
     @page = Page.find(params[:id])
     @page.new_vandalism 
-    gon.revDates = @page.format_rev_dates_for_c3
-    gon.revCounts = @page.format_rev_counts_for_c3
-    gon.anonLocationMap = @page.anonymous_location_for_map
-    gon.extractTitle = @page.title
-    gon.extractPageId = @page.page_id      
   end
 
   def map
@@ -65,7 +53,12 @@ class PagesController < ApplicationController
 
   def random
     wiki = WikiWrapper.new
-    @page = wiki.random_page
+    results = wiki.random_page
+    @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])
     redirect_to page_path(@page)
+  end
+
+  def top_five_authors
+    @page = Page.find(params[:id])
   end
 end

@@ -8,10 +8,15 @@
       <hr>
     </div>
    </div>
-    
+  
+
   <div id="page-data">
+  <% if @page.revisions.size == 0 %>
     <div class="col-md-offset-6">
       <%= image_tag("extract-spinner.gif") %>
     </div>
+  <% else %>
+    <%= render "dashboard" %>
+  <% end %>
   </div>
 </div>
