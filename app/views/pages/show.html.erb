@@ -21,7 +21,11 @@
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-red">
         <div class="content">
-          <h3>This page changes every <b><%=@page.time_between_revisions%></b></h3>
+          <% if @page.revisions.count > 2 %>
+            <h3>This page changes every <b><%=@page.time_between_revisions%></b></h3>
+          <% else %>
+            <h3>This page is new.</h3>
+          <% end %>
         </div>
       </div>
     </div>
