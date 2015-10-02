@@ -137,14 +137,18 @@ class Page < ActiveRecord::Base
     end.unshift('Revisions Per Day')
   end
 
-  def edit_activity_amount  
-    case revision_rate
-    when (0...2)
-      "highly active"
-    when (2...15)
-      "moderately active"
-    else 
-      "relatively stable"
+  def edit_activity_amount 
+    if self.authors.count > 10
+      case revision_rate
+      when (0...2)
+        "highly active"
+      when (2...15)
+        "moderately active"
+      else 
+        "relatively stable"
+      end
+    else
+      "inactive"
     end
   end
 

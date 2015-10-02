@@ -41,7 +41,7 @@
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-blue">
         <div class="content">
-          <h3><b class="timer" data-from="0" data-to="<%=@page.author_count%>" data-speed="2500"></b> authors have edited this page</h3>
+          <h3><b class="timer" data-from="0" data-to="<%=@page.authors.count%>" data-speed="2500"></b> authors have edited this page</h3>
         </div>
       </div>
     </div>
@@ -49,7 +49,9 @@
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-purple">
         <div class="content">
-          <h3>Based on the rate of edits, this page is <b><%=@page.edit_activity_amount%></b></h3>
+          <h3>Based on the rate of edits, this page is 
+              <b><%=@page.edit_activity_amount%></b>
+          </h3>
         </div>
       </div>
     </div>
