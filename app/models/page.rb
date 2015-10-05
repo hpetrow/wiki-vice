@@ -58,6 +58,11 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def unique_authors
+    binding.pry
+    self.authors.uniq.count
+  end
+
   def anonymous_author_location
     author_collection = self.get_anonymous_authors
     self.get_geoip_location(author_collection)
