@@ -1,12 +1,13 @@
 class PagesController < ApplicationController
 
   def create
-    wiki = WikiWrapper.new
     if params["query"] == ""
       redirect_to random_path
     else
-      @page = wiki.get_page(params[:query])
-      if @page
+      wiki = WikiWrapper.new
+      results = wiki.get_title(params[:query])
+      if results
+        @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])    
         redirect_to page_path(@page)
       else
         flash[:notice] = "Can't find #{params[:query]}. Please try again."
@@ -17,21 +18,47 @@ class PagesController < ApplicationController
 
   def show
     @page = Page.find(params[:id])
-    if @page.revisions.size < 10
-      wiki = WikiWrapper.new
-      @page = wiki.get_page(@page.title)
+    if @page.revisions.empty?
+      RevisionsWorker.perform_async(@page.id)
     end
-    @page.new_vandalism
-    gon.revDates = @page.format_rev_dates_for_c3
-    gon.revCounts = @page.format_rev_counts_for_c3
-    gon.anonLocationMap = @page.anonymous_location_for_map
     gon.extractTitle = @page.title
-    gon.extractPageId = @page.page_id
+    gon.extractPageId = @page.page_id 
+  end
+
+  def dashboard
+    @page = Page.find(params[:id])
+    @page.new_vandalism 
+  end
+
+  def map
+    @page = Page.find(params[:id])
+    respond_to do |format|
+      format.json {
+        render json: {:mapData => @page.anonymous_location_for_map}
+      }
+    end
+  end
+
+  def histogram
+    @page = Page.find(params[:id])
+    respond_to do |format|
+      format.json {
+        render json: {
+          revDates: @page.format_rev_dates_for_c3,
+          revCounts: @page.format_rev_counts_for_c3
+        }
+      }
+    end
   end
 
   def random
     wiki = WikiWrapper.new
-    @page = wiki.random_page
+    results = wiki.random_page
+    @page = Page.find_or_create_by(page_id: results[:page_id], title: results[:title])
     redirect_to page_path(@page)
+  end
+
+  def top_five_authors
+    @page = Page.find(params[:id])
   end
 end

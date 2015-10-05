@@ -1,12 +1,20 @@
-$(function () {
+function histogram() {
+    var id = $("#page_id").text();
+    $.ajax({
+      url: '/histogram',
+      type: 'GET',
+      dataType: 'json',
+      data: {id: id},
+    })
+    .success(function(data) {
       var colors = ['#000'];
       var chart = c3.generate({
         bindto: '#zoom',
         data: {
           x: 'x',
           columns: [
-            gon.revDates,
-            gon.revCounts
+            data.revDates,
+            data.revCounts
           ],
           type: 'line',
           color: function(color) {
@@ -27,5 +35,6 @@ $(function () {
         zoom: {
           enabled: true
         }
-      });
-});
+      });      
+    });
+};

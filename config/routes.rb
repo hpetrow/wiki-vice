@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/sidekiq"
   resources :authors
   resources :pages, only: [:show, :create]
 
@@ -10,7 +11,10 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get 'random' => 'pages#random'
-
+  get 'dashboard' => "pages#dashboard"
+  get 'map' => 'pages#map'
+  get 'histogram' => 'pages#histogram'
+  get 'top_five_authors' => 'pages#top_five_authors'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

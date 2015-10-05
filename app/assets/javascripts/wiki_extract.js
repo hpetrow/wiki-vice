@@ -1,4 +1,4 @@
-$(function() {
+function wikiExtract() {
   var callback = 'https://en.wikipedia.org/w/api.php?'
   var action = 'query';
   var format = 'json';
@@ -28,6 +28,4 @@ $(function() {
     extract = response.query.pages[gon.extractPageId].extract;
     $("#extract").html(extract);
   });
-  
-});
-
+};
