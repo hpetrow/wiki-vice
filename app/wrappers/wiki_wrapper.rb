@@ -4,6 +4,7 @@ class WikiWrapper
 
   CALLBACK = "https://en.wikipedia.org/w/api.php?format=json&action=query"
   def get_title(query)
+    query = query.split(" ").join("_")
     url = title_url(query)
     json = load_json(url)
     if valid_page?(json)
@@ -27,6 +28,7 @@ class WikiWrapper
   end
 
   def get_user_contributions(author)
+    # Issue here: Not grabbing all contributions for author.
     url = user_contribs_url(author)
     json = load_json(url)
     json = json["query"]["usercontribs"]

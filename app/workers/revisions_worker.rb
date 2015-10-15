@@ -5,6 +5,7 @@ class RevisionsWorker
   def perform(id)
     page = Page.find(id)
     wiki = WikiWrapper.new
+    binding.pry
     revisions = wiki.get_page(page.title)
     columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
     values = []
@@ -16,6 +17,7 @@ class RevisionsWorker
         author = Author.find_or_create_by(name: author_name, anonymous: anonymous)
         values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
       end
+
     end
     Revision.import(columns, values)
     add_vandalism(id, page.title)

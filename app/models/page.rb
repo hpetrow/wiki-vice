@@ -153,7 +153,7 @@ class Page < ActiveRecord::Base
         "relatively stable"
       end
     else
-      "inactive"
+      "not active"
     end
   end
 
