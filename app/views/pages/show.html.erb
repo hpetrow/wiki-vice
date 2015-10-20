@@ -2,12 +2,20 @@
 
 
   <div id="page-data">
-  <% if @page.revisions.size == 0 %>
+  <% if @page.revisions.count == 0 %>
+  <%= render "loader" %>
     <div class="col-md-offset-6">
-      <%= image_tag("extract-spinner.gif") %>
+       
+      <script>
+        setTimeout(function(){
+          location.reload();
+        },3000);
+      </script>
     </div>
   <% else %>
     <%= render "dashboard" %>
   <% end %>
   </div>
 </div>
+
+

@@ -8,6 +8,8 @@ class TweetVandalism
     @url = url
   end
 
+  # tweet parser should check if word exists, if it does, no tweet is sent.
+
   def create_client
     Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV["TWITTER_KEY"]
@@ -18,7 +20,8 @@ class TweetVandalism
   end
 
   def send_tweet
-    client.update(format_tweet)
+    #if tweet_is_safe?
+      client.update(format_tweet)
   end
 
   def tweet_suffix

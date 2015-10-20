@@ -13,7 +13,7 @@ $(function() {
   var channel = pusher.subscribe('page_results_' + id);
 
 
-  channel.bind('pusher:subscription_succeeded', function() {
+  channel.bind('pusher:subscription_succeeded', function(data) {
     channel.bind('get_page', function(data) {
       console.log(data.id);
 

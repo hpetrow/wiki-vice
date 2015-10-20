@@ -5,6 +5,8 @@ $(function() {
 
 var app = function() {
 
+    // for side tweet bar
+
     var init = function() {
         tooltips();
         toggleMenuLeft();

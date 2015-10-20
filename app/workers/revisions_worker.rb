@@ -16,7 +16,9 @@ class RevisionsWorker
         author = Author.find_or_create_by(name: author_name, anonymous: anonymous)
         values << [r['revid'], r["timestamp"], vandalism, page.id, author.id]
       end
+
     end
+
     Revision.import(columns, values)
     add_vandalism(id, page.title)
 
@@ -27,6 +29,7 @@ class RevisionsWorker
       secret: ENV["PUSHER_SECRET"]
     }
     ) 
+
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 

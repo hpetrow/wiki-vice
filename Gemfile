@@ -26,10 +26,6 @@ gem 'gon'
 gem 'geoip'
 # push notifications
 gem 'pusher'
-#adds way to make connections between classes without tables
-gem 'activerecord-tableless', '~> 1.3.4'
-#adds turbolinks
-gem 'turbolinks'
 # Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.
 gem 'whenever', :require => false
 # It provides a convenient way to generate a diff from two strings or files. 
