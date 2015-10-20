@@ -4,7 +4,7 @@ class WikiWrapper
 
   CALLBACK = "https://en.wikipedia.org/w/api.php?format=json&action=query"
   def get_title(query)
-    query = query.split(" ").join("_")
+    query = query.titleize.split(" ").join("_")
     url = title_url(query)
     json = load_json(url)
     if valid_page?(json)
