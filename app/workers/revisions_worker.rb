@@ -5,10 +5,10 @@ class RevisionsWorker
   def perform(id)
     page = Page.find(id)
     wiki = WikiWrapper.new
-    binding.pry
     revisions = wiki.get_page(page.title)
     columns = [:revid, :timestamp, :vandalism, :page_id, :author_id]
     values = []
+    # wrap these in ifs to check if empty (Where sidekiq issue may be happening)
     revisions.each do |r|
       if major_edit?(r) && user_exists?(r)
         vandalism = vandalism?(r)
@@ -19,9 +19,11 @@ class RevisionsWorker
       end
 
     end
+
     Revision.import(columns, values)
     add_vandalism(id, page.title)
 
+    # Do I need keys for this?
     pusher = Pusher::Client.new(
     { 
       app_id: ENV["PUSHER_APP_ID"],
@@ -29,6 +31,9 @@ class RevisionsWorker
       secret: ENV["PUSHER_SECRET"]
     }
     ) 
+
+    #probably where the render issue is happening
+    binding.pry
     pusher.trigger("page_results_#{page.id}", "get_page", {:id => page.id, :title => page.title, :revisionRate => page.time_between_revisions})
   end
 
