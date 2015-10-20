@@ -1,5 +1,8 @@
   <div class="row">
-   <div class="col-md-6">
+   <div class="col-md-8">
+   <div><h1 id="page_title"><%= @page.title %></h1></div>
+      <div id="page_id" style="display:none;"><%= @page.id %></div>
+      <hr>
       <div id="extract">
         <div class="col-md-offset-4">
           <%= image_tag("extract-spinner.gif") %>
@@ -8,6 +11,7 @@
       <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>     
    </div>
     <div class="col-md-4">
+    <br><br>
       <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
     </div>   
   </div>
@@ -19,7 +23,11 @@
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-red">
         <div class="content">
-          <h3>This page changes every <b><%=@page.time_between_revisions%></b></h3>
+          <% if @page.revisions.count > 2 %>
+            <h3>This page changes every <b><%=@page.time_between_revisions%></b></h3>
+          <% else %>
+            <h3>This page is new.</h3>
+          <% end %>
         </div>
       </div>
     </div>
@@ -28,9 +36,15 @@
       <div class="dashboard-tile detail tile-turquoise">
         <div class="content">
         <% if @page.get_number_of_anonymous_authors >= 1 %>
-        <h3>There are <b class="timer" data-from="0" data-to="<%= @page.get_number_of_anonymous_authors %>" data-speed="2500"></b> anonymous authors from <b class="timer" data-from="0" data-to="<%= @page.find_country_name.count %>" data-speed="2500"></b> countries contributing.</h3>
+          <h3>
+            There are <b class="timer" data-from="0" 
+                data-to="<%= @page.get_number_of_anonymous_authors %>" data-speed="2500"></b>
+            anonymous authors from <b class="timer" data-from="0" 
+                data-to="<%= @page.find_country_name.count %>" data-speed="2500"></b> 
+            countries contributing.
+          </h3>
         <% else %>
-        <h3>This page has no edits from anonymous authors.</h3>
+          <h3>This page has no edits from anonymous authors.</h3>
         <% end %>
         </div>
       </div>
@@ -39,7 +53,7 @@
     <div class="col-md-3 col-sm-6">
       <div class="dashboard-tile detail tile-blue">
         <div class="content">
-          <h3><b class="timer" data-from="0" data-to="<%=@page.author_count%>" data-speed="2500"></b> authors have edited this page</h3>
+          <h3><b class="timer" data-from="0" data-to="<%=@page.authors.uniq.count%>" data-speed="2500"></b> authors have edited this page</h3>
         </div>
       </div>
     </div>

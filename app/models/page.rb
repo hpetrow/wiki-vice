@@ -46,8 +46,8 @@ class Page < ActiveRecord::Base
         time = time.round
         period = "day".pluralize(time)
         "#{time} #{period}"
-      elsif (time * 10) < 1
-        time = ((time * 10) * 60).round
+      elsif (time * 24) < 1
+        time = ((time * 24) * 60).round
         period = "minute".pluralize(time)
         "#{time} #{period}"
       else
@@ -56,6 +56,11 @@ class Page < ActiveRecord::Base
         "<span class='timer' data-from='0' data-to='#{time}' data-speed='2500'></span> #{period}".html_safe
       end
     end
+  end
+
+  def unique_authors
+    binding.pry
+    self.authors.uniq.count
   end
 
   def anonymous_author_location
@@ -137,14 +142,18 @@ class Page < ActiveRecord::Base
     end.unshift('Revisions Per Day')
   end
 
-  def edit_activity_amount  
-    case revision_rate
-    when (0...2)
-      "highly active"
-    when (2...15)
-      "moderately active"
-    else 
-      "relatively stable"
+  def edit_activity_amount 
+    if self.authors.count > 10
+      case revision_rate
+      when (0...2)
+        "highly active"
+      when (2...15)
+        "moderately active"
+      else 
+        "relatively stable"
+      end
+    else
+      "inactive"
     end
   end
 
