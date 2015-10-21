@@ -20,8 +20,9 @@ class TweetVandalism
   end
 
   def send_tweet
-    #if tweet_is_safe?
+    if tweet_okay?
       client.update(format_tweet)
+    end
   end
 
   def tweet_suffix
@@ -38,18 +39,27 @@ class TweetVandalism
 
   def replace_words
     better_words = {
-      /[f][u][c][k][e][d]/i => "f*cked",
-      /[f][u][c][k]/i => "f*ck",
-      /[r][a][p][e]\w{1}/i => "r****",
-      /[r][a][p][e]/i => "r***",
-      /[r][a][p][i][s][t]/i => "r*****",
-      /[f][a][g][g][o][t][s]/i => "f*****s",
+      /fucked/i => "f*cked",
+      /fuck/i => "f*ck",
+      /rape\w{1}/i => "r****",
+      /rape/i => "r***",
+      /rapist/i => "r*****",
+      /faggot/i => "f*****s",
       /[f][a][g][g][o][t]/i => "f****t",
       /[c][u][n][t][s]/i => "c*nts",
       /[c][u][n][t]/i => "c*nt",
       /[n][i][g][g][e][r][s]/i => "n*****s",
       /n[i][g][g][e][r]/i => "n****"
     }
+  end
+
+  def tweet_okay?
+    okay = true
+    banned_words = /fuck|cunt|rape|rapist|nigger/
+    if @content.match(banned_words)
+      okay = false
+    end
+    okay 
   end
  
   def tweet_parser
