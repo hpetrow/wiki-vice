@@ -6,18 +6,18 @@
   <!--logo end-->
 
 <div class="row">
-  <div class="col-md-7 navsearch">
+  <div class="col-md-7 col-sm-8 col-xs-12 navsearch">
       <%= form_tag("/pages", method: "post", class: "form") do %>
-      <div class="form-group col-md-9">
+      <div class="form-group col-md-9 col-sm-9 col-xs-9">
           <%= text_field_tag(:query, "", class: "form-control navsearchbar", placeholder: "Search Wikipedia...") %>
       </div>
-      <div class="form-group col-md-1 navbutton">
+      <div class="form-group col-md-1 col-sm-1 col-xs-1 navbutton">
       <button type="submit" class="btn btn-primary search-loader" id="header-search"> <i class="fa fa-search fa-2x"></i></button>
       </div>
       <% end %>
   </div>
 
-      <%= button_to "Random!", random_path, class: "search-loader col-md-1 link_text btn btn-primary btn-3d", method: "get", style: "margin-top:15px;"%>
+      <%= button_to "Random!", random_path, class: "search-loader col-md-1 col-sm-1 col-xs-1link_text btn btn-primary btn-3d", method: "get", style: "margin-top:15px;"%>
 
   <div class="toggle-navigation toggle-right col-md-1"  id="twitter-toggle">
     <a href="javascript:void(0)" class="btn btn-default" id="toggle-right">
