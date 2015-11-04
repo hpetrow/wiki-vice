@@ -124,6 +124,8 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    haml (4.0.7)
+      tilt
     hitimes (1.2.2)
     http (0.6.4)
       http_parser.rb (~> 0.6.0)
@@ -340,6 +342,7 @@ DEPENDENCIES
   google-analytics-rails
   google-search (~> 1.0.3)
   guard-rspec
+  haml
   jbuilder (~> 2.0)
   jquery-rails
   nokogiri
