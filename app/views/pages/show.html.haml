@@ -1,0 +1,14 @@
+.main-content-wrapper.col-md-8
+  #page-data
+  - if @page.revisions.count == 0
+    = render :partial => "loader"
+    .col-md-offset-6
+      :javascript
+        setTimeout(function(){
+          location.reload();
+        },3000);
+  -else
+    = render :partial => "dashboard"
+
+
+
