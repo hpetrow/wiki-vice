@@ -1,0 +1,32 @@
+%br 
+%br
+.col-md-10.col-md-offset-1
+	.row
+		.col-md-5.col-md-offset-1
+			%h2= @author.name  
+			%small 
+			%i (Author)
+			%ol
+				- @top_contributions.each do |contribution|
+					%li
+						%h3= link_to(contribution[0], pages_path(query: contribution[0]), :method => :post)
+
+						%small
+							%b= contribution[1] 
+							contributions
+							= link_to("Wikipedia »", Page.find_by(title: contribution[0]).wiki_link, :target => "_blank")	
+		
+
+		.col-md-5.col-md-offset-1
+			%h3 Contributions breakdown
+			%canvas#authorContributionsChart {:width=>"300", :height=>"300"}
+
+		.col-md-5.col-md-offset-1
+			%h4 Last revision made 
+			= distance_of_time_in_words(@author.most_recent_revision.timestamp, Time.now)
+			ago
+			= render :partial => "revisions/author_revision", :locals => {:revision => @author.most_recent_revision}
+	
+= javascript_include_tag "Chart.min.js"
+= javascript_include_tag "authors.js"
+%script{:type => "text/javascript", :src => "https://js.pusher.com/2.2/pusher.min.js"}
