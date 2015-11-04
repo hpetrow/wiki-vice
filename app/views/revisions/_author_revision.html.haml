@@ -1,0 +1,16 @@
+.scroll-flow
+	%h3
+		%b
+		= @author.most_recent_revision.page.title
+		%br
+	%small
+		= revision.get_date 
+		%hr
+
+	- if !!revision.comment
+		%p Comment: 
+		= revision.comment
+
+	%div
+		= revision.get_content.html_safe
+

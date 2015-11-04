@@ -1,0 +1,14 @@
+.scroll-flow
+	%h3
+		%b= revision.author.display_name
+		%br
+	%small= revision.get_date
+	%hr
+
+	- if !!revision.comment
+		%p Comment: 
+		= revision.comment
+	%div
+		%span{:style => "background-color:#1ABC9C;"}
+		= revision.get_content.html_safe
+
