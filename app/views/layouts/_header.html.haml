@@ -1,0 +1,19 @@
+%header#header
+  .brand
+    %a.logo{:href => "#{root_path}"} 
+      <span>Wiki</span>Vice
+  .row
+    .col-md-7.col-sm-7.col-xs-7.navsearch
+      =form_tag("/pages", method: "post", class: "form") do
+        .form-group.col-md-9.col-sm-9.col-xs-9
+          =text_field_tag(:query, "", class: "form-control navsearchbar", placeholder: "Search Wikipedia...")
+        .form-group.col-md-1.col-sm-1.col-xs-1.navbutton
+          %button.btn.btn-primary.search-loader#header-search{:type => "submit"} 
+            %i.fa.fa-search.fa-2x
+    %a.btn.btn-primary.btn-3d.col-md-1.col-sm-2.col-xs-2.col-xs-offset-1.col-md-offset-0.col-sm-offset-0{:href => "#{random_path}", :method => "get", :style => "margin-top:15px; width:75px;"}
+      %i.fa.fa-random
+
+    .toggle-navigation.toggle-right.col-md-1.col-sm-1.col-xs-1#twitter-toggle
+      %a.btn.btn-default#toggle-right{:href =>"javascript:void(0)"}
+        %i.fa.fa-twitter
+

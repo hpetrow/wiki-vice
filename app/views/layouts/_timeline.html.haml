@@ -1,0 +1,29 @@
+%section#main-content
+  .row
+    .col-sm-11.col-md-11
+      .timeline
+        -@page.top_revisions.each.with_index do |revision, i|
+          %article.timeline-item
+            .text-right
+              .time-layer
+                %span.label.label-primary= time_tag revision.timestamp
+
+          - if i%2 != 0
+            %article.timeline-item
+          - else
+            %article.timeline-item.left
+
+              .timeline-layer
+                .panel
+                  .panel-heading
+                    %h1.panel-title
+                      %i.fa.fa-clock-o= time_ago_in_words(revision.timestamp) 
+                    ago
+                  .panel-body
+                    -if i%2 != 0
+                      %span.arrow
+                    -else
+                      %span.arrow-left
+                      .timeline-icon
+                      %i.fa.fa-pencil
+                      = render :partial => 'revisions/revision', :locals => { revision: revision }

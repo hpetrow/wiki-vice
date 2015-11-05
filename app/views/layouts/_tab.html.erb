@@ -1,7 +1,6 @@
   
   <div class="tab-wrapper tab-left ">
       <ul class="nav nav-tabs">
-hello
         <% @top_five_authors.each.with_index(1) do |author,i| %>
           <li><a href="#home<%=i%>" data-toggle="tab"><%= author[:author].name %></a>
 

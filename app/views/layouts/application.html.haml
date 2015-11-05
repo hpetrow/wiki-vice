@@ -1,0 +1,26 @@
+!!!
+%html.no-js
+  %head
+    %title WikiVice
+    = Gon::Base.render_data
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+    = analytics_init if Rails.env.production?
+    = favicon_link_tag 'wiki-vice-favicon.png'
+    %link{:rel => "stylesheet", :href => "https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"}
+    %script{:src => "//js.pusher.com/3.0/pusher.min.js"}
+
+  %body.off-canvas
+    #container
+      = render :partial => 'layouts/header'
+      .row
+        .col-md-12.col-sm-12
+          .loader
+            = render 'pages/loader'
+         
+        
+          = yield
+
+    = render :partial => 'layouts/twitter_widget'
+    = render :partial => 'layouts/footer'
