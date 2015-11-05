@@ -1,0 +1,19 @@
+.col-md-6
+  %ol
+    -@page.top_five_authors.each do |top_five_author|
+      %li
+        %h3= link_to "#{top_five_author[:author].name}",  
+            author_path(top_five_author[:author].id)
+        %small 
+          %b= top_five_author[:count] 
+        contributions 
+
+.col-md-6
+  %h3= link_to "#{@page.top_five_authors.first[:author].name} also contributes to:",author_path(@page.top_five_authors.first[:author].id)
+
+  - @page.top_five_authors.first[:author].top_contributions.each do |contribution| 
+    %p
+      %b= contribution[0]
+      %br
+      %small= contribution[1]
+      contributions
