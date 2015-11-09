@@ -1,5 +1,34 @@
-  
-  <div class="tab-wrapper tab-left ">
+.tab-wrapper.tab-left
+  %ul.nav.nav-tabs
+    = @top_five_authors.each.with_index(1) do |author,i| %>
+      %li
+        %a{:href => "#home<%=i%>", :data-toggle => "tab"}= author[:author].name
+
+      %li
+        %h3= link_to "#{author[:author].name}", author_path(author[:author].id)
+        %br
+        %small # of contributions: 
+        %small= author[:count]
+
+  .tab-content
+    -idx = 1
+    -@top_five_authors.each do |author|
+      .tab-pane#home<%=idx%>
+        -author [:author].top_contributions.each.with_index(1) do |contribution, i|
+        %p= contribution[0].title
+        - if i == 4
+          idx += 1
+          break
+
+
+
+
+
+
+
+
+
+  <div class="tab-wrapper tab-left">
       <ul class="nav nav-tabs">
         <% @top_five_authors.each.with_index(1) do |author,i| %>
           <li><a href="#home<%=i%>" data-toggle="tab"><%= author[:author].name %></a>

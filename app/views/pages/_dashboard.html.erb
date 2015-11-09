@@ -1,20 +1,20 @@
-  <div class="row">
-   <div class="col-md-8">
-   <div><h1 id="page_title"><%= @page.title %></h1></div>
-      <div id="page_id" style="display:none;"><%= @page.id %></div>
-      <hr>
-      <div id="extract">
-        <div class="col-md-offset-4">
-          <%= image_tag("extract-spinner.gif") %>
-        </div>
-      </div>        
-      <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>     
-   </div>
-    <div class="col-md-4">
-    <br><br>
-      <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
-    </div>   
-  </div>
+<div class="row">
+ <div class="col-md-8">
+ <div><h1 id="page_title"><%= @page.title %></h1></div>
+    <div id="page_id" style="display:none;"><%= @page.id %></div>
+    <hr>
+    <div id="extract">
+      <div class="col-md-offset-4">
+        <%= image_tag("extract-spinner.gif") %>
+      </div>
+    </div>        
+    <div> <i><small> <%= link_to("View on Wikipedia »", @page.wiki_link, target: "_blank") %></small></i></div>     
+ </div>
+  <div class="col-md-4">
+  <br><br>
+    <img class="pull-right" src="<%= @page.get_photo(@page.title) %>" height="200">
+  </div>   
+</div>
 
 
   <br><br><br>
