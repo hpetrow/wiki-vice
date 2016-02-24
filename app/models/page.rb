@@ -157,15 +157,9 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def get_photo(title)
-    search = Google::Search::Image.new(:query => title, :image_size => :medium)
-    search.first.uri
-  end
-
   def most_recent_vandalism
     vandalism = Vandalism.new 
     vandalism.most_recent_page_vandalism(self)
-    #vandalism = self.revisions.where('vandalism = ?', true).first
   end
 
   def new_vandalism
