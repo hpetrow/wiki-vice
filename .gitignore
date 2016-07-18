@@ -20,4 +20,4 @@
 /config/application.yml
 
 #Ignore Redis dump file.
-/dump.rdb
+dump.*

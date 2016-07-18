@@ -19,11 +19,6 @@ On a page:
 • Last, see a timeline of the past edits. Added parts are in green, deleted parts are in red.
 
 
-## Currently working on...
-• Speeding up the search. We know, we know, you had time to run out and grab a coffee while the page loaded. We're working on speeding that up.
-• Bugs. Specifically, fixing our data methods so that if there aren't enough edits to really give a clear picture, we're reflecting that. We're also adding a search filter to queries so it breaks less.
-• Joining the 21st Century & switching our pages over to HAML.
-
 ## Contributing
 We're always looking to make WikiVice better. Have ideas? We'd love to hear them. Feel free to open an issue & we'll take a look.
 
